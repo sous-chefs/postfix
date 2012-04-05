@@ -31,3 +31,5 @@ default[:postfix][:smtp_tls_cafile] = "/etc/postfix/cacert.pem"
 default[:postfix][:smtp_use_tls]    = "yes"
 default[:postfix][:smtp_sasl_user_name] = ""
 default[:postfix][:smtp_sasl_passwd]    = ""
+
+default[:postfix][:aliases] = {}
