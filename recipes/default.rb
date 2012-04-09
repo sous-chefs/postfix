@@ -22,15 +22,13 @@ package "postfix" do
   action :install
 end
 
+service "postfix" do
+  supports :status => true, :restart => true, :reload => true
+  action :enable
+end
+
 case node[:platform]
-when "ubuntu", "debian" 
-  service "postfix" do
-   action :enable
-  end
-when "redhat", "centos"
-  service "postfix" do
-    action :nothing
-  end
+when "redhat", "centos", "amazon", "scientific"
   service "sendmail" do
     action :nothing
   end
@@ -50,4 +48,8 @@ end
     mode 0644
     notifies :restart, resources(:service => "postfix")
   end
+end
+
+service "postfix" do
+  action :start
 end
