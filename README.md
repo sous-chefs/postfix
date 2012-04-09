@@ -49,6 +49,9 @@ See `attributes/default.rb` for default values.
   `sasl_passwd` file as the user to authenticate as.
 * `node['postfix']['smtp_sasl_passwd']` - mapped in the `sasl_passwd`
   file as the password to use.
+* `node['postfix']['aliases']` - hash of aliases to create with
+  `recipe[postfix::aliases]`, see below under __Recipes__ for more
+  information.
 
 Recipes
 =======
@@ -67,6 +70,17 @@ sasl\_auth
 Sets up the system to authenticate with a remote mail relay using SASL
 authentication.
 
+aliases
+-------
+
+Manage `/etc/aliases` with this recipe. Currently only Ubuntu 10.04
+platform has a template for the aliases file. Add your aliases
+template to the `templates/default` or to the appropriate
+platform+version directory per the File Specificity rules for
+templates. Then specify a hash of aliases for the
+`node['postfix']['aliases']` attribute.
+
+http://wiki.opscode.com/display/chef/Templates#Templates-TemplateLocationSpecificity
 
 Usage
 =====

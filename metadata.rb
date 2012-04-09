@@ -2,11 +2,12 @@ maintainer        "Opscode, Inc."
 maintainer_email  "cookbooks@opscode.com"
 license           "Apache 2.0"
 description       "Installs and configures postfix for client or outbound relayhost, or to do SASL auth"
-version           "0.8.4"
+version           "1.0.0"
 recipe            "postfix", "Installs and configures postfix"
 recipe            "postfix::sasl_auth", "Set up postfix to auth to a server with sasl"
+recipe            "postfix::aliases", "Manages /etc/aliases"
 
-%w{ubuntu debian redhat centos}.each do |os|
+%w{ubuntu debian redhat centos amazon scientific}.each do |os|
   supports os
 end
 
@@ -85,3 +86,7 @@ attribute "postfix/smtp_sasl_passwd",
   :description => "Password for smtp_sasl_user_name",
   :default => ""
 
+attribute "postfix/aliases",
+  :display_name => "Postfix mail aliases",
+  :description => "Hash of mail aliases for /etc/aliases",
+  :default => ""
