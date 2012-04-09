@@ -23,7 +23,21 @@ package "postfix" do
 end
 
 service "postfix" do
+  supports :status => true, :restart => true, :reload => true
   action :enable
+end
+
+case node[:platform]
+when "redhat", "centos", "amazon", "scientific"
+  service "sendmail" do
+    action :nothing
+  end
+  execute "switch_mailer_to_postfix" do
+    command "/usr/sbin/alternatives --set mta /usr/sbin/sendmail.postfix"
+    notifies :stop, resources(:service => "sendmail")
+    notifies :start, resources(:service => "postfix")
+    not_if "/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix"
+  end
 end
 
 %w{main master}.each do |cfg|
@@ -34,4 +48,8 @@ end
     mode 0644
     notifies :restart, resources(:service => "postfix")
   end
+end
+
+service "postfix" do
+  action :start
 end

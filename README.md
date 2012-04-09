@@ -4,6 +4,8 @@ Description
 Installs and configures postfix for client or outbound relayhost, or
 to do SASL authentication.
 
+On RHEL-family systems, sendmail will be replaced with postfix.
+
 Requirements
 ============
 
@@ -11,6 +13,8 @@ Requirements
 
 * Ubuntu 10.04+
 * Debian 6.0+
+* RHEL/CentOS/Scientific 5.7+, 6.2+
+* Amazon Linux (as of 4/9/2012)
 
 Attributes
 ==========
