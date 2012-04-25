@@ -19,6 +19,7 @@ smtp_sasl_security_options = <%= node['postfix']['smtp_sasl_security_options'] %
 smtp_tls_CAfile = <%= node['postfix']['smtp_tls_cafile'] %>
 smtp_use_tls = <%= node['postfix']['smtp_use_tls'] %>
 <% end -%>
+smtp_destination_concurrency_limit = <%= node['postfix']['smtp_destination_concurrency_limit'] %>
 myhostname = <%= node['postfix']['myhostname'] %>
 mydomain = <%= node['postfix']['mydomain'] %>
 myorigin = <%= node['postfix']['myorigin'] %>
