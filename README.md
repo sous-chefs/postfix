@@ -58,6 +58,8 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['aliases']` - hash of aliases to create with
   `recipe[postfix::aliases]`, see below under __Recipes__ for more
   information.
+* `node['postfix']['inet_interfaces']` - corresponds to the `inet_interfaces` option
+   in `/etc/postfix/main.cf`, defaults to loopback-only
 
 Recipes
 =======

@@ -35,3 +35,5 @@ gefault['postfix']['smtp_sasl_passwd']    = ""
 default['postfix']['smtp_destination_concurrency_limit'] = "$default_destination_concurrency_limit"
 
 default['postfix']['aliases'] = {}
+
+default['postfix']['inet_interfaces'] = "loopback-only"
