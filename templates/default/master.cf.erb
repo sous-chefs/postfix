@@ -6,8 +6,12 @@
 # service type  private unpriv  chroot  wakeup  maxproc command + args
 #               (yes)   (yes)   (yes)   (never) (100)
 # ==========================================================================
+<%- if node['postfix']['listen']['smtp'] %>
 smtp      inet  n       -       n       -       -       smtpd
-#submission inet n       -       n       -       -       smtpd
+<%- end %>
+<%- if node['postfix']['listen']['submission'] %>
+submission inet n       -       n       -       -       smtpd
+<%- end %>
 #  -o smtpd_enforce_tls=yes
 #  -o smtpd_sasl_auth_enable=yes
 #  -o smtpd_client_restrictions=permit_sasl_authenticated,reject

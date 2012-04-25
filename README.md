@@ -59,7 +59,10 @@ See `attributes/default.rb` for default values.
   `recipe[postfix::aliases]`, see below under __Recipes__ for more
   information.
 * `node['postfix']['inet_interfaces']` - corresponds to the `inet_interfaces` option
-   in `/etc/postfix/main.cf`, defaults to loopback-only
+* `node['postfix']['listen']['smtp']` - run the `smtpd` process while listening on the
+   `smtp` port, defaults to true
+* `node['postfix']['listen']['submission']` - run the `smtpd` process while
+   listening on the `submission` port, defaults to false
 
 Recipes
 =======

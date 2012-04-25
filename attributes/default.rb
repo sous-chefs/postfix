@@ -37,3 +37,6 @@ default['postfix']['smtp_destination_concurrency_limit'] = "$default_destination
 default['postfix']['aliases'] = {}
 
 default['postfix']['inet_interfaces'] = "loopback-only"
+
+default['postfix']['listen']['smtp'] = true
+default['postfix']['listen']['submission'] = false
