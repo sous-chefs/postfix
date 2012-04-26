@@ -53,10 +53,16 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['smtp_sasl_user_name']` - mapped in the
   `sasl_passwd` file as the user to authenticate as.
 * `node['postfix']['smtp_sasl_passwd']` - mapped in the `sasl_passwd`
-  file as the password to use.
+* `node['postfix']['smtp_destination_concurrency_limit']` - corresponds to the
+   `smtp_destination_concurreny_limit` option in `/etc/postfix/main.cf`
 * `node['postfix']['aliases']` - hash of aliases to create with
   `recipe[postfix::aliases]`, see below under __Recipes__ for more
   information.
+* `node['postfix']['inet_interfaces']` - corresponds to the `inet_interfaces` option
+* `node['postfix']['listen']['smtp']` - run the `smtpd` process while listening on the
+   `smtp` port, defaults to true
+* `node['postfix']['listen']['submission']` - run the `smtpd` process while
+   listening on the `submission` port, defaults to false
 
 Recipes
 =======

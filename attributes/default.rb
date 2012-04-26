@@ -32,5 +32,11 @@ default['postfix']['smtp_tls_cafile'] = "/etc/postfix/cacert.pem"
 default['postfix']['smtp_use_tls']    = "yes"
 default['postfix']['smtp_sasl_user_name'] = ""
 default['postfix']['smtp_sasl_passwd']    = ""
+default['postfix']['smtp_destination_concurrency_limit'] = "$default_destination_concurrency_limit"
 
 default['postfix']['aliases'] = {}
+
+default['postfix']['inet_interfaces'] = "loopback-only"
+
+default['postfix']['listen']['smtp'] = true
+default['postfix']['listen']['submission'] = false
