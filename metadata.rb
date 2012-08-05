@@ -102,3 +102,8 @@ attribute "postfix/multi_environment_relay",
   :display_name => "Postfix Search for relayhost in any environment",
   :description => "If true, then the client recipe will search any environment instead of just the node's",
   :default => ""
+  
+attribute "postfix/use_procmail",
+  :display_name => "Postfix Use procmail?",
+  :description => "Whether procmail should be used as the local delivery agent for a server",
+  :default => "no"

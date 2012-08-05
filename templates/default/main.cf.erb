@@ -37,5 +37,8 @@ relayhost = <%= node['postfix']['relayhost'] %>
 mynetworks = <%= node['postfix']['mail_relay_networks'] %>
 inet_interfaces = loopback-only
 <% end -%>
+<% if node['postfix']['use_procmail'] -%>
+mailbox_command = /usr/bin/procmail -a "$EXTENSION"
+<% end -%>
 mailbox_size_limit = 0
 recipient_delimiter = +
