@@ -33,4 +33,6 @@ default['postfix']['smtp_use_tls']    = "yes"
 default['postfix']['smtp_sasl_user_name'] = ""
 default['postfix']['smtp_sasl_passwd']    = ""
 
+default['postfix']['use_procmail'] = false
+
 default['postfix']['aliases'] = {}
