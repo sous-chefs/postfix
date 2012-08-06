@@ -16,9 +16,11 @@ smtp_sasl_auth_enable = <%= node['postfix']['smtp_sasl_auth_enable'] %>
 <% if node['postfix']['smtp_sasl_auth_enable'] == "yes" -%>
 smtp_sasl_password_maps = <%= node['postfix']['smtp_sasl_password_maps'] %>
 smtp_sasl_security_options = <%= node['postfix']['smtp_sasl_security_options'] %>
-smtp_tls_CAfile = <%= node['postfix']['smtp_tls_cafile'] %>
 smtp_use_tls = <%= node['postfix']['smtp_use_tls'] %>
 <% end -%>
+<% if node['postfix']['smtp_tls_cafile'] -%>
+smtp_tls_CAfile = <%= node['postfix']['smtp_tls_cafile'] %>
+<% end %>
 myhostname = <%= node['postfix']['myhostname'] %>
 <% if node['postfix']['domain'] %>
 mydomain = <%= node['postfix']['mydomain'] %>
