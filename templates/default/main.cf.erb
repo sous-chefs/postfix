@@ -39,3 +39,8 @@ inet_interfaces = loopback-only
 <% end -%>
 mailbox_size_limit = 0
 recipient_delimiter = +
+
+milter_default_action = <%= node['postfix']['milter_default_action'] %>
+milter_protocol = <%= node['postfix']['milter_protocol'] %>
+smtpd_milters = <%= node['postfix']['smtpd_milters'] %>
+non_smtpd_milters = <%= node['postfix']['non_smtpd_milters'] %>
