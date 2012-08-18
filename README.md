@@ -57,6 +57,9 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['aliases']` - hash of aliases to create with
   `recipe[postfix::aliases]`, see below under __Recipes__ for more
   information.
+* `node['postfix']['use_procmail']` - set to true if nodes should use
+  procmail as the delivery agent (mailbox_command).
+
 
 Recipes
 =======
