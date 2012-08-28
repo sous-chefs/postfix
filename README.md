@@ -16,6 +16,8 @@ Requirements
 * RHEL/CentOS/Scientific 5.7+, 6.2+
 * Amazon Linux (as of AMIs created after 4/9/2012)
 
+May work on other platforms with or without modification.
+
 Attributes
 ==========
 
@@ -59,7 +61,14 @@ See `attributes/default.rb` for default values.
   information.
 * `node['postfix']['use_procmail']` - set to true if nodes should use
   procmail as the delivery agent (mailbox_command).
-
+* `node['postfix']['milter_default_action']` - corresponds to the
+  `milter_default_action` option in `/etc/postfix/main.cf`.
+* `node['postfix']['milter_protocol']` - corresponds to the
+  `milter_protocol` option in `/etc/postfix/main.cf`.
+* `node['postfix']['smtpd_milters']` - corresponds to the
+  `smtpd_milters` option in `/etc/postfix/main.cf`.
+* `node['postfix']['non_smtpd_milters']` - corresponds to the
+  `non_smtpd_milters` option in `/etc/postfix/main.cf`.
 
 Recipes
 =======
