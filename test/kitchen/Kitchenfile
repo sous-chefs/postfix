@@ -1,0 +1,3 @@
+cookbook "postfix" do
+  runtimes []
+end
