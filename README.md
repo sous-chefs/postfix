@@ -122,6 +122,9 @@ template to the `templates/default` or to the appropriate
 platform+version directory per the File Specificity rules for
 templates. Then specify a hash of aliases for the
 `node['postfix']['aliases']` attribute.
+Arrays are supported as alias values, since postfix supports
+comma separated values per alias, simply specify your alias
+as an array to use this handy feature.
 
 http://wiki.opscode.com/display/chef/Templates#Templates-TemplateLocationSpecificity
 
