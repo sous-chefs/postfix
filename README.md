@@ -69,7 +69,29 @@ See `attributes/default.rb` for default values.
   `smtpd_milters` option in `/etc/postfix/main.cf`.
 * `node['postfix']['non_smtpd_milters']` - corresponds to the
   `non_smtpd_milters` option in `/etc/postfix/main.cf`.
-* `node['postfix']['inet_interfaces']` - interfaces to listen to, all or loopback-only
+* `node['postfix']['inet_interfaces']` - interfaces to listen to, all
+  or loopback-only
+* `node['postfix']['sender_canonical_classes']` - controls what
+  addresses are subject to `sender_canonical_maps` address mapping,
+  specify one or more of: `envelope_sender`, `header_sender` - defaults to
+  nil
+* `node['postfix']['recipient_canonical_classes']` - controls what
+  addresses are subject to `recipient_canonical_maps` address mapping,
+  specify one or more of: `envelope_recipient`, `header_recipient` -
+  defaults to nil
+* `node['postfix']['canonical_classes']` - controls what addresses are
+  subject to `canonical_maps` address mapping, specify one or more of:
+  `envelope_sender`, `envelope_recipient`, `header_sender`,
+  `header_recipient` - defaults to nil
+* `node['postfix']['sender_canonical_maps']` - optional address
+  mapping lookup tables for envelope and header sender addresses, eg.
+  `hash:/etc/postfix/sender_canonical` - defaults to nil
+* `node['postfix']['recipient_canonical_maps']` - optional address
+  mapping lookup tables for envelope and header recipient addresses,
+  eg. `hash:/etc/postfix/recipient_canonical` - defaults to nil
+* `node['postfix']['canonical_maps']` - optional address mapping
+  lookup tables for message headers and envelopes, eg.
+  `hash:/etc/postfix/canonical` - defaults to nil
 
 Recipes
 =======
