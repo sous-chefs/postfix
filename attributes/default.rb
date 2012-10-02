@@ -34,3 +34,10 @@ default['postfix']['smtp_sasl_user_name'] = ""
 default['postfix']['smtp_sasl_passwd']    = ""
 
 default['postfix']['aliases'] = {}
+
+default['postfix']['sender_canonical_classes'] = nil
+default['postfix']['recipient_canonical_classes'] = nil
+default['postfix']['canonical_classes'] = nil
+default['postfix']['sender_canonical_maps'] = nil
+default['postfix']['recipient_canonical_maps'] = nil
+default['postfix']['canonical_maps'] = nil
