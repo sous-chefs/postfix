@@ -88,11 +88,6 @@ attribute "postfix/smtp_sasl_passwd",
   :description => "Password for smtp_sasl_user_name",
   :default => ""
 
-attribute "postfix/aliases",
-  :display_name => "Postfix mail aliases",
-  :description => "Hash of mail aliases for /etc/aliases",
-  :default => ""
-
 attribute "postfix/relayhost_role",
   :display_name => "Postfix Relayhost's role",
   :description => "String containing the role name",
