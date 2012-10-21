@@ -18,14 +18,12 @@
 # limitations under the License.
 #
 
-package "postfix" do
-  action :install
-end
+package "postfix"
 
-if node['postfix']['use_procmail'] then
-  package "procmail" do 
-    action :install
-  end
+if node['postfix']['use_procmail']
+
+  package "procmail"
+
 end
 
 
@@ -34,26 +32,31 @@ service "postfix" do
   action :enable
 end
 
-case node[:platform]
-when "redhat", "centos", "amazon", "scientific"
+case node['platform_family']
+when "rhel", "fedora"
+
   service "sendmail" do
     action :nothing
   end
+
   execute "switch_mailer_to_postfix" do
     command "/usr/sbin/alternatives --set mta /usr/sbin/sendmail.postfix"
-    notifies :stop, resources(:service => "sendmail")
-    notifies :start, resources(:service => "postfix")
+    notifies :stop, "service[sendmail]"
+    notifies :start, "service[postfix]"
     not_if "/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix"
   end
+
 end
 
 %w{main master}.each do |cfg|
+
   template "/etc/postfix/#{cfg}.cf" do
     source "#{cfg}.cf.erb"
     owner "root"
-    group "root"
-    mode 0644
-    notifies :restart, resources(:service => "postfix")
+    group 0
+    mode 00644
+    notifies :restart, "service[postfix]"
+
   end
 end
 

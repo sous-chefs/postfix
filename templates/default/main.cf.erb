@@ -24,12 +24,12 @@ myhostname = <%= node['postfix']['myhostname'] %>
 mydomain = <%= node['postfix']['mydomain'] %>
 <% end -%>
 myorigin = <%= node['postfix']['myorigin'] %>
-smtpd_banner = $myhostname ESMTP $mail_name 
+smtpd_banner = $myhostname ESMTP $mail_name
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 mydestination = <%= node['postfix']['myhostname'] %>, <%= node['hostname'] %>, localhost.localdomain, localhost
 <% if node['postfix']['mail_type'] == "master" -%>
-relayhost = 
+relayhost =
 mynetworks = <%= node['postfix']['mail_relay_networks'] %>
 inet_interfaces = all
 <% else -%>

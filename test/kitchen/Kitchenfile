@@ -1,3 +1,7 @@
 cookbook "postfix" do
-  runtimes []
+  configuration "default"
+  configuration "aliases"
+  configuration "client"
+  configuration "server"
+  configuration "sasl_auth"
 end
