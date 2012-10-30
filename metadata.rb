@@ -68,6 +68,11 @@ attribute "postfix/smtp_sasl_security_options",
   :description => "Sets the value of smtp_sasl_security_options in main.cf",
   :default => "noanonymous"
 
+attribute "postfix/inet_interfaces",
+  :display_name => "Postfix listening interfaces",
+  :description => "Interfaces to listen to, all or loopback-only. default is all for master mail_type, and loopback-only otherwise",
+  :default => ""
+
 attribute "postfix/smtp_tls_cafile",
   :display_name => "Postfix SMTP TLS CA File",
   :description => "CA certificate file for SMTP over TLS",
