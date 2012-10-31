@@ -69,6 +69,7 @@ See `attributes/default.rb` for default values.
   `smtpd_milters` option in `/etc/postfix/main.cf`.
 * `node['postfix']['non_smtpd_milters']` - corresponds to the
   `non_smtpd_milters` option in `/etc/postfix/main.cf`.
+* `node['postfix']['inet_interfaces']` - interfaces to listen to, all or loopback-only
 
 Recipes
 =======
