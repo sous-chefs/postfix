@@ -31,11 +31,11 @@ mydestination = <%= node['postfix']['myhostname'] %>, <%= node['hostname'] %>, l
 <% if node['postfix']['mail_type'] == "master" -%>
 relayhost =
 mynetworks = <%= node['postfix']['mail_relay_networks'] %>
-inet_interfaces = all
+inet_interfaces = <%= node[:postfix][:inet_interfaces] || 'all' %>
 <% else -%>
 relayhost = <%= node['postfix']['relayhost'] %>
 mynetworks = <%= node['postfix']['mail_relay_networks'] %>
-inet_interfaces = loopback-only
+inet_interfaces = <%= node[:postfix][:inet_interfaces] || 'loopback-only' %>
 <% end -%>
 <% if node['postfix']['use_procmail'] -%>
 mailbox_command = /usr/bin/procmail -a "$EXTENSION"
