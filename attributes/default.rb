@@ -41,3 +41,6 @@ default['postfix']['smtpd_milters']  = ""
 default['postfix']['non_smtpd_milters']  = ""
 
 default['postfix']['aliases'] = {}
+
+default['postfix']['virtual_domains'] = []
+default['postfix']['virtual_aliases'] = {}
