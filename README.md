@@ -38,6 +38,10 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['multi_environment_relay']` - set to true if nodes
   should not constrain search for the relayhost in their own
   environment.
+* `node['postfix']['inet_interfaces']` - if set, corresponds to the
+  inet_interfaces option in `/etc/postfix/main.cf`. nil by default,
+  which will result in 'all' for master `mail_type` and
+  'loopback-only' for non-master (anything else) `mail_type`.
 * `node['postfix']['mail_relay_networks']` - corresponds to the
   mynetworks option in `/etc/postfix/main.cf`.
 * `node['postfix']['smtpd_use_tls']` - set to "yes" to use TLS for
