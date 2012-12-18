@@ -1,3 +1,8 @@
+## v2.1.2:
+
+* [COOK-2010] - postfix sasl_auth does not include the sasl plain
+  package
+
 ## v2.1.0:
 
 * [COOK-1233] - optional configuration for canonical maps
