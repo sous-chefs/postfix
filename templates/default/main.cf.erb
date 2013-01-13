@@ -66,3 +66,13 @@ recipient_canonical_maps = <%= node['postfix']['recipient_canonical_maps'] %>
 <% unless node['postfix']['canonical_maps'].nil? -%>
 canonical_maps = <%= node['postfix']['canonical_maps'] %>
 <% end -%>
+<% unless node['postfix']['virtual_mailbox_domains'].nil? -%>
+virtual_mailbox_domains = <%= node['postfix']['virtual_mailbox_domains'].join(",") %>
+<% end -%>
+<% unless node['postfix']['virtual_alias_maps'].nil? -%>
+virtual_alias_maps = /etc/postfix/virtual
+<% end -%>
+<% unless node['postfix']['virtual_mailbox_maps'].nil? -%>
+virtual_mailbox_maps = /etc/postfix/vmailbox
+<% end -%>
+

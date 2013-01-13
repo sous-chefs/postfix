@@ -96,6 +96,13 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['canonical_maps']` - optional address mapping
   lookup tables for message headers and envelopes, eg.
   `hash:/etc/postfix/canonical` - defaults to nil
+* `node['postfix']['virtual_mailbox_domains']` - array of optional
+   virtual-hosting domains - defaults to nil
+* `node['postfix']['virtual_mailbox_maps']` - array of email
+   addresses (mailboxes) in virtual-hosting domains - defaults to nil
+* `node['postfix']['virtual_alias_maps']` - hash of aliases and
+   the actual email addresses (mailboxes) that should receive them.
+   - defaults to nil
 
 Recipes
 =======
