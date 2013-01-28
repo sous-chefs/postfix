@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require_recipe "postfix"
+include_recipe "postfix"
 
 execute "update-postfix-aliases" do
   command "newaliases"
