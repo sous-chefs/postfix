@@ -1,3 +1,7 @@
+## v2.1.4:
+
+* [COOK-2281] - postfix aliases uses require_recipe statement
+
 ## v2.1.2:
 
 * [COOK-2010] - postfix sasl_auth does not include the sasl plain
