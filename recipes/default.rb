@@ -58,6 +58,18 @@ end
     notifies :restart, "service[postfix]"
 
   end
+
+  script "restorecon-#{cfg}" do
+    interpreter "bash"
+    code "restorecon /etc/postfix/#{cfg}.cf"
+    only_if {node['postfix']['selinux']}
+  end
+end
+
+script "chcon-sender_canonical" do
+  interpreter "bash"
+  code "chcon -t postfix_etc_t /etc/postfix/sender_canonical"
+  only_if {node['postfix']['selinux']}
 end
 
 service "postfix" do
