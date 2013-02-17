@@ -77,3 +77,29 @@ ifmail    unix  -       n       n       -       -       pipe
   flags=F user=ftn argv=/usr/lib/ifmail/ifmail -r $nexthop ($recipient)
 bsmtp     unix  -       n       n       -       -       pipe
   flags=Fq. user=foo argv=/usr/local/sbin/bsmtp -f $sender $nexthop $recipient
+
+<%
+   # See if we need any additional services, such as amavis
+   if !node['postfix']['services'].nil? then
+     node['postfix']['services'].each do |name,svc|
+       t            = svc['type']
+       priv         = svc['private'].nil?      ? '-' : svc['private'] ? 'y' : 'n'
+       unprivil     = svc['unprivileged'].nil? ? '-' : svc['unprivileged'] ? 'y' : 'n'
+       chroot       = svc['chroot'].nil?       ? '-' : svc['chroot'] ? 'y' : 'n'
+       wakeuptime   = svc['wakeuptime'].nil?   ? '-' : svc['wakeuptime']
+       processlimit = svc['processlimit'].nil? ? '-' : svc['processlimit']
+       cmd          = svc['command']
+       options      = svc['options']
+       raise "node['postfix']['services'][#{name}]['type'] must be set" unless !t.nil?
+       raise "node['postfix']['services'][#{name}]['command'] must be set"  unless !cmd.nil?
+%>
+
+<%= name %> <%= t %>  <%= priv %> <%= unprivil %> <%= chroot %> <%= wakeuptime %> <%= processlimit %> <%= cmd %>
+<%     if !options.nil? then
+         options.each do |opt,val| %>
+    -o <%= opt %>=<%= val %>
+<%       end
+       end %>
+<%   end
+   end %>
+

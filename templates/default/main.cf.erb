@@ -3,6 +3,60 @@
 # Configured as <%= node['postfix']['mail_type'] %>
 ###
 
+
+#-------------------------------------------
+# Platform-specific settings for <%= node['platform'] %>
+<%
+# In keeping with the DRY principle, we don't
+# maintain multiple configuration files using
+# file specificity, but rather embed the small
+# platform-specific portion within a single,
+# otherwise identical, configuration file.
+# Currently, only RedHat/CentOS receive special
+# settings because I only have that system
+# available for testing. If you have other
+# systems that should be included, please
+# add the appropriate settings and contribute
+# back to the community cookbook.
+case node['platform']
+when "centos", "redhat", "scientific"
+%>
+queue_directory = /var/spool/postfix
+command_directory = /usr/sbin
+daemon_directory = /usr/libexec/postfix
+data_directory = /var/lib/postfix
+mail_owner = postfix
+debug_peer_level = 2
+debugger_command =
+	 PATH=/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin
+	 ddd $daemon_directory/$process_name $process_id & sleep 5
+# The following three settings are here to keep
+# RedHat's alternatives mechanism working
+sendmail_path = /usr/sbin/sendmail.postfix
+newaliases_path = /usr/bin/newaliases.postfix
+mailq_path = /usr/bin/mailq.postfix
+setgid_group = postdrop
+html_directory = no
+manpage_directory = /usr/share/man
+sample_directory = /usr/share/doc/postfix-2.6.6/samples
+readme_directory = /usr/share/doc/postfix-2.6.6/README_FILES
+<%
+when "debian", "ubuntu"
+%>
+<%
+when "amazon"
+%>
+<%
+else
+   # If you run into this error, please add a when clause
+   # and contribute your platform-specific settings back to
+   # the community cookbook
+   raise "Platform #{node['platform']} is currently not supported"
+end
+%>
+# End of platform-specific settings
+#-------------------------------------------
+
 biff = no
 append_dot_mydomain = no
 smtpd_use_tls = <%= node['postfix']['smtpd_use_tls'] %>
@@ -28,12 +82,12 @@ smtpd_banner = $myhostname ESMTP $mail_name
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 mydestination = <%= node['postfix']['myhostname'] %>, <%= node['hostname'] %>, localhost.localdomain, localhost
+inet_protocols = all
+relayhost = <%= node['postfix']['relayhost'] %>
 <% if node['postfix']['mail_type'] == "master" -%>
-relayhost =
 mynetworks = <%= node['postfix']['mail_relay_networks'] %>
 inet_interfaces = <%= node['postfix']['inet_interfaces'] || 'all' %>
 <% else -%>
-relayhost = <%= node['postfix']['relayhost'] %>
 mynetworks = <%= node['postfix']['mail_relay_networks'] %>
 inet_interfaces = <%= node['postfix']['inet_interfaces'] || 'loopback-only' %>
 <% end -%>
@@ -70,9 +124,12 @@ canonical_maps = <%= node['postfix']['canonical_maps'] %>
 virtual_mailbox_domains = <%= node['postfix']['virtual_mailbox_domains'].join(",") %>
 <% end -%>
 <% unless node['postfix']['virtual_alias_maps'].nil? -%>
-virtual_alias_maps = /etc/postfix/virtual
+virtual_alias_maps = hash:/etc/postfix/virtual
 <% end -%>
 <% unless node['postfix']['virtual_mailbox_maps'].nil? -%>
-virtual_mailbox_maps = /etc/postfix/vmailbox
+virtual_mailbox_maps = hash:/etc/postfix/vmailbox
+<% end -%>
+<% unless node['postfix']['content_filter'].nil? -%>
+content_filter = <%= node['postfix']['content_filter'] %>
 <% end -%>
 
