@@ -106,6 +106,8 @@ See `attributes/default.rb` for default values.
    the actual email addresses (mailboxes) that should receive them.
    - defaults to nil
 * `node['postfix']['content_filter']` - content filter
+* `node['postfix']['virtual_transport']` - corresponds to virtual_transport
+   entry in main.cf
 
 * `node['postfix']['services']` - hash of additional service entries
   that should be added to master.cf. defaults to nil.

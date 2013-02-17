@@ -129,6 +129,9 @@ virtual_alias_maps = hash:/etc/postfix/virtual
 <% unless node['postfix']['virtual_mailbox_maps'].nil? -%>
 virtual_mailbox_maps = hash:/etc/postfix/vmailbox
 <% end -%>
+<% unless node['postfix']['virtual_transport'].nil? -%>
+virtual_transport = <%= node['postfix']['virtual_transport'] %>
+<% end -%>
 <% unless node['postfix']['content_filter'].nil? -%>
 content_filter = <%= node['postfix']['content_filter'] %>
 <% end -%>
