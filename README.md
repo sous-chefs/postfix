@@ -44,6 +44,8 @@ See `attributes/default.rb` for default values.
   'loopback-only' for non-master (anything else) `mail_type`.
 * `node['postfix']['mail_relay_networks']` - corresponds to the
   mynetworks option in `/etc/postfix/main.cf`.
+* `node['postfix']['append_dot_mydomain']` - corresponds to the
+  append_dot_mydomain option in `/etc/postfix/main.cf`.
 * `node['postfix']['smtpd_use_tls']` - set to "yes" to use TLS for
   SMTPD, which will use the snakeoil certs.
 * `node['postfix']['smtp_sasl_auth_enable']` - set to "yes" to enable
