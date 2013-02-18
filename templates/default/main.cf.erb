@@ -4,7 +4,7 @@
 ###
 
 biff = no
-append_dot_mydomain = no
+append_dot_mydomain = <%= node['postfix']['append_dot_mydomain'] %>
 smtpd_use_tls = <%= node['postfix']['smtpd_use_tls'] %>
 <% if node['postfix']['smtpd_use_tls'] == "yes" -%>
 smtpd_tls_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
