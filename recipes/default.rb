@@ -60,6 +60,14 @@ end
   end
 end
 
+template "/etc/postfix/sender_canonical" do
+  owner "root"
+  group 0
+  mode 00644
+  notifies :restart, "service[postfix]"
+  not_if { node['postfix']['sender_canonical_map'].empty? }
+end
+
 service "postfix" do
   action :start
 end
