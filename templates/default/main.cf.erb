@@ -61,8 +61,8 @@ biff = no
 append_dot_mydomain = no
 smtpd_use_tls = <%= node['postfix']['smtpd_use_tls'] %>
 <% if node['postfix']['smtpd_use_tls'] == "yes" -%>
-smtpd_tls_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
-smtpd_tls_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+smtpd_tls_cert_file=/etc/pki/tls/certs/<%= node['postfix']['myhostname'] %>.crt
+smtpd_tls_key_file=/etc/pki/tls/private/<%= node['postfix']['myhostname'] %>.key
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 <% end -%>
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
