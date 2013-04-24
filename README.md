@@ -16,6 +16,8 @@ Requirements
 * RHEL/CentOS/Scientific 5.7+, 6.2+
 * Amazon Linux (as of AMIs created after 4/9/2012)
 
+May work on other platforms with or without modification.
+
 Attributes
 ==========
 
@@ -36,6 +38,10 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['multi_environment_relay']` - set to true if nodes
   should not constrain search for the relayhost in their own
   environment.
+* `node['postfix']['inet_interfaces']` - if set, corresponds to the
+  inet_interfaces option in `/etc/postfix/main.cf`. nil by default,
+  which will result in 'all' for master `mail_type` and
+  'loopback-only' for non-master (anything else) `mail_type`.
 * `node['postfix']['mail_relay_networks']` - corresponds to the
   mynetworks option in `/etc/postfix/main.cf`.
 * `node['postfix']['smtpd_use_tls']` - set to "yes" to use TLS for
@@ -57,6 +63,39 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['aliases']` - hash of aliases to create with
   `recipe[postfix::aliases]`, see below under __Recipes__ for more
   information.
+* `node['postfix']['use_procmail']` - set to true if nodes should use
+  procmail as the delivery agent (mailbox_command).
+* `node['postfix']['milter_default_action']` - corresponds to the
+  `milter_default_action` option in `/etc/postfix/main.cf`.
+* `node['postfix']['milter_protocol']` - corresponds to the
+  `milter_protocol` option in `/etc/postfix/main.cf`.
+* `node['postfix']['smtpd_milters']` - corresponds to the
+  `smtpd_milters` option in `/etc/postfix/main.cf`.
+* `node['postfix']['non_smtpd_milters']` - corresponds to the
+  `non_smtpd_milters` option in `/etc/postfix/main.cf`.
+* `node['postfix']['inet_interfaces']` - interfaces to listen to, all
+  or loopback-only
+* `node['postfix']['sender_canonical_classes']` - controls what
+  addresses are subject to `sender_canonical_maps` address mapping,
+  specify one or more of: `envelope_sender`, `header_sender` - defaults to
+  nil
+* `node['postfix']['recipient_canonical_classes']` - controls what
+  addresses are subject to `recipient_canonical_maps` address mapping,
+  specify one or more of: `envelope_recipient`, `header_recipient` -
+  defaults to nil
+* `node['postfix']['canonical_classes']` - controls what addresses are
+  subject to `canonical_maps` address mapping, specify one or more of:
+  `envelope_sender`, `envelope_recipient`, `header_sender`,
+  `header_recipient` - defaults to nil
+* `node['postfix']['sender_canonical_maps']` - optional address
+  mapping lookup tables for envelope and header sender addresses, eg.
+  `hash:/etc/postfix/sender_canonical` - defaults to nil
+* `node['postfix']['recipient_canonical_maps']` - optional address
+  mapping lookup tables for envelope and header recipient addresses,
+  eg. `hash:/etc/postfix/recipient_canonical` - defaults to nil
+* `node['postfix']['canonical_maps']` - optional address mapping
+  lookup tables for message headers and envelopes, eg.
+  `hash:/etc/postfix/canonical` - defaults to nil
 
 Recipes
 =======
@@ -110,6 +149,9 @@ template to the `templates/default` or to the appropriate
 platform+version directory per the File Specificity rules for
 templates. Then specify a hash of aliases for the
 `node['postfix']['aliases']` attribute.
+Arrays are supported as alias values, since postfix supports
+comma separated values per alias, simply specify your alias
+as an array to use this handy feature.
 
 http://wiki.opscode.com/display/chef/Templates#Templates-TemplateLocationSpecificity
 

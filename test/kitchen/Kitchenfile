@@ -1,0 +1,7 @@
+cookbook "postfix" do
+  configuration "default"
+  configuration "aliases"
+  configuration "client"
+  configuration "server"
+  configuration "sasl_auth"
+end

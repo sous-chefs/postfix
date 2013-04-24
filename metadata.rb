@@ -1,8 +1,9 @@
+name              "postfix"
 maintainer        "Opscode, Inc."
 maintainer_email  "cookbooks@opscode.com"
 license           "Apache 2.0"
 description       "Installs and configures postfix for client or outbound relayhost, or to do SASL auth"
-version           "1.2.0"
+version           "2.1.4"
 recipe            "postfix", "Installs and configures postfix"
 recipe            "postfix::sasl_auth", "Set up postfix to auth to a server with sasl"
 recipe            "postfix::aliases", "Manages /etc/aliases"
@@ -68,6 +69,11 @@ attribute "postfix/smtp_sasl_security_options",
   :description => "Sets the value of smtp_sasl_security_options in main.cf",
   :default => "noanonymous"
 
+attribute "postfix/inet_interfaces",
+  :display_name => "Postfix listening interfaces",
+  :description => "Interfaces to listen to, all or loopback-only. default is all for master mail_type, and loopback-only otherwise",
+  :default => ""
+
 attribute "postfix/smtp_tls_cafile",
   :display_name => "Postfix SMTP TLS CA File",
   :description => "CA certificate file for SMTP over TLS",
@@ -102,3 +108,8 @@ attribute "postfix/multi_environment_relay",
   :display_name => "Postfix Search for relayhost in any environment",
   :description => "If true, then the client recipe will search any environment instead of just the node's",
   :default => ""
+  
+attribute "postfix/use_procmail",
+  :display_name => "Postfix Use procmail?",
+  :description => "Whether procmail should be used as the local delivery agent for a server",
+  :default => "no"
