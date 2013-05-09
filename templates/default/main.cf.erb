@@ -20,7 +20,7 @@ smtp_tls_CAfile = <%= node['postfix']['smtp_tls_cafile'] %>
 smtp_use_tls = <%= node['postfix']['smtp_use_tls'] %>
 <% end -%>
 myhostname = <%= node['postfix']['myhostname'] %>
-<% if node['postfix']['domain'] %>
+<% if node['postfix']['mydomain'] %>
 mydomain = <%= node['postfix']['mydomain'] %>
 <% end -%>
 myorigin = <%= node['postfix']['myorigin'] %>
