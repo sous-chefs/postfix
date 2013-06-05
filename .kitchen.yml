@@ -52,4 +52,7 @@ suites:
 - name: sasl_auth
   run_list:
   - recipe[postfix::sasl_auth]
-  attributes: {}
+  attributes:
+    postfix:
+      main :
+        smtp_sasl_auth_enable: "yes"
