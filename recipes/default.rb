@@ -45,6 +45,10 @@ end
 
 %w{main master}.each do |cfg|
   template "/etc/postfix/#{cfg}.cf" do
+# ======= stash for merge
+#
+#   template "#{node['postfix']['conf_dir']}/#{cfg}.cf" do
+# >>>>>>> set config file location to attributes and use it.
     source "#{cfg}.cf.erb"
     owner "root"
     group 0
