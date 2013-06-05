@@ -87,3 +87,19 @@ end
 
 # Master.cf attributes
 default['postfix']['master']['submission'] = false
+# ======= stash for merge
+# default['postfix']['sender_canonical_classes'] = nil
+# default['postfix']['recipient_canonical_classes'] = nil
+# default['postfix']['canonical_classes'] = nil
+# default['postfix']['sender_canonical_maps'] = nil
+# default['postfix']['recipient_canonical_maps'] = nil
+# default['postfix']['canonical_maps'] = nil
+#
+#
+# case node['platform']
+# when 'smartos'
+#   default['postfix']['aliases_db'] = '/opt/local/etc/postfix/aliases'
+# else
+#   default['postfix']['aliases_db'] = '/etc/aliases'
+# end
+# >>>>>>> aliasdb location become attributes

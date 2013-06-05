@@ -21,7 +21,7 @@ execute "update-postfix-aliases" do
   action :nothing
 end
 
-template "/etc/aliases" do
+template node['postfix']['aliases_db'] do
   source "aliases.erb"
   notifies :run, "execute[update-postfix-aliases]"
 end
