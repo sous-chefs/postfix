@@ -96,6 +96,9 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['canonical_maps']` - optional address mapping
   lookup tables for message headers and envelopes, eg.
   `hash:/etc/postfix/canonical` - defaults to nil
+* `node['postfix']['smtp_generic_maps']` - optional address mapping
+  lookup tables for outgoing smtp address rewriting
+  `hash:/etc/postfix/smtp_generic_maps` - defaults to nil
 
 Recipes
 =======
