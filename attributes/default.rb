@@ -70,18 +70,15 @@ if node['postfix']['main']['smtp_sasl_auth_enable'] == "yes"
   default['postfix']['sasl']['smtp_sasl_user_name'] = ""
   default['postfix']['sasl']['smtp_sasl_passwd']    = ""
   default['postfix']['main']['relayhost'] = ""
-## ======= stash for merge
-## case node['platform']
-## when 'smartos'
-##   default['postfix']['conf_dir'] = '/opt/local/etc/postfix'
-##   default['postfix']['aliases_db'] = '/opt/local/etc/postfix/aliases'
-##   default['postfix']['smtp_sasl_password_maps']    = "hash://opt/local/etc/postfix/sasl_passwd"
-##   default['postfix']['smtp_tls_cafile'] = "/opt/local/etc/postfix/cacert.pem"
-##   default['postfix']['smtp_use_tls']    = "no"
-## else
-##   default['postfix']['conf_dir'] = '/etc/postfix'
-##   default['postfix']['aliases_db'] = '/etc/aliases'
-## >>>>>>> set config file location to attributes and use it.
+##  ======= stash for merge
+##  case node['platform']
+##  when 'smartos'
+##    default['postfix']['conf_dir'] = '/opt/local/etc/postfix'
+##    default['postfix']['aliases_db'] = '/opt/local/etc/postfix/aliases'
+##    default['postfix']['smtp_sasl_password_maps']    = "hash://opt/local/etc/postfix/sasl_passwd"
+##    default['postfix']['smtp_tls_cafile'] = "/opt/local/etc/postfix/cacert.pem"
+##    default['postfix']['smtp_use_tls']    = "no"
+##  >>>>>>> set two attributes as default substitute for else statement.
 end
 
 # Default main.cf attributes according to `postconf -d`
