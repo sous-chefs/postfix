@@ -1,3 +1,12 @@
+## v2.1.6:
+
+### Bug
+
+- [COOK-2501]: Reference to `['postfix']['domain']` should be
+  `['postfix']['mydomain']`
+- [COOK-2715]: master.cf uses old name for `smtp_fallback_relay`
+  (`fallback_relay`) parameter in master.cf
+
 ## v2.1.4:
 
 * [COOK-2281] - postfix aliases uses require_recipe statement
