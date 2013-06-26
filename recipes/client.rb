@@ -23,20 +23,23 @@ if Chef::Config[:solo]
   return
 end
 
-query = "role:#{node['postfix']['relayhost_role']}"
-relayhost = ""
-results = []
+if node['postfix']['relayhost'].nil? then
+  query = "role:#{node['postfix']['relayhost_role']}"
+  relayhost = ""
+  results = []
 
-if node.run_list.roles.include?(node['postfix']['relayhost_role'])
-  relayhost << node['ipaddress']
-elsif node['postfix']['multi_environment_relay']
-  results = search(:node, query)
-  relayhost = results.map {|n| n['ipaddress']}.first
-else
-  results = search(:node, "#{query} AND chef_environment:#{node.chef_environment}")
-  relayhost = results.map {|n| n['ipaddress']}.first
+  if node.run_list.roles.include?(node['postfix']['relayhost_role'])
+    relayhost << node['ipaddress']
+  elsif node['postfix']['multi_environment_relay']
+    results = search(:node, query)
+    relayhost = results.map {|n| n['ipaddress']}.first
+  else
+    results = search(:node, "#{query} AND chef_environment:#{node.chef_environment}")
+    relayhost = results.map {|n| n['ipaddress']}.first
+  end
+
+  node.set['postfix']['relayhost'] = "[#{relayhost}]"
 end
 
-node.set['postfix']['relayhost'] = "[#{relayhost}]"
-
 include_recipe "postfix"
+

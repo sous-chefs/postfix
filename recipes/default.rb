@@ -48,6 +48,23 @@ when "rhel", "fedora"
 
 end
 
+%w{virtual vmailbox}.each do |cfg|
+
+  execute "update-virtual-#{cfg}" do
+    action :nothing
+    command "postmap /etc/postfix/#{cfg}"
+  end
+
+  template "/etc/postfix/#{cfg}" do
+    source "#{cfg}.erb"
+    owner "root"
+    group 0
+    mode 00644
+    notifies :restart, "service[postfix]"
+    notifies :run, "execute[update-virtual-#{cfg}]"
+  end
+end
+
 %w{main master}.each do |cfg|
 
   template "/etc/postfix/#{cfg}.cf" do
@@ -56,10 +73,10 @@ end
     group 0
     mode 00644
     notifies :restart, "service[postfix]"
-
   end
 end
 
 service "postfix" do
   action :start
 end
+

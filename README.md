@@ -38,6 +38,8 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['multi_environment_relay']` - set to true if nodes
   should not constrain search for the relayhost in their own
   environment.
+* `node['postfix']['inet_protocols']` - if set, corresponds to the
+  inet_protocols option in `/etc/postfix/main.cf`. nil by default
 * `node['postfix']['inet_interfaces']` - if set, corresponds to the
   inet_interfaces option in `/etc/postfix/main.cf`. nil by default,
   which will result in 'all' for master `mail_type` and
@@ -45,7 +47,11 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['mail_relay_networks']` - corresponds to the
   mynetworks option in `/etc/postfix/main.cf`.
 * `node['postfix']['smtpd_use_tls']` - set to "yes" to use TLS for
-  SMTPD, which will use the snakeoil certs.
+  SMTPD. The certificate needs to be stored in
+  /etc/pki/tls/certs/xxx.crt and the corresponding key must be stored
+  in 
+  /etc/pki/tls/private/xxx.key. xxx must be the FQDN of the server, as
+  specified in node['postfix']['myhostname']
 * `node['postfix']['smtp_sasl_auth_enable']` - set to "yes" to enable
   SASL authentication for SMTP.
 * `node['postfix']['smtp_sasl_password_maps']` - corresponds to the
@@ -96,6 +102,36 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['canonical_maps']` - optional address mapping
   lookup tables for message headers and envelopes, eg.
   `hash:/etc/postfix/canonical` - defaults to nil
+* `node['postfix']['virtual_mailbox_domains']` - array of optional
+   virtual-hosting domains - defaults to nil
+* `node['postfix']['virtual_mailbox_maps']` - array of email
+   addresses (mailboxes) in virtual-hosting domains - defaults to nil
+* `node['postfix']['virtual_alias_maps']` - hash of aliases and
+   the actual email addresses (mailboxes) that should receive them.
+   - defaults to nil
+* `node['postfix']['content_filter']` - content filter
+* `node['postfix']['virtual_transport']` - corresponds to virtual_transport
+   entry in main.cf
+
+* `node['postfix']['services']` - hash of additional service entries
+  that should be added to master.cf. defaults to nil.
+  The hash should follow this structure:
+  'name' => {
+     'type' => 'unix|inet|fifo|pass',
+     'private' => true|false,
+     'unprivileged' => true|false,
+     'chroot' => true|false,
+     'wakeuptime' => number,
+     'processlimit' => number,
+     'command' => "command line",
+     'options' => {
+        'name' => 'value',
+        ...
+     }
+  }
+
+  Note: the value in the options must not contain spaces.
+
 
 Recipes
 =======
@@ -119,6 +155,9 @@ based which node has the `node['postfix']['relayhost']` role. Sets the
 `node['postfix']['relayhost']` attribute to the first result from the
 search.
 
+Alternatively, set the attribute `node['postfix']['relayhost']` directly
+to force a specific relay host.
+
 Includes the default recipe to install, configure and start postfix.
 
 Does not work with `chef-solo`.
@@ -136,6 +175,9 @@ To use Chef Server search to automatically detect a node that is the
 relayhost, use this recipe in a role that will be relayhost. By
 default, the role should be "relayhost" but you can change the
 attribute `node['postfix']['relayhost_role']` to modify this.
+
+If the server needs to further relay email to an upstream server,
+set the attribute `node['postfix']['relayhost']` to modify this.
 
 **Note** This recipe will set the `node['postfix']['mail_type']` to
 "master" with an override attribute.
@@ -284,6 +326,31 @@ The base role would look something like this:
         "myorigin" => "example.com"
       }
     )
+
+To process incoming emails through amavisd-new:
+Assuming that you configured amavisd-new to listen on
+port 10024, and deliver processed emails on port 10025:
+
+run_list("recipe[postfix::server]")
+override_attributes(
+  "postfix" => {
+    "content_filter" => "amavisfeed:[127.0.0.1]:10024",
+    "services" => {
+      "amavisfeed" => {
+         "type" => "unix",
+         "chroot" => false,
+         "processlimit" => 2,
+         "command" => "lmtp",
+         options => {
+           'lmtp_data_done_timeout' => '1200',
+           'lmtp_send_xforward_command' => 'yes',
+           'disable_dns_lookups' => 'yes',
+           'max_use' => '20'
+         }
+      }
+    }
+  }
+)
 
 License and Author
 ==================
