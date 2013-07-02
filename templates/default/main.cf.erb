@@ -66,3 +66,6 @@ recipient_canonical_maps = <%= node['postfix']['recipient_canonical_maps'] %>
 <% unless node['postfix']['canonical_maps'].nil? -%>
 canonical_maps = <%= node['postfix']['canonical_maps'] %>
 <% end -%>
+<% unless node['postfix']['header_size_limit'].nil? -%>
+header_size_limit = <%= node['postfix']['header_size_limit'] %>
+<% end -%>
