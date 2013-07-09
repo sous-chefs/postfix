@@ -52,6 +52,9 @@ end
 
   template "/etc/postfix/#{cfg}.cf" do
     source "#{cfg}.cf.erb"
+    if node['postfix']["#{cfg}_cookbook"]
+      cookbook node['postfix']["#{cfg}_cookbook"]
+    end
     owner "root"
     group 0
     mode 00644
