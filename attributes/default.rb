@@ -49,3 +49,4 @@ default['postfix']['canonical_classes'] = nil
 default['postfix']['sender_canonical_maps'] = nil
 default['postfix']['recipient_canonical_maps'] = nil
 default['postfix']['canonical_maps'] = nil
+default['postfix']['default_process_limit'] = nil

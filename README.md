@@ -96,6 +96,9 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['canonical_maps']` - optional address mapping
   lookup tables for message headers and envelopes, eg.
   `hash:/etc/postfix/canonical` - defaults to nil
+* `node['postfix']['default_process_limit']` - performance tweaking
+  option - nil by default. 
+  See http://www.postfix.org/postconf.5.html#default_process_limit
 
 Recipes
 =======
