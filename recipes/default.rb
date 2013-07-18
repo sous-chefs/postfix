@@ -56,7 +56,7 @@ end
     group 0
     mode 00644
     notifies :restart, "service[postfix]"
-
+    variables(:settings => node['postfix']["#{cfg}"])
   end
 end
 

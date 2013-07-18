@@ -23,79 +23,61 @@ Attributes
 
 See `attributes/default.rb` for default values.
 
+
+## Generic cookbook attributes
+
 * `node['postfix']['mail_type']` - Sets the kind of mail
   configuration. `master` will set up a server (relayhost).
-* `node['postfix']['myhostname']` - corresponds to the myhostname
-  option in `/etc/postfix/main.cf`.
-* `node['postfix']['mydomain']` - corresponds to the mydomain option
-  in `/etc/postfix/main.cf`.
-* `node['postfix']['myorigin']` - corresponds to the myorigin option
-  in `/etc/postfix/main.cf`.
-* `node['postfix']['relayhost']` - corresponds to the relayhost option
-  in `/etc/postfix/main.cf`.
 * `node['postfix']['relayhost_role']` - name of a role used for search
   in the client recipe.
 * `node['postfix']['multi_environment_relay']` - set to true if nodes
   should not constrain search for the relayhost in their own
   environment.
-* `node['postfix']['inet_interfaces']` - if set, corresponds to the
-  inet_interfaces option in `/etc/postfix/main.cf`. nil by default,
-  which will result in 'all' for master `mail_type` and
-  'loopback-only' for non-master (anything else) `mail_type`.
-* `node['postfix']['mail_relay_networks']` - corresponds to the
-  mynetworks option in `/etc/postfix/main.cf`.
-* `node['postfix']['smtpd_use_tls']` - set to "yes" to use TLS for
-  SMTPD, which will use the snakeoil certs.
-* `node['postfix']['smtp_sasl_auth_enable']` - set to "yes" to enable
-  SASL authentication for SMTP.
-* `node['postfix']['smtp_sasl_password_maps']` - corresponds to the
-  `smtp_sasl_password_maps` option in `/etc/postfix/main.cf`.
-* `node['postfix']['smtp_sasl_security_options']` - corresponds to the
-  `smtp_sasl_security_options` option in `/etc/postfix/main.cf`.
-* `node['postfix']['smtp_tls_cafile']` - corresponds to the
-  `smtp_tls_CAfile` option in `/etc/postfix/main.cf`.
-* `node['postfix']['smtp_use_tls']` - corresponds to the
-  `smtp_use_tls` option in `/etc/postfix/main.cf`.
-* `node['postfix']['smtp_sasl_user_name']` - mapped in the
-  `sasl_passwd` file as the user to authenticate as.
-* `node['postfix']['smtp_sasl_passwd']` - mapped in the `sasl_passwd`
-  file as the password to use.
+* `node['postfix']['use_procmail']` - set to true if nodes should use
+  procmail as the delivery agent (mailbox_command).
 * `node['postfix']['aliases']` - hash of aliases to create with
   `recipe[postfix::aliases]`, see below under __Recipes__ for more
   information.
-* `node['postfix']['use_procmail']` - set to true if nodes should use
-  procmail as the delivery agent (mailbox_command).
-* `node['postfix']['milter_default_action']` - corresponds to the
-  `milter_default_action` option in `/etc/postfix/main.cf`.
-* `node['postfix']['milter_protocol']` - corresponds to the
-  `milter_protocol` option in `/etc/postfix/main.cf`.
-* `node['postfix']['smtpd_milters']` - corresponds to the
-  `smtpd_milters` option in `/etc/postfix/main.cf`.
-* `node['postfix']['non_smtpd_milters']` - corresponds to the
-  `non_smtpd_milters` option in `/etc/postfix/main.cf`.
-* `node['postfix']['inet_interfaces']` - interfaces to listen to, all
-  or loopback-only
-* `node['postfix']['sender_canonical_classes']` - controls what
-  addresses are subject to `sender_canonical_maps` address mapping,
-  specify one or more of: `envelope_sender`, `header_sender` - defaults to
-  nil
-* `node['postfix']['recipient_canonical_classes']` - controls what
-  addresses are subject to `recipient_canonical_maps` address mapping,
-  specify one or more of: `envelope_recipient`, `header_recipient` -
-  defaults to nil
-* `node['postfix']['canonical_classes']` - controls what addresses are
-  subject to `canonical_maps` address mapping, specify one or more of:
-  `envelope_sender`, `envelope_recipient`, `header_sender`,
-  `header_recipient` - defaults to nil
-* `node['postfix']['sender_canonical_maps']` - optional address
-  mapping lookup tables for envelope and header sender addresses, eg.
-  `hash:/etc/postfix/sender_canonical` - defaults to nil
-* `node['postfix']['recipient_canonical_maps']` - optional address
-  mapping lookup tables for envelope and header recipient addresses,
-  eg. `hash:/etc/postfix/recipient_canonical` - defaults to nil
-* `node['postfix']['canonical_maps']` - optional address mapping
-  lookup tables for message headers and envelopes, eg.
-  `hash:/etc/postfix/canonical` - defaults to nil
+
+## main.cf template attributes
+
+The main.cf template has been simplified to include any attributes in the `node['postfix']['main']`
+data structure.  The following attributes are still included with this cookbook
+to maintain some semblance of backwards compatibility.
+
+This change in namespace to `node['postfix']['main']` should allow for greater flexibility,
+given the large number of configuration variables for the postfix daemon.  All of these cookbook
+attributes correspond to the option of the same name in `/etc/postfix/main.cf`.
+
+* `node['postfix']['main']['biff']` - (yes/no); default no 
+* `node['postfix']['main']['append_dot_mydomain']` - (yes/no); default no
+* `node['postfix']['main']['myhostname']` - defaults to fqdn from Ohai
+* `node['postfix']['main']['mydomain']` - defaults to domain from Ohai
+* `node['postfix']['main']['myorigin']` - defaults to $myhostname
+* `node['postfix']['main']['mynetworks']` - default is `127.0.0.0/8` and default network for master.
+  and only `127.0.0.0/8` for client role.
+* `node['postfix']['main']['inet_interfaces']` - set to `loopback-only`, or `all` for server (master role) recipes
+* `node['postfix']['main']['alias_maps']` - set to `hash:/etc/aliases`
+* `node['postfix']['main']['mailbox_size_limit']` - set to `0` (disabled)
+* `node['postfix']['main']['recipient_delimiter']` - set to `+`
+* `node['postfix']['main']['mydestination']` - default fqdn, hostname, localhost.localdomain, localhost
+* `node['postfix']['main']['smtpd_use_tls']` - (yes/no); default yes. See conditional cert/key attributes.
+  - `node['postfix']['main']['smtpd_tls_cert_file']` - conditional attribute, set to full path of server's x509 certificate.
+  - `node['postfix']['main']['smtpd_tls_key_file']` - conditional attribute, set to full path of server's private key
+  - `node['postfix']['main']['smtpd_tls_CAfile']` - set to platform specific CA bundle
+  - `node['postfix']['main']['smtpd_tls_session_cache_database'] - set to `btree:${data_directory}/smtpd_scache`
+* `node['postfix']['main']['smtp_use_tls']` - (yes/no); default yes.  See following conditional attributes.
+  - `node['postfix']['main']['smtp_tls_CAfile']` - set to platform specific CA bundle
+  - `node['postfix']['main']['smtp_tls_session_cache_database'] - set to `btree:${data_directory}/smtpd_scache`
+* `node['postfix']['main']['smtp_sasl_auth_enable']` - (yes/no); default no.  If enabled, see following conditional attributes.
+  - `node['postfix']['main']['smtp_sasl_password_maps']` - Set to `hash:/etc/postfix/sasl_passwd` template file 
+  - `node['postfix']['main']['smtp_sasl_security_options']` - Set to noanonymous 
+  - `node['postfix']['main']['smtp_sasl_user_name']` - SASL user to authenticate as.  Default empty 
+  - `node['postfix']['main']['smtp_sasl_passwd']` - SASL password to use.  Default empty. 
+
+## master.cf template attributes
+
+* `node['postfix']['master']['submission'] - Whether to use submission (TCP 587) daemon. (true/false); default false
 
 Recipes
 =======

@@ -15,37 +15,79 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Generic cookbook attributes
 default['postfix']['mail_type']  = "client"
-default['postfix']['myhostname'] = node['fqdn']
-default['postfix']['mydomain']   = node['domain']
-default['postfix']['myorigin']   = "$myhostname"
-default['postfix']['relayhost']  = ""
-default['postfix']['mail_relay_networks']        = "127.0.0.0/8"
-default['postfix']['relayhost_role']             = "relayhost"
+default['postfix']['relayhost_role'] = "relayhost"
 default['postfix']['multi_environment_relay'] = false
-default['postfix']['inet_interfaces'] = nil
-
-default['postfix']['smtpd_use_tls'] = "yes"
-default['postfix']['smtp_sasl_auth_enable'] = "no"
-default['postfix']['smtp_sasl_password_maps']    = "hash:/etc/postfix/sasl_passwd"
-default['postfix']['smtp_sasl_security_options'] = "noanonymous"
-default['postfix']['smtp_tls_cafile'] = "/etc/postfix/cacert.pem"
-default['postfix']['smtp_use_tls']    = "yes"
-default['postfix']['smtp_sasl_user_name'] = ""
-default['postfix']['smtp_sasl_passwd']    = ""
-
 default['postfix']['use_procmail'] = false
-
-default['postfix']['milter_default_action']  = "tempfail"
-default['postfix']['milter_protocol']  = "6"
-default['postfix']['smtpd_milters']  = ""
-default['postfix']['non_smtpd_milters']  = ""
-
 default['postfix']['aliases'] = {}
 
-default['postfix']['sender_canonical_classes'] = nil
-default['postfix']['recipient_canonical_classes'] = nil
-default['postfix']['canonical_classes'] = nil
-default['postfix']['sender_canonical_maps'] = nil
-default['postfix']['recipient_canonical_maps'] = nil
-default['postfix']['canonical_maps'] = nil
+# Non-default main.cf attributes
+default['postfix']['main']['biff'] = "no"
+default['postfix']['main']['append_dot_mydomain'] = "no"
+default['postfix']['main']['myhostname'] = node['fqdn']
+default['postfix']['main']['mydomain'] = node['domain']
+default['postfix']['main']['myorigin'] = "$myhostname"
+default['postfix']['main']['mydestination'] = [ node['postfix']['main']['myhostname'], node['hostname'], "localhost.localdomain", "localhost" ]
+default['postfix']['main']['smtpd_use_tls'] = "yes"
+default['postfix']['main']['smtp_use_tls'] = "yes"
+default['postfix']['main']['alias_maps'] = [ "hash:/etc/aliases" ]
+default['postfix']['main']['mailbox_size_limit'] = 0
+default['postfix']['main']['recipient_delimiter'] = "+"
+default['postfix']['main']['smtp_sasl_auth_enable'] = "no"
+
+# Conditional attributes
+case node['platform_family']
+  when "rhel"
+    cafile = "/etc/pki/tls/cert.pem"
+  else
+    cafile = "/etc/postfix/cacert.pem"
+  end
+end
+
+if node['postfix']['use_procmail']
+  default['postfix']['main']['mailbox_command'] = '/usr/bin/procmail -a "$EXTENSION"'
+end
+
+if node['postfix']['main']['smtpd_use_tls'] == "yes"
+  default['postfix']['main']['smtpd_tls_cert_file'] = "/etc/ssl/certs/ssl-cert-snakeoil.pem"
+  default['postfix']['main']['smtpd_tls_key_file'] = "/etc/ssl/private/ssl-cert-snakeoil.key"
+  default['postfix']['main']['smtpd_tls_CAfile'] = cafile
+  default['postfix']['main']['smtpd_tls_session_cache_database'] = "btree:${data_directory}/smtpd_scache"
+end
+
+if node['postfix']['main']['smtp_use_tls'] == "yes"
+  default['postfix']['main']['smtp_tls_CAfile'] = cafile
+  default['postfix']['main']['smtp_tls_session_cache_database'] = "btree:${data_directory}/smtp_scache"
+end
+
+if node['postfix']['main']['smtp_sasl_auth_enable'] == "yes"
+  default['postfix']['main']['smtp_sasl_password_maps'] = "hash:/etc/postfix/sasl_passwd"
+  default['postfix']['main']['smtp_sasl_security_options'] = "noanonymous"
+  default['postfix']['main']['smtp_sasl_user_name'] = ""
+  default['postfix']['main']['smtp_sasl_passwd']    = ""
+end
+
+if node['postfix']['mail_type'] == "master"
+  default['postfix']['main']['inet_interfaces'] = "all"
+else
+  default['postfix']['main']['inet_interfaces'] = "loopback-only"
+  default['postfix']['main']['mynetworks'] = "127.0.0.0/8" # let postfix use `postconf -d` setting for "master" role
+end
+
+# Default main.cf attributes according to `postconf -d`
+#default['postfix']['main']['relayhost'] = ""
+#default['postfix']['main']['milter_default_action']  = "tempfail"
+#default['postfix']['main']['milter_protocol']  = "6"
+#default['postfix']['main']['smtpd_milters']  = ""
+#default['postfix']['main']['non_smtpd_milters']  = ""
+#default['postfix']['main']['sender_canonical_classes'] = nil
+#default['postfix']['main']['recipient_canonical_classes'] = nil
+#default['postfix']['main']['canonical_classes'] = nil
+#default['postfix']['main']['sender_canonical_maps'] = nil
+#default['postfix']['main']['recipient_canonical_maps'] = nil
+#default['postfix']['main']['canonical_maps'] = nil
+
+# Master.cf attributes
+default['postfix']['master']['submission'] = false
+default['postfix']['master']['autoreply'] = false
