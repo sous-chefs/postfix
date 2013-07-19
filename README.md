@@ -46,6 +46,10 @@ See `attributes/default.rb` for default values.
   mynetworks option in `/etc/postfix/main.cf`.
 * `node['postfix']['smtpd_use_tls']` - set to "yes" to use TLS for
   SMTPD, which will use the snakeoil certs.
+* `node['postfix']['smtpd_tls_cert_file']` - the path to the certificate to use
+  for TLS encryption. Defaults to the snakeoil certificate.
+* `node['postfix']['smtpd_tls_key_file']` - the path to the private key for the
+  TLS encryption certificate. Defaults to the snakeoil key.
 * `node['postfix']['smtp_sasl_auth_enable']` - set to "yes" to enable
   SASL authentication for SMTP.
 * `node['postfix']['smtp_sasl_password_maps']` - corresponds to the

@@ -26,6 +26,8 @@ default['postfix']['multi_environment_relay'] = false
 default['postfix']['inet_interfaces'] = nil
 
 default['postfix']['smtpd_use_tls'] = "yes"
+default['postfix']['smtpd_tls_cert_file'] = "/etc/ssl/certs/ssl-cert-snakeoil.pem"
+default['postfix']['smtpd_tls_key_file'] = "/etc/ssl/private/ssl-cert-snakeoil.key"
 default['postfix']['smtp_sasl_auth_enable'] = "no"
 default['postfix']['smtp_sasl_password_maps']    = "hash:/etc/postfix/sasl_passwd"
 default['postfix']['smtp_sasl_security_options'] = "noanonymous"
