@@ -34,12 +34,13 @@ See `attributes/default.rb` for default values.
   should not constrain search for the relayhost in their own
   environment.
 * `node['postfix']['use_procmail']` - set to true if nodes should use
-  procmail as the delivery agent (mailbox_command).
+  procmail as the delivery agent.
 * `node['postfix']['aliases']` - hash of aliases to create with
   `recipe[postfix::aliases]`, see below under __Recipes__ for more
   information.
+* `node['postfix']['template_source']` - Cookbook source for main.cf/master.cf templates. Default 'postfix'
 
-## main.cf template attributes
+## main.cf and sasl\_passwd template attributes
 
 The main.cf template has been simplified to include any attributes in the `node['postfix']['main']`
 data structure.  The following attributes are still included with this cookbook
@@ -54,9 +55,8 @@ attributes correspond to the option of the same name in `/etc/postfix/main.cf`.
 * `node['postfix']['main']['myhostname']` - defaults to fqdn from Ohai
 * `node['postfix']['main']['mydomain']` - defaults to domain from Ohai
 * `node['postfix']['main']['myorigin']` - defaults to $myhostname
-* `node['postfix']['main']['mynetworks']` - default is `127.0.0.0/8` and default network for master.
-  and only `127.0.0.0/8` for client role.
-* `node['postfix']['main']['inet_interfaces']` - set to `loopback-only`, or `all` for server (master role) recipes
+* `node['postfix']['main']['mynetworks']` - default is `127.0.0.0/8`
+* `node['postfix']['main']['inet_interfaces']` - set to `loopback-only`, or `all` for server recipe
 * `node['postfix']['main']['alias_maps']` - set to `hash:/etc/aliases`
 * `node['postfix']['main']['mailbox_size_limit']` - set to `0` (disabled)
 * `node['postfix']['main']['recipient_delimiter']` - set to `+`
@@ -65,15 +65,16 @@ attributes correspond to the option of the same name in `/etc/postfix/main.cf`.
   - `node['postfix']['main']['smtpd_tls_cert_file']` - conditional attribute, set to full path of server's x509 certificate.
   - `node['postfix']['main']['smtpd_tls_key_file']` - conditional attribute, set to full path of server's private key
   - `node['postfix']['main']['smtpd_tls_CAfile']` - set to platform specific CA bundle
-  - `node['postfix']['main']['smtpd_tls_session_cache_database'] - set to `btree:${data_directory}/smtpd_scache`
+  - `node['postfix']['main']['smtpd_tls_session_cache_database']` - set to `btree:${data_directory}/smtpd_scache`
 * `node['postfix']['main']['smtp_use_tls']` - (yes/no); default yes.  See following conditional attributes.
   - `node['postfix']['main']['smtp_tls_CAfile']` - set to platform specific CA bundle
-  - `node['postfix']['main']['smtp_tls_session_cache_database'] - set to `btree:${data_directory}/smtpd_scache`
+  - `node['postfix']['main']['smtp_tls_session_cache_database']` - set to `btree:${data_directory}/smtpd_scache`
 * `node['postfix']['main']['smtp_sasl_auth_enable']` - (yes/no); default no.  If enabled, see following conditional attributes.
   - `node['postfix']['main']['smtp_sasl_password_maps']` - Set to `hash:/etc/postfix/sasl_passwd` template file 
-  - `node['postfix']['main']['smtp_sasl_security_options']` - Set to noanonymous 
-  - `node['postfix']['main']['smtp_sasl_user_name']` - SASL user to authenticate as.  Default empty 
-  - `node['postfix']['main']['smtp_sasl_passwd']` - SASL password to use.  Default empty. 
+  - `node['postfix']['main']['smtp_sasl_security_options']` - Set to noanonymous
+  - `node['postfix']['main']['relayhost']` - Set to empty string 
+  - `node['postfix']['sasl']['smtp_sasl_user_name']` - SASL user to authenticate as.  Default empty 
+  - `node['postfix']['sasl']['smtp_sasl_passwd']` - SASL password to use.  Default empty. 
 
 ## master.cf template attributes
 
@@ -97,7 +98,7 @@ client
 ------
 
 Use this recipe to have nodes automatically search for the mail relay
-based which node has the `node['postfix']['relayhost']` role. Sets the
+based which node has the `node['postfix']['relayhost_role']` role. Sets the
 `node['postfix']['relayhost']` attribute to the first result from the
 search.
 
@@ -150,7 +151,7 @@ is `master`. See __Examples__ for information on how to use
 `recipe[postfix::server]` to do this automatically.
 
 If you need to use SASL authentication to send mail through your ISP
-(such as on a home network), use `recipe[postfix::sasl_auth]` and set
+(such as on a home network), use `postfix::sasl_auth` and set
 the appropriate attributes.
 
 For each of these implementations, see __Examples__ for role usage.
@@ -167,12 +168,14 @@ The `base` role is applied to all nodes in the environment.
     name "base"
     run_list("recipe[postfix]")
     override_attributes(
+      "mail_type" => "client",
       "postfix" => {
-        "mail_type" => "client",
-        "mydomain" => "example.com",
-        "myorigin" => "example.com",
-        "relayhost" => "[smtp.example.com]",
-        "smtp_use_tls" => "no"
+        "main" => {
+          "mydomain" => "example.com",
+          "myorigin" => "example.com",
+          "relayhost" => "[smtp.example.com]",
+          "smtp_use_tls" => "no"
+        }
       }
     )
 
@@ -180,13 +183,15 @@ The `relayhost` role is applied to the nodes that are relayhosts.
 Often this is 2 systems using a CNAME of `smtp.example.com`.
 
     name "relayhost"
-    run_list("recipe[postfix]")
+    run_list("recipe[postfix::server]")
     override_attributes(
       "postfix" => {
-        "mail_relay_networks" => "10.3.3.0/24",
         "mail_type" => "master",
-        "mydomain" => "example.com",
-        "myorigin" => "example.com"
+        "main" => {
+          "mynetworks" => [ "10.3.3.0/24", "127.0.0.0/8" ],
+          "inet-interfaces" => "all",
+          "mydomain" => "example.com",
+          "myorigin" => "example.com"
       }
     )
 
@@ -199,14 +204,17 @@ access to SMTP.
     run_list("recipe[postfix], recipe[postfix::sasl_auth]")
     override_attributes(
       "postfix" => {
-        "mail_relay_networks" => "10.3.3.0/24",
         "mail_type" => "master",
-        "mydomain" => "example.com",
-        "myorigin" => "example.com",
-        "relayhost" => "[smtp.comcast.net]:587",
-        "smtp_sasl_auth_enable" => "yes",
-        "smtp_sasl_passwd" => "your_password",
-        "smtp_sasl_user_name" => "your_username"
+        "main" => {
+          "mynetworks" => "10.3.3.0/24",
+          "mail_type" => "master",
+          "mydomain" => "example.com",
+          "myorigin" => "example.com",
+          "relayhost" => "[smtp.comcast.net]:587",
+          "smtp_sasl_auth_enable" => "yes",
+          "smtp_sasl_passwd" => "your_password",
+          "smtp_sasl_user_name" => "your_username"
+        }
       }
     )
 
@@ -223,9 +231,11 @@ If you'd like to use the more dynamic search based approach for discovery, use t
     run_list("recipe[postfix::server]")
     override_attributes(
       "postfix" => {
-        "mail_relay_networks" => "10.3.3.0/24",
-        "mydomain" => "example.com",
-        "myorigin" => "example.com"
+        "main" => {
+          "mynetworks" => "10.3.3.0/24",
+          "mydomain" => "example.com",
+          "myorigin" => "example.com"
+        }
       }
     )
 
@@ -236,8 +246,10 @@ Then, add the `postfix::client` recipe to the run list of your `base` role or eq
     override_attributes(
       "postfix" => {
         "mail_type" => "client",
-        "mydomain" => "example.com",
-        "myorigin" => "example.com"
+        "main" => {
+          "mydomain" => "example.com",
+          "myorigin" => "example.com"
+        }
       }
     )
 
@@ -248,9 +260,11 @@ If you wish to use a different role name for the relayhost, then also set the at
     run_list("recipe[postfix::server]")
     override_attributes(
       "postfix" => {
-        "mail_relay_networks" => "10.3.3.0/24",
-        "mydomain" => "example.com",
-        "myorigin" => "example.com"
+        "main" => {
+          "mynetworks" => "10.3.3.0/24",
+          "mydomain" => "example.com",
+          "myorigin" => "example.com"
+        }
       }
     )
 
@@ -262,8 +276,10 @@ The base role would look something like this:
       "postfix" => {
         "relayhost_role" => "postfix_master",
         "mail_type" => "client",
-        "mydomain" => "example.com",
-        "myorigin" => "example.com"
+        "main" => {
+          "mydomain" => "example.com",
+          "myorigin" => "example.com"
+        }
       }
     )
 

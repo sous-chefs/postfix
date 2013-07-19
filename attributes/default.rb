@@ -21,6 +21,7 @@ default['postfix']['relayhost_role'] = "relayhost"
 default['postfix']['multi_environment_relay'] = false
 default['postfix']['use_procmail'] = false
 default['postfix']['aliases'] = {}
+default['postfix']['template_source'] = "postfix"
 
 # Non-default main.cf attributes
 default['postfix']['main']['biff'] = "no"
@@ -35,14 +36,15 @@ default['postfix']['main']['alias_maps'] = [ "hash:/etc/aliases" ]
 default['postfix']['main']['mailbox_size_limit'] = 0
 default['postfix']['main']['recipient_delimiter'] = "+"
 default['postfix']['main']['smtp_sasl_auth_enable'] = "no"
+default['postfix']['main']['mynetworks'] = "127.0.0.0/8"
+default['postfix']['main']['inet_interfaces'] = "loopback-only"
 
 # Conditional attributes
 case node['platform_family']
-  when "rhel"
-    cafile = "/etc/pki/tls/cert.pem"
-  else
-    cafile = "/etc/postfix/cacert.pem"
-  end
+when "rhel"
+  cafile = "/etc/pki/tls/cert.pem"
+else
+  cafile = "/etc/postfix/cacert.pem"
 end
 
 if node['postfix']['use_procmail']
@@ -64,15 +66,9 @@ end
 if node['postfix']['main']['smtp_sasl_auth_enable'] == "yes"
   default['postfix']['main']['smtp_sasl_password_maps'] = "hash:/etc/postfix/sasl_passwd"
   default['postfix']['main']['smtp_sasl_security_options'] = "noanonymous"
-  default['postfix']['main']['smtp_sasl_user_name'] = ""
-  default['postfix']['main']['smtp_sasl_passwd']    = ""
-end
-
-if node['postfix']['mail_type'] == "master"
-  default['postfix']['main']['inet_interfaces'] = "all"
-else
-  default['postfix']['main']['inet_interfaces'] = "loopback-only"
-  default['postfix']['main']['mynetworks'] = "127.0.0.0/8" # let postfix use `postconf -d` setting for "master" role
+  default['postfix']['sasl']['smtp_sasl_user_name'] = ""
+  default['postfix']['sasl']['smtp_sasl_passwd']    = ""
+  default['postfix']['main']['relayhost'] = ""
 end
 
 # Default main.cf attributes according to `postconf -d`
@@ -90,4 +86,3 @@ end
 
 # Master.cf attributes
 default['postfix']['master']['submission'] = false
-default['postfix']['master']['autoreply'] = false
