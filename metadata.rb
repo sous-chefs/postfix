@@ -84,6 +84,16 @@ attribute "postfix/smtp_use_tls",
   :description => "Whether SMTP SASL Auth should use TLS encryption",
   :default => "yes"
 
+attribute "postfix/smtpd_tls_cert_file",
+  :display_name => "Postfix SMTP TLS Certificate File",
+  :description => "Path of the certificate to use for TLS encryption",
+  :default => "/etc/ssl/certs/ssl-cert-snakeoil.pem"
+
+attribute "postfix/smtpd_tls_key_file",
+  :display_name => "Postfix SMTP TLS Key File",
+  :description => "Path of the private key matching the TLS encryption certificate",
+  :default => "/etc/ssl/private/ssl-cert-snakeoil.key"
+
 attribute "postfix/smtp_sasl_user_name",
   :display_name => "Postfix SMTP SASL Username",
   :description => "User to auth SMTP via SASL",
