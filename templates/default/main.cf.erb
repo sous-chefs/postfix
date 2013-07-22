@@ -66,3 +66,16 @@ recipient_canonical_maps = <%= node['postfix']['recipient_canonical_maps'] %>
 <% unless node['postfix']['canonical_maps'].nil? -%>
 canonical_maps = <%= node['postfix']['canonical_maps'] %>
 <% end -%>
+
+<% unless node['postfix']['default_verp_delimiters'].nil? -%>
+default_verp_delimiters = <%= node['postfix']['default_verp_delimiters'] %>
+<% end -%>
+<% unless node['postfix']['verp_delimiter_filter'].nil? -%>
+verp_delimiter_filter = <%= node['postfix']['verp_delimiter_filter'] %>
+<% end -%>
+<% unless node['postfix']['smtpd_authorized_verp_clients'].nil? -%>
+smtpd_authorized_verp_clients = <%= node['postfix']['smtpd_authorized_verp_clients'] %>
+<% end -%>
+<% unless node['postfix']['disable_verp_bounces'].nil? -%>
+disable_verp_bounces = <%= node['postfix']['disable_verp_bounces'] %>
+<% end -%>
