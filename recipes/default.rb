@@ -51,7 +51,7 @@ end
     mode 00644
     notifies :restart, "service[postfix]"
     variables(:settings => node['postfix'][cfg])
-    cookbook node['postfix']"#{cfg}_template_source"]
+    cookbook node['postfix']["#{cfg}_template_source"]
   end
 end
 
