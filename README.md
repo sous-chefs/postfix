@@ -38,7 +38,8 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['aliases']` - hash of aliases to create with
   `recipe[postfix::aliases]`, see below under __Recipes__ for more
   information.
-* `node['postfix']['template_source']` - Cookbook source for main.cf/master.cf templates. Default 'postfix'
+* `node['postfix']['main_template_source']` - Cookbook source for main.cf template. Default 'postfix'
+* `node['postfix']['master_template_source']` - Cookbook source for master.cf template. Default 'postfix'
 
 ## main.cf and sasl\_passwd template attributes
 

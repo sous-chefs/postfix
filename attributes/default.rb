@@ -21,7 +21,8 @@ default['postfix']['relayhost_role'] = "relayhost"
 default['postfix']['multi_environment_relay'] = false
 default['postfix']['use_procmail'] = false
 default['postfix']['aliases'] = {}
-default['postfix']['template_source'] = "postfix"
+default['postfix']['main_template_source'] = "postfix"
+default['postfix']['master_template_source'] = "postfix"
 
 # Non-default main.cf attributes
 default['postfix']['main']['biff'] = "no"
