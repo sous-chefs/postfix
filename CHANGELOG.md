@@ -1,3 +1,12 @@
+## v3.?.?:
+
+- [COOK-3328]: Refactor main.cf template and attributes for greater flexibility.
+
+**Breaking changes**:
+
+- Attributes are namespaced as `node['postfix']`, `node['postfix']['main']`, 
+  and `node['postfix']['master']`.
+
 ## v2.1.6:
 
 ### Bug

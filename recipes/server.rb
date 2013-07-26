@@ -18,6 +18,7 @@
 # limitations under the License.
 #
 
-node.override['postfix']['mail_type'] = 'master'
+node.default['postfix']['mail_type'] = 'master'
+node.default['postfix']['main']['inet_interfaces'] = 'all'
 
 include_recipe "postfix"
