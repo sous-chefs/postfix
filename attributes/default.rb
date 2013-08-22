@@ -22,6 +22,8 @@ default['postfix']['myorigin']   = "$myhostname"
 default['postfix']['relayhost']  = ""
 default['postfix']['mail_relay_networks']        = "127.0.0.0/8"
 default['postfix']['relayhost_role']             = "relayhost"
+default['postfix']['myorigin_relay']             = node['domain'] # new
+default['postfix']['append_mydomain']            = "no" # new
 default['postfix']['multi_environment_relay'] = false
 default['postfix']['inet_interfaces'] = nil
 
