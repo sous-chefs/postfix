@@ -4,7 +4,7 @@
 ###
 
 biff = no
-append_dot_mydomain = no
+append_dot_mydomain = <%= node['postfix']['append_mydomain'] %>
 smtpd_use_tls = <%= node['postfix']['smtpd_use_tls'] %>
 <% if node['postfix']['smtpd_use_tls'] == "yes" -%>
 smtpd_tls_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
@@ -24,6 +24,7 @@ myhostname = <%= node['postfix']['myhostname'] %>
 mydomain = <%= node['postfix']['mydomain'] %>
 <% end -%>
 myorigin = <%= node['postfix']['myorigin'] %>
+remote_header_rewrite_domain = <%= node['postfix']['myorigin_relay'] %>
 smtpd_banner = $myhostname ESMTP $mail_name
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
