@@ -21,11 +21,8 @@
 package "postfix"
 
 if node['postfix']['use_procmail']
-
   package "procmail"
-
 end
-
 
 service "postfix" do
   supports :status => true, :restart => true, :reload => true
@@ -34,7 +31,6 @@ end
 
 case node['platform_family']
 when "rhel", "fedora"
-
   service "sendmail" do
     action :nothing
   end
@@ -45,18 +41,17 @@ when "rhel", "fedora"
     notifies :start, "service[postfix]"
     not_if "/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix"
   end
-
 end
 
 %w{main master}.each do |cfg|
-
   template "/etc/postfix/#{cfg}.cf" do
     source "#{cfg}.cf.erb"
     owner "root"
     group 0
     mode 00644
     notifies :restart, "service[postfix]"
-
+    variables(:settings => node['postfix'][cfg])
+    cookbook node['postfix']["#{cfg}_template_source"]
   end
 end
 

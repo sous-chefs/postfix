@@ -55,4 +55,5 @@ template "/etc/postfix/sasl_passwd" do
   mode 0400
   notifies :run, "execute[postmap-sasl_passwd]", :immediately
   notifies :restart, "service[postfix]"
+  variables(:settings => node['postfix']['sasl'])
 end
