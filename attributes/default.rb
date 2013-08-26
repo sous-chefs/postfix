@@ -26,6 +26,7 @@ default['postfix']['myorigin_relay']             = node['domain'] # new
 default['postfix']['append_mydomain']            = "no" # new
 default['postfix']['multi_environment_relay'] = false
 default['postfix']['inet_interfaces'] = nil
+default['postfix']['smtp_helo_name'] = node['fqdn']
 
 default['postfix']['smtpd_use_tls'] = "yes"
 default['postfix']['smtp_sasl_auth_enable'] = "no"

@@ -28,7 +28,7 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['myhostname']` - corresponds to the myhostname
   option in `/etc/postfix/main.cf`.
 * `node['postfix']['mydomain']` - corresponds to the mydomain option
-  in `/etc/postfix/main.cf`.
+* `node['postfix']['smtp_helo_name']` - corresponds to the smtp_helo_name option in `/etc/postfix/main.cf`.
 * `node['postfix']['myorigin']` - corresponds to the myorigin option
 * `node['postfix']['myorigin_relay']` - corresponds to the remote_header_rewrite_domain option
 * `node['postfix']['append_mydomain']` - corresponds to the append_dot_mydomain option. Defaults to no.
