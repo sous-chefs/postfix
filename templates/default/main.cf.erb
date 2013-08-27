@@ -23,7 +23,11 @@ myhostname = <%= node['postfix']['myhostname'] %>
 <% if node['postfix']['mydomain'] %>
 mydomain = <%= node['postfix']['mydomain'] %>
 <% end -%>
-smtp_helo_name = <%= node['postfix']['smtp_helo_name'] %>
+<% if node['postfix']['mail_type'] == "master" -%>
+smtp_helo_name = <%= node['postfix']['smtp_helo_name_master'] %>
+<% else -%>
+smtp_helo_name = <%= node['postfix']['smtp_helo_name_client'] %>
+<% end -%>
 myorigin = <%= node['postfix']['myorigin'] %>
 remote_header_rewrite_domain = <%= node['postfix']['myorigin_relay'] %>
 smtpd_banner = $myhostname ESMTP $mail_name
