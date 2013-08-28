@@ -51,7 +51,7 @@ This change in namespace to `node['postfix']['main']` should allow for greater f
 given the large number of configuration variables for the postfix daemon.  All of these cookbook
 attributes correspond to the option of the same name in `/etc/postfix/main.cf`.
 
-* `node['postfix']['main']['biff']` - (yes/no); default no 
+* `node['postfix']['main']['biff']` - (yes/no); default no
 * `node['postfix']['main']['append_dot_mydomain']` - (yes/no); default no
 * `node['postfix']['main']['myhostname']` - defaults to fqdn from Ohai
 * `node['postfix']['main']['mydomain']` - defaults to domain from Ohai
@@ -71,11 +71,11 @@ attributes correspond to the option of the same name in `/etc/postfix/main.cf`.
   - `node['postfix']['main']['smtp_tls_CAfile']` - set to platform specific CA bundle
   - `node['postfix']['main']['smtp_tls_session_cache_database']` - set to `btree:${data_directory}/smtpd_scache`
 * `node['postfix']['main']['smtp_sasl_auth_enable']` - (yes/no); default no.  If enabled, see following conditional attributes.
-  - `node['postfix']['main']['smtp_sasl_password_maps']` - Set to `hash:/etc/postfix/sasl_passwd` template file 
+  - `node['postfix']['main']['smtp_sasl_password_maps']` - Set to `hash:/etc/postfix/sasl_passwd` template file
   - `node['postfix']['main']['smtp_sasl_security_options']` - Set to noanonymous
-  - `node['postfix']['main']['relayhost']` - Set to empty string 
-  - `node['postfix']['sasl']['smtp_sasl_user_name']` - SASL user to authenticate as.  Default empty 
-  - `node['postfix']['sasl']['smtp_sasl_passwd']` - SASL password to use.  Default empty. 
+  - `node['postfix']['main']['relayhost']` - Set to empty string
+  - `node['postfix']['sasl']['smtp_sasl_user_name']` - SASL user to authenticate as.  Default empty
+  - `node['postfix']['sasl']['smtp_sasl_passwd']` - SASL password to use.  Default empty.
 
 ## master.cf template attributes
 
