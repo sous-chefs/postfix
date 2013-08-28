@@ -3,9 +3,10 @@ postfix Cookbook CHANGELOG
 This file is used to list changes made in each version of the postfix cookbook.
 
 
-v3.?.?
+v3.0.0
 ------
-- [COOK-3328]: Refactor main.cf template and attributes for greater flexibility.
+### Improvement
+- **[COOK-3328](https://tickets.opscode.com/browse/COOK-3328)** - Postfix main/master and attributes refactor
 
 **Breaking changes**:
 - Attributes are namespaced as `node['postfix']`, `node['postfix']['main']`, and `node['postfix']['master']`.
