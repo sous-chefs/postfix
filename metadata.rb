@@ -10,7 +10,7 @@ recipe            "postfix::aliases", "Manages /etc/aliases"
 recipe            "postfix::client", "Searches for the relayhost based on an attribute"
 recipe            "postfix::server", "Sets the mail_type attribute to master"
 
-%w{ubuntu debian redhat centos amazon scientific}.each do |os|
+%w{ubuntu debian redhat centos amazon scientific smartos}.each do |os|
   supports os
 end
 

@@ -24,16 +24,25 @@ default['postfix']['aliases'] = {}
 default['postfix']['main_template_source'] = "postfix"
 default['postfix']['master_template_source'] = "postfix"
 
+case node['platform']
+when 'smartos'
+  default['postfix']['conf_dir'] = '/opt/local/etc/postfix'
+  default['postfix']['aliases_db'] = '/opt/local/etc/postfix/aliases'
+else
+  default['postfix']['conf_dir'] = '/etc/postfix'
+  default['postfix']['aliases_db'] = '/etc/aliases'
+end
+
 # Non-default main.cf attributes
 default['postfix']['main']['biff'] = "no"
 default['postfix']['main']['append_dot_mydomain'] = "no"
-default['postfix']['main']['myhostname'] = node['fqdn']
-default['postfix']['main']['mydomain'] = node['domain']
+default['postfix']['main']['myhostname'] = node['fqdn'].chomp('.') || node['hostname'].chomp('.')
+default['postfix']['main']['mydomain'] = node['domain'].chomp('.') || node['hostname'].chomp('.')
 default['postfix']['main']['myorigin'] = "$myhostname"
-default['postfix']['main']['mydestination'] = [ node['postfix']['main']['myhostname'], node['hostname'], "localhost.localdomain", "localhost" ]
+default['postfix']['main']['mydestination'] = [ node['postfix']['main']['myhostname'], node['hostname'], "localhost.localdomain", "localhost" ].compact
 default['postfix']['main']['smtpd_use_tls'] = "yes"
 default['postfix']['main']['smtp_use_tls'] = "yes"
-default['postfix']['main']['alias_maps'] = [ "hash:/etc/aliases" ]
+default['postfix']['main']['alias_maps'] = [ "hash:#{node['postfix']['aliases_db']}" ]
 default['postfix']['main']['mailbox_size_limit'] = 0
 default['postfix']['main']['recipient_delimiter'] = "+"
 default['postfix']['main']['smtp_sasl_auth_enable'] = "no"
@@ -41,7 +50,11 @@ default['postfix']['main']['mynetworks'] = "127.0.0.0/8"
 default['postfix']['main']['inet_interfaces'] = "loopback-only"
 
 # Conditional attributes
-case node['platform_family']
+case node['platform']
+when 'smartos'
+  default['postfix']['main']['smtpd_use_tls'] = "no"
+  default['postfix']['main']['smtp_use_tls'] = "no"
+  cafile = "/opt/local/etc/postfix/cacert.pem"
 when "rhel"
   cafile = "/etc/pki/tls/cert.pem"
 else
@@ -65,7 +78,7 @@ if node['postfix']['main']['smtp_use_tls'] == "yes"
 end
 
 if node['postfix']['main']['smtp_sasl_auth_enable'] == "yes"
-  default['postfix']['main']['smtp_sasl_password_maps'] = "hash:/etc/postfix/sasl_passwd"
+  default['postfix']['main']['smtp_sasl_password_maps'] = "hash:#{node['postfix']['conf_dir']}/postfix/sasl_passwd"
   default['postfix']['main']['smtp_sasl_security_options'] = "noanonymous"
   default['postfix']['sasl']['smtp_sasl_user_name'] = ""
   default['postfix']['sasl']['smtp_sasl_passwd']    = ""
