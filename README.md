@@ -114,8 +114,8 @@ The `base` role is applied to all nodes in the environment.
 name "base"
 run_list("recipe[postfix]")
 override_attributes(
-  "mail_type" => "client",
   "postfix" => {
+    "mail_type" => "client",
     "main" => {
       "mydomain" => "example.com",
       "myorigin" => "example.com",
