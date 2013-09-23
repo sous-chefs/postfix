@@ -36,8 +36,8 @@ end
 # Non-default main.cf attributes
 default['postfix']['main']['biff'] = "no"
 default['postfix']['main']['append_dot_mydomain'] = "no"
-default['postfix']['main']['myhostname'] = node['fqdn'].chomp('.') || node['hostname'].chomp('.')
-default['postfix']['main']['mydomain'] = node['domain'].chomp('.') || node['hostname'].chomp('.')
+default['postfix']['main']['myhostname'] = (node['fqdn'] || node['hostname']).to_s.chomp('.')
+default['postfix']['main']['mydomain'] = (node['domain'] || node['hostname']).to_s.chomp('.')
 default['postfix']['main']['myorigin'] = "$myhostname"
 default['postfix']['main']['mydestination'] = [ node['postfix']['main']['myhostname'], node['hostname'], "localhost.localdomain", "localhost" ].compact
 default['postfix']['main']['smtpd_use_tls'] = "yes"
