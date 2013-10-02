@@ -23,6 +23,7 @@ default['postfix']['use_procmail'] = false
 default['postfix']['aliases'] = {}
 default['postfix']['main_template_source'] = "postfix"
 default['postfix']['master_template_source'] = "postfix"
+default['postfix']['sender_canonical_map_entries'] = {}
 
 case node['platform']
 when 'smartos'
