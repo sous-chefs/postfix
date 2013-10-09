@@ -38,6 +38,19 @@ when "rhel", "fedora"
   end
 end
 
+if !node['postfix']['sender_canonical_map_entries'].empty?
+  template "#{node['postfix']['conf_dir']}/sender_canonical" do
+    owner "root"
+    group 0
+    mode  '0644'
+    notifies :restart, "service[postfix]"
+  end
+
+  if !node['postfix']['main'].has_key?('sender_canonical_maps')
+    node.set['postfix']['main']['sender_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/sender_canonical"
+  end
+end
+
 %w{main master}.each do |cfg|
   template "#{node['postfix']['conf_dir']}/#{cfg}.cf" do
     source "#{cfg}.cf.erb"
