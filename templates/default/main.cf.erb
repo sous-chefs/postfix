@@ -17,3 +17,6 @@
 <%=   "#{key} = #{value}"%>
 <%  end -%>
 <% end -%>
+<% unless node['postfix']['header_size_limit'].nil? -%>
+header_size_limit = <%= node['postfix']['header_size_limit'] %>
+<% end -%>
