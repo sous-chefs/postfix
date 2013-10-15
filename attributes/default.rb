@@ -23,7 +23,6 @@ default['postfix']['use_procmail'] = false
 default['postfix']['aliases'] = {}
 default['postfix']['main_template_source'] = "postfix"
 default['postfix']['master_template_source'] = "postfix"
-default['postfix']['sender_canonical_map_entries'] = {}
 
 case node['platform']
 when 'smartos'
@@ -33,6 +32,8 @@ else
   default['postfix']['conf_dir'] = '/etc/postfix'
   default['postfix']['aliases_db'] = '/etc/aliases'
 end
+
+default['postfix']['sasl_passwd_db'] = "#{node['postfix']['conf_dir']}/sasl_passwd"
 
 # Non-default main.cf attributes
 default['postfix']['main']['biff'] = "no"
@@ -51,15 +52,13 @@ default['postfix']['main']['mynetworks'] = "127.0.0.0/8"
 default['postfix']['main']['inet_interfaces'] = "loopback-only"
 
 # Conditional attributes
+cafile = "#{node['postfix']['conf_dir']}/cacert.pem"
 case node['platform']
 when 'smartos'
   default['postfix']['main']['smtpd_use_tls'] = "no"
   default['postfix']['main']['smtp_use_tls'] = "no"
-  cafile = "/opt/local/etc/postfix/cacert.pem"
 when "rhel"
   cafile = "/etc/pki/tls/cert.pem"
-else
-  cafile = "/etc/postfix/cacert.pem"
 end
 
 if node['postfix']['use_procmail']
@@ -79,7 +78,7 @@ if node['postfix']['main']['smtp_use_tls'] == "yes"
 end
 
 if node['postfix']['main']['smtp_sasl_auth_enable'] == "yes"
-  default['postfix']['main']['smtp_sasl_password_maps'] = "hash:#{node['postfix']['conf_dir']}/postfix/sasl_passwd"
+  default['postfix']['main']['smtp_sasl_password_maps'] = "hash:#{node['postfix']['sasl_passwd_db']}"
   default['postfix']['main']['smtp_sasl_security_options'] = "noanonymous"
   default['postfix']['sasl']['smtp_sasl_user_name'] = ""
   default['postfix']['sasl']['smtp_sasl_passwd']    = ""
