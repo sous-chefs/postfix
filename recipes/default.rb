@@ -21,20 +21,11 @@
 package "postfix"
 
 if node['postfix']['use_procmail']
-
   package "procmail"
-
-end
-
-
-service "postfix" do
-  supports :status => true, :restart => true, :reload => true
-  action :enable
 end
 
 case node['platform_family']
 when "rhel", "fedora"
-
   service "sendmail" do
     action :nothing
   end
@@ -45,21 +36,34 @@ when "rhel", "fedora"
     notifies :start, "service[postfix]"
     not_if "/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix"
   end
+end
 
+if !node['postfix']['sender_canonical_map_entries'].empty?
+  template "#{node['postfix']['conf_dir']}/sender_canonical" do
+    owner "root"
+    group 0
+    mode  '0644'
+    notifies :restart, "service[postfix]"
+  end
+
+  if !node['postfix']['main'].has_key?('sender_canonical_maps')
+    node.set['postfix']['main']['sender_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/sender_canonical"
+  end
 end
 
 %w{main master}.each do |cfg|
-
-  template "/etc/postfix/#{cfg}.cf" do
+  template "#{node['postfix']['conf_dir']}/#{cfg}.cf" do
     source "#{cfg}.cf.erb"
     owner "root"
     group 0
     mode 00644
     notifies :restart, "service[postfix]"
-
+    variables(:settings => node['postfix'][cfg])
+    cookbook node['postfix']["#{cfg}_template_source"]
   end
 end
 
 service "postfix" do
-  action :start
+  supports :status => true, :restart => true, :reload => true
+  action [:enable, :start]
 end

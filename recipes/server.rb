@@ -19,5 +19,6 @@
 #
 
 node.override['postfix']['mail_type'] = 'master'
+node.override['postfix']['main']['inet_interfaces'] = 'all'
 
 include_recipe "postfix"
