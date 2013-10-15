@@ -38,17 +38,15 @@ when "fedora"
 end
 
 sasl_pkgs.each do |pkg|
-
   package pkg
-
 end
 
 execute "postmap-sasl_passwd" do
-  command "postmap /etc/postfix/sasl_passwd"
+  command "postmap #{node['postfix']['sasl_passwd_db']}"
   action :nothing
 end
 
-template "/etc/postfix/sasl_passwd" do
+template node['postfix']['sasl_passwd_db'] do
   source "sasl_passwd.erb"
   owner "root"
   group "root"
