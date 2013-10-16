@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+require 'ipaddress'
+
 package "postfix"
 
 if node['postfix']['use_procmail']
@@ -49,6 +51,14 @@ if !node['postfix']['sender_canonical_map_entries'].empty?
   if !node['postfix']['main'].has_key?('sender_canonical_maps')
     node.set['postfix']['main']['sender_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/sender_canonical"
   end
+end
+
+# postfix will fail to start if the hostname is an ip addr.  Example:
+# postfix: warning: valid_hostname: numeric hostname: 1.2.3.4
+# postfix: fatal: file /etc/postfix/main.cf: parameter myhostname: bad parameter value: 1.2.3.4
+if IPAddress.valid? node['postfix']['main']['myhostname']
+    node.set['postfix']['main']['myhostname'] = 'localhost'
+    node.set['postfix']['main']['mydomain'] = 'localdomain'
 end
 
 %w{main master}.each do |cfg|
