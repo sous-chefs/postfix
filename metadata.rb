@@ -10,6 +10,7 @@ recipe            'postfix::sasl_auth', 'Set up postfix to auth to a server with
 recipe            'postfix::aliases', 'Manages /etc/aliases'
 recipe            'postfix::client', 'Searches for the relayhost based on an attribute'
 recipe            'postfix::server', 'Sets the mail_type attribute to master'
+recipe            'postfix::virtual', 'Manages postfix virtuals'
 
 %w{ubuntu debian redhat centos amazon scientific smartos}.each do |os|
   supports os
@@ -49,3 +50,18 @@ attribute 'postfix/use_procmail',
 display_name: 'Postfix Use procmail?',
 description: 'Whether procmail should be used as the local delivery agent for a server',
 default: 'no'
+
+attribute 'postfix/aliases',
+display_name: 'Postfix mail aliases',
+description: 'Hash of mail aliases for /etc/aliases',
+default: ''
+
+attribute 'postfix/virtual_domains',
+display_name: 'Postfix virtual domains',
+description: 'Array of virtual domain names',
+default: ''
+
+attribute 'postfix/virtual_aliases',
+display_name: 'Postfix virtual aliases',
+description: 'Hash of virtual alias mappings',
+default: ''
