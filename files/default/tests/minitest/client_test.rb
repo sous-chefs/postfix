@@ -1,4 +1,4 @@
-#
+# encoding: utf-8
 # Copyright 2012, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,9 @@
 
 require File.expand_path('../support/helpers', __FILE__)
 
-describe "postfix::client" do
+describe 'postfix::client' do
   include Helpers::Postfix
   it 'doesnt configure postfix because solo is unsupported' do
-    skip "Postfix may be set up by default on the system, but not configured by Chef because this test assumes it is run under Chef Solo"
+    skip 'Postfix may be set up by default on the system, but not configured by Chef because this test assumes it is run under Chef Solo'
   end
 end

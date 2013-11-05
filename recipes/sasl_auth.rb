@@ -1,3 +1,4 @@
+# encoding: utf-8
 #
 # Author:: Joshua Timberman(<joshua@opscode.com>)
 # Cookbook Name:: postfix
@@ -18,42 +19,40 @@
 # limitations under the License.
 #
 
-include_recipe "postfix"
+include_recipe 'postfix'
 
 sasl_pkgs = []
 
 # We use case instead of value_for_platform_family because we need
 # version specifics for RHEL.
 case node['platform_family']
-when "debian"
+when 'debian'
   sasl_pkgs = %w{libsasl2-2 libsasl2-modules ca-certificates}
-when "rhel"
+when 'rhel'
   if node['platform_version'].to_i < 6
     sasl_pkgs = %w{cyrus-sasl cyrus-sasl-plain openssl}
   else
     sasl_pkgs = %w{cyrus-sasl cyrus-sasl-plain ca-certificates}
   end
-when "fedora"
+when 'fedora'
   sasl_pkgs = %w{cyrus-sasl cyrus-sasl-plain ca-certificates}
 end
 
 sasl_pkgs.each do |pkg|
-
   package pkg
-
 end
 
-execute "postmap-sasl_passwd" do
-  command "postmap /etc/postfix/sasl_passwd"
+execute 'postmap-sasl_passwd' do
+  command 'postmap /etc/postfix/sasl_passwd'
   action :nothing
 end
 
-template "/etc/postfix/sasl_passwd" do
-  source "sasl_passwd.erb"
-  owner "root"
-  group "root"
+template '/etc/postfix/sasl_passwd' do
+  source 'sasl_passwd.erb'
+  owner 'root'
+  group 'root'
   mode 0400
-  notifies :run, "execute[postmap-sasl_passwd]", :immediately
-  notifies :restart, "service[postfix]"
-  variables(:settings => node['postfix']['sasl'])
+  notifies :run, 'execute[postmap-sasl_passwd]', :immediately
+  notifies :restart, 'service[postfix]'
+  variables(settings: node['postfix']['sasl'])
 end

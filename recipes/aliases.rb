@@ -1,4 +1,4 @@
-#
+# encoding: utf-8
 # Copyright:: Copyright (c) 2012, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,14 +14,14 @@
 # limitations under the License.
 #
 
-include_recipe "postfix"
+include_recipe 'postfix'
 
-execute "update-postfix-aliases" do
-  command "newaliases"
+execute 'update-postfix-aliases' do
+  command 'newaliases'
   action :nothing
 end
 
 template node['postfix']['aliases_db'] do
-  source "aliases.erb"
-  notifies :run, "execute[update-postfix-aliases]"
+  source 'aliases.erb'
+  notifies :run, 'execute[update-postfix-aliases]'
 end
