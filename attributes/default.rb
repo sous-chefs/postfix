@@ -24,6 +24,7 @@ default['postfix']['aliases'] = {}
 default['postfix']['main_template_source'] = 'postfix'
 default['postfix']['master_template_source'] = 'postfix'
 default['postfix']['sender_canonical_map_entries'] = {}
+default['postfix']['transport']['enable'] = 'no'
 
 case node['platform']
 when 'smartos'
@@ -85,6 +86,14 @@ if node['postfix']['main']['smtp_sasl_auth_enable'] == 'yes'
   default['postfix']['sasl'][0]['username'] = ''
   default['postfix']['sasl'][0]['passwd'] = ''
   default['postfix']['main']['relayhost'] = node['postfix']['sasl'][0]['host']
+end
+
+if node['postfix']['transport']['enable'] == 'yes'
+  default['postfix']['transport']['file'] = "#{node['postfix']['conf_dir']}/transport"
+  default['postfix']['main']['transport_maps'] = "hash:#{node['postfix']['transport']['file']}"
+  default['postfix']['transport']['entries'][0]['pattern'] = ''
+  default['postfix']['transport']['entries'][0]['transport'] = ''
+  default['postfix']['transport']['entries'][0]['nexthop'] = ''
 end
 
 # # Default main.cf attributes according to `postconf -d`
