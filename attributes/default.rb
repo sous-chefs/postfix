@@ -81,9 +81,10 @@ end
 if node['postfix']['main']['smtp_sasl_auth_enable'] == 'yes'
   default['postfix']['main']['smtp_sasl_password_maps'] = "hash:#{node['postfix']['conf_dir']}/postfix/sasl_passwd"
   default['postfix']['main']['smtp_sasl_security_options'] = 'noanonymous'
-  default['postfix']['sasl']['smtp_sasl_user_name'] = ''
-  default['postfix']['sasl']['smtp_sasl_passwd']    = ''
-  default['postfix']['main']['relayhost'] = ''
+  default['postfix']['sasl'][0]['host'] = ''
+  default['postfix']['sasl'][0]['username'] = ''
+  default['postfix']['sasl'][0]['passwd'] = ''
+  default['postfix']['main']['relayhost'] = node['postfix']['sasl'][0]['host']
 end
 
 # # Default main.cf attributes according to `postconf -d`

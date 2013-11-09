@@ -57,8 +57,9 @@ This change in namespace to `node['postfix']['main']` should allow for greater f
   - `node['postfix']['main']['smtp_sasl_password_maps']` - Set to `hash:/etc/postfix/sasl_passwd` template file
   - `node['postfix']['main']['smtp_sasl_security_options']` - Set to noanonymous
   - `node['postfix']['main']['relayhost']` - Set to empty string
-  - `node['postfix']['sasl']['smtp_sasl_user_name']` - SASL user to authenticate as.  Default empty
-  - `node['postfix']['sasl']['smtp_sasl_passwd']` - SASL password to use.  Default empty.
+  - `node['postfix']['sasl'][0]['host']` - SMTP host. Default empty
+  - `node['postfix']['sasl'][0]['username']` - SASL user to authenticate as.  Default empty
+  - `node['postfix']['sasl'][0]['passwd']` - SASL password to use.  Default empty.
 
 ### master.cf template attributes
 * `node['postfix']['master']['submission'] - Whether to use submission (TCP 587) daemon. (true/false); default false
@@ -158,9 +159,12 @@ override_attributes(
       "relayhost" => "[smtp.comcast.net]:587",
       "smtp_sasl_auth_enable" => "yes"
     },
-    "sasl" => {
-      "smtp_sasl_passwd" => "your_password",
-      "smtp_sasl_user_name" => "your_username"
+    "sasl" => [
+      {
+        "host" => "[smtp.comcast.net]:587",
+        "passwd" => "your_password",
+        "username" => "your_username"
+      }
     }
   }
 )
