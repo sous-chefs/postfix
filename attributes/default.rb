@@ -94,7 +94,7 @@ if node['postfix']['use_virtual_aliases'] == 'yes'
   else
     default['postfix']['virtual_alias_db'] = '/etc/postfix/virtual'
   end
-  default['postfix']['main']['virtual_alias_maps'] = ["hash:#{node['postfix']['virtual_alias_db']}"]
+  default['postfix']['main']['virtual_alias_maps'] = "hash:#{node['postfix']['virtual_alias_db']}"
   default['postfix']['virtual_aliases'] = {}
 end
 
