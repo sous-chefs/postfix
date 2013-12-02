@@ -6,5 +6,5 @@
 # See man 5 canonical for format
 
 <% node['postfix']['sender_canonical_map_entries'].each do |name, value| %>
-<%= name %> <%= [value].flatten.map{|x| %Q(#{x})}.join(', ') %>
+<%= name %> <%= value %>
 <% end unless node['postfix']['sender_canonical_map_entries'].nil? %>
