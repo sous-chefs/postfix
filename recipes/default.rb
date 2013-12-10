@@ -36,6 +36,40 @@ when 'rhel', 'fedora'
     notifies :start, 'service[postfix]'
     not_if '/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix'
   end
+when 'omnios'
+  manifest_path = ::File.join(Chef::Config[:file_cache_path], "manifest-postfix.xml")
+
+  # we need to manage the postfix group and user
+  # and then subscribe to the package install because it creates a
+  # postdrop group and adds postfix user to it.
+  group 'postfix' do
+    append true
+  end
+
+  user 'postfix' do
+    uid node['postfix']['uid']
+    gid 'postfix'
+    home '/var/spool/postfix'
+    subscribes :manage, 'package[postfix]'
+    notifies :run, 'execute[/opt/omni/sbin/postfix set-permissions]', :immediately
+  end
+
+  # we don't guard this because if the user creation was successful (or happened out of band), then this won't get executed when the action is :nothing.
+  execute '/opt/omni/sbin/postfix set-permissions'
+
+  template manifest_path  do
+    source 'manifest-postfix.xml.erb'
+    owner 'root'
+    group 'root'
+    mode 00644
+    notifies :run, "execute[load postfix manifest]", :immediately
+  end
+
+  execute "load postfix manifest" do
+    action :nothing
+    command "svccfg import #{manifest_path}"
+    notifies :restart, "service[postfix]"
+  end
 end
 
 if !node['postfix']['sender_canonical_map_entries'].empty?

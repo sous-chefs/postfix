@@ -43,16 +43,17 @@ sasl_pkgs.each do |pkg|
 end
 
 execute 'postmap-sasl_passwd' do
-  command 'postmap /etc/postfix/sasl_passwd'
+  command "postmap #{node['postfix']['conf_dir']}/sasl_passwd"
+  environment :PATH => "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
   action :nothing
 end
 
-template '/etc/postfix/sasl_passwd' do
+template "#{node['postfix']['conf_dir']}/sasl_passwd" do
   source 'sasl_passwd.erb'
   owner 'root'
   group 'root'
   mode 0400
   notifies :run, 'execute[postmap-sasl_passwd]', :immediately
   notifies :restart, 'service[postfix]'
-  variables(settings: node['postfix']['sasl'])
+  variables(:settings => node['postfix']['sasl'])
 end
