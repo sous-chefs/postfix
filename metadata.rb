@@ -4,7 +4,7 @@ description       'Installs and configures postfix for client or outbound relayh
 maintainer        'Opscode, Inc.'
 maintainer_email  'cookbooks@opscode.com'
 license           'Apache 2.0'
-version           '3.0.4'
+version           '3.0.5'
 recipe            'postfix', 'Installs and configures postfix'
 recipe            'postfix::sasl_auth', 'Set up postfix to auth to a server with sasl'
 recipe            'postfix::aliases', 'Manages /etc/aliases'
