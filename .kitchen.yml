@@ -5,49 +5,38 @@ driver_config:
 
 platforms:
 - name: ubuntu-12.04
-  driver_config:
-    box: opscode-ubuntu-12.04
-    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box
   run_list:
   - recipe[apt]
 
 - name: ubuntu-10.04
-  driver_config:
-    box: opscode-ubuntu-10.04
-    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-10.04_provisionerless.box
   run_list:
   - recipe[apt]
 
 - name: centos-6.4
-  driver_config:
-    box: opscode-centos-6.4
-    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_centos-6.4_provisionerless.box
-
 - name: centos-5.9
-  driver_config:
-    box: opscode-centos-5.9
-    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_centos-5.9_provisionerless.box
+- name: omnios-r151006c
+  driver:
+    box: omnios-r151006c
+    box_url: http://omnios.omniti.com/media/OmniOS_Text_r151006c.iso
+  run_list:
+  - recipe[fake::omnios]
 
 suites:
 - name: default
   run_list:
   - recipe[postfix]
-  attributes: {}
 
 - name: aliases
   run_list:
   - recipe[postfix::aliases]
-  attributes: {}
 
 - name: client
   run_list:
   - recipe[postfix::client]
-  attributes: {}
 
 - name: server
   run_list:
   - recipe[postfix::server]
-  attributes: {}
 
 - name: sasl_auth
   run_list:
