@@ -39,11 +39,17 @@ when 'rhel', 'fedora'
 end
 
 if !node['postfix']['sender_canonical_map_entries'].empty?
+  execute 'postmap-sender_canonical' do
+    command 'postmap /etc/postfix/sender_canonical'
+    action :nothing
+  end
+
   template "#{node['postfix']['conf_dir']}/sender_canonical" do
     owner 'root'
     group 0
     mode  '0644'
     notifies :restart, 'service[postfix]'
+    notifies :run, 'execute[postmap-sender_canonical]'
   end
 
   if !node['postfix']['main'].key?('sender_canonical_maps')
