@@ -31,26 +31,31 @@ platforms:
 suites:
 - name: default
   run_list:
+  - recipe[minitest-handler]
   - recipe[postfix]
   attributes: {}
 
 - name: aliases
   run_list:
+  - recipe[minitest-handler]
   - recipe[postfix::aliases]
   attributes: {}
 
 - name: client
   run_list:
+  - recipe[minitest-handler]
   - recipe[postfix::client]
   attributes: {}
 
 - name: server
   run_list:
+  - recipe[minitest-handler]
   - recipe[postfix::server]
   attributes: {}
 
 - name: sasl_auth
   run_list:
+  - recipe[minitest-handler]
   - recipe[postfix::sasl_auth]
   attributes:
     postfix:
