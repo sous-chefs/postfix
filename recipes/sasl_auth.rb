@@ -48,11 +48,17 @@ execute 'postmap-sasl_passwd' do
 end
 
 template node['postfix']['sasl_password_file'] do
+  command "postmap #{node['postfix']['conf_dir']}/sasl_passwd"
+  environment :PATH => "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
+  action :nothing
+end
+
+template "#{node['postfix']['conf_dir']}/sasl_passwd" do
   source 'sasl_passwd.erb'
   owner 'root'
   group 'root'
   mode 0400
   notifies :run, 'execute[postmap-sasl_passwd]', :immediately
   notifies :restart, 'service[postfix]'
-  variables(settings: node['postfix']['sasl'])
+  variables(:settings => node['postfix']['sasl'])
 end

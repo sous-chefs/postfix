@@ -29,6 +29,10 @@ case node['platform']
 when 'smartos'
   default['postfix']['conf_dir'] = '/opt/local/etc/postfix'
   default['postfix']['aliases_db'] = '/opt/local/etc/postfix/aliases'
+when 'omnios'
+  default['postfix']['conf_dir'] = '/opt/omni/etc/postfix'
+  default['postfix']['aliases_db'] = 'opt/omni/etc/postfix/aliases'
+  default['postfix']['uid'] = 11
 else
   default['postfix']['conf_dir'] = '/etc/postfix'
   default['postfix']['aliases_db'] = '/etc/aliases'
@@ -59,7 +63,7 @@ when 'smartos'
 when 'rhel'
   cafile = '/etc/pki/tls/cert.pem'
 else
-  cafile = '/etc/postfix/cacert.pem'
+  cafile = "#{node['postfix']['conf_dir']}/cacert.pem"
 end
 
 if node['postfix']['use_procmail']
