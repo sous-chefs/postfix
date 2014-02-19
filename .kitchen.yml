@@ -43,5 +43,9 @@ suites:
   - recipe[postfix::sasl_auth]
   attributes:
     postfix:
-      main :
+      main:
+        relayhost: "localhost"
         smtp_sasl_auth_enable: "yes"
+      sasl:
+        smtp_sasl_user_name: "kitchenuser"
+        smtp_sasl_passwd: "not-a-real-thing"
