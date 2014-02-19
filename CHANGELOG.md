@@ -3,6 +3,16 @@ postfix Cookbook CHANGELOG
 This file is used to list changes made in each version of the postfix cookbook.
 
 
+v3.1.0 (2014-02-19)
+-------------------
+### Bug
+- **[COOK-4322](https://tickets.opscode.com/browse/COOK-4322)** - Postfix cookbook has incorrect default path for sasl_passwd
+
+### New Feature
+- **[COOK-4086](https://tickets.opscode.com/browse/COOK-4086)** - use conf_dir attribute for sasl recipe, and add omnios support
+- **[COOK-2551](https://tickets.opscode.com/browse/COOK-2551)** - Support creating the sender_canonical map file
+
+
 v3.0.4
 ------
 ### Bug
