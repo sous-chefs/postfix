@@ -3,6 +3,12 @@ postfix Cookbook CHANGELOG
 This file is used to list changes made in each version of the postfix cookbook.
 
 
+v3.1.2 (2014-02-19)
+-------------------
+### Bug
+- **[COOK-4357](https://tickets.opscode.com/browse/COOK-4357)** - postfix::sasl_auth recipe fails to converge
+
+
 v3.1.0 (2014-02-19)
 -------------------
 ### Bug
