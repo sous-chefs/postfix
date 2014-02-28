@@ -3,6 +3,11 @@ postfix Cookbook CHANGELOG
 This file is used to list changes made in each version of the postfix cookbook.
 
 
+v3.1.4 (2014-02-27)
+-------------------
+[COOK-4329] Migrate minitest PITs to latest test-kitchen + serverspec
+
+
 v3.1.2 (2014-02-19)
 -------------------
 ### Bug
