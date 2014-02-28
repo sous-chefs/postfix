@@ -13,12 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require_relative '../../../kitchen/data/spec_helper'
 
-require File.expand_path('../support/helpers', __FILE__)
-
-describe 'postfix::client' do
-  include Helpers::Postfix
+describe 'postfix::server' do
   it 'doesnt configure postfix because solo is unsupported' do
-    skip 'Postfix may be set up by default on the system, but not configured by Chef because this test assumes it is run under Chef Solo'
+    pending 'Postfix may be set up by default on the system, but not configured by Chef because this test assumes it is run under Chef Solo'
   end
 end
