@@ -55,7 +55,7 @@ default['postfix']['main']['mynetworks'] = '127.0.0.0/8'
 default['postfix']['main']['inet_interfaces'] = 'loopback-only'
 
 # Conditional attributes
-case node['platform']
+case node['platform_family']
 when 'smartos'
   default['postfix']['main']['smtpd_use_tls'] = 'no'
   default['postfix']['main']['smtp_use_tls'] = 'no'

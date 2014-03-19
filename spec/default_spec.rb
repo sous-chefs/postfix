@@ -1,0 +1,37 @@
+require 'spec_helper'
+
+describe 'postfix::default' do
+  before do
+    stub_command('/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix').and_return(true)
+  end
+  
+  context 'on Centos 6.5' do
+    let(:chef_run) do
+      ChefSpec::Runner.new(platform: 'centos', version: 6.5).converge(described_recipe)
+    end
+
+    it '[COOK-4423] renders file main.cf with /etc/pki/tls/cert.pem' do
+      expect(chef_run).to render_file('/etc/postfix/main.cf').with_content(%r{smtp_tls_CAfile += +/etc/pki/tls/cert.pem})
+    end
+  end
+
+  context 'on SmartOS' do
+    let(:chef_run) do
+      ChefSpec::Runner.new(platform: 'smartos', version: 'joyent_20130111T180733Z').converge(described_recipe)
+    end
+
+    it '[COOK-4423] renders file main.cf without smtp_use_tls' do
+      expect(chef_run).to render_file('/opt/local/etc/postfix/main.cf').with_content(%r{smtp_use_tls += +no})
+    end
+  end
+
+  context 'on Ubuntu 13.04' do
+    let(:chef_run) do
+      ChefSpec::Runner.new(platform: 'ubuntu', version: 13.04).converge(described_recipe)
+    end
+
+    it '[COOK-4423] renders file main.cf with /etc/postfix/cacert.pem' do
+      expect(chef_run).to render_file('/etc/postfix/main.cf').with_content(%r{smtp_tls_CAfile += +/etc/postfix/cacert.pem})
+    end
+  end
+end
