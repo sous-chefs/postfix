@@ -3,6 +3,12 @@ postfix Cookbook CHANGELOG
 This file is used to list changes made in each version of the postfix cookbook.
 
 
+v3.1.8 (2014-03-27)
+-------------------
+- [COOK-4410] - Fix sender_canonical configuration by adding template
+  and postmap execution
+
+
 v3.1.6 (2014-03-19)
 -------------------
 - [COOK-4423] - use platform_family, find cert.pem on rhel
