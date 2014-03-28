@@ -72,12 +72,18 @@ when 'omnios'
   end
 end
 
+execute 'update-postfix-sender_canonical' do
+  command "postmap #{node['postfix']['conf_dir']}/sender_canonical"
+  action :nothing
+end
+
 if !node['postfix']['sender_canonical_map_entries'].empty?
   template "#{node['postfix']['conf_dir']}/sender_canonical" do
     owner 'root'
     group 0
     mode  '0644'
-    notifies :restart, 'service[postfix]'
+    notifies :run, 'execute[update-postfix-sender_canonical]'
+    notifies :reload, 'service[postfix]'
   end
 
   if !node['postfix']['main'].key?('sender_canonical_maps')
