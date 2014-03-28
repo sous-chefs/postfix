@@ -77,6 +77,11 @@ execute 'update-postfix-sender_canonical' do
   action :nothing
 end
 
+execute 'update-postfix-sender_canonical' do
+  command "postmap #{node['postfix']['conf_dir']}/sender_canonical"
+  action :nothing
+end
+
 if !node['postfix']['sender_canonical_map_entries'].empty?
   template "#{node['postfix']['conf_dir']}/sender_canonical" do
     owner 'root'
