@@ -91,6 +91,26 @@ if !node['postfix']['sender_canonical_map_entries'].empty?
   end
 end
 
+execute 'update-postfix-smtp_generic' do
+  command "postmap #{node['postfix']['conf_dir']}/smtp_generic"
+  action :nothing
+end
+
+if !node['postfix']['smtp_generic_map_entries'].empty?
+  template "#{node['postfix']['conf_dir']}/smtp_generic" do
+    owner 'root'
+    group 0
+    mode  '0644'
+    notifies :run, 'execute[update-postfix-smtp_generic]'
+    notifies :reload, 'service[postfix]'
+  end
+
+  if !node['postfix']['main'].key?('smtp_generic_maps')
+    node.set['postfix']['main']['smtp_generic_maps'] = "hash:#{node['postfix']['conf_dir']}/smtp_generic"
+  end
+end
+
+
 %w{main master}.each do |cfg|
   template "#{node['postfix']['conf_dir']}/#{cfg}.cf" do
     source "#{cfg}.cf.erb"
