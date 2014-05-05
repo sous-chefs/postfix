@@ -13,6 +13,10 @@ describe 'postfix::default' do
     it '[COOK-4423] renders file main.cf with /etc/pki/tls/cert.pem' do
       expect(chef_run).to render_file('/etc/postfix/main.cf').with_content(%r{smtp_tls_CAfile += +/etc/pki/tls/cert.pem})
     end
+
+    it '[COOK-4619] does not set recipient_delimiter' do
+      expect(chef_run).to_not render_file('/etc/postfix/main.cf').with_content('recipient_delimiter')
+    end
   end
 
   context 'on SmartOS' do
@@ -23,6 +27,10 @@ describe 'postfix::default' do
     it '[COOK-4423] renders file main.cf without smtp_use_tls' do
       expect(chef_run).to render_file('/opt/local/etc/postfix/main.cf').with_content(%r{smtp_use_tls += +no})
     end
+
+    it '[COOK-4619] does not set recipient_delimiter' do
+      expect(chef_run).to_not render_file('/etc/postfix/main.cf').with_content('recipient_delimiter')
+    end
   end
 
   context 'on Ubuntu 13.04' do
@@ -32,6 +40,10 @@ describe 'postfix::default' do
 
     it '[COOK-4423] renders file main.cf with /etc/postfix/cacert.pem' do
       expect(chef_run).to render_file('/etc/postfix/main.cf').with_content(%r{smtp_tls_CAfile += +/etc/postfix/cacert.pem})
+    end
+
+    it '[COOK-4619] does not set recipient_delimiter' do
+      expect(chef_run).to_not render_file('/etc/postfix/main.cf').with_content('recipient_delimiter')
     end
   end
 end
