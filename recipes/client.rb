@@ -25,7 +25,7 @@ end
 
 query = "role:#{node['postfix']['relayhost_role']}"
 relayhost = ''
-results = []
+# results = []
 
 if node.run_list.roles.include?(node['postfix']['relayhost_role'])
   relayhost << node['ipaddress']

@@ -27,15 +27,15 @@ sasl_pkgs = []
 # version specifics for RHEL.
 case node['platform_family']
 when 'debian'
-  sasl_pkgs = %w{libsasl2-2 libsasl2-modules ca-certificates}
+  sasl_pkgs = %w(libsasl2-2 libsasl2-modules ca-certificates)
 when 'rhel'
   if node['platform_version'].to_i < 6
-    sasl_pkgs = %w{cyrus-sasl cyrus-sasl-plain openssl}
+    sasl_pkgs = %w(cyrus-sasl cyrus-sasl-plain openssl)
   else
-    sasl_pkgs = %w{cyrus-sasl cyrus-sasl-plain ca-certificates}
+    sasl_pkgs = %w(cyrus-sasl cyrus-sasl-plain ca-certificates)
   end
 when 'fedora'
-  sasl_pkgs = %w{cyrus-sasl cyrus-sasl-plain ca-certificates}
+  sasl_pkgs = %w(cyrus-sasl cyrus-sasl-plain ca-certificates)
 end
 
 sasl_pkgs.each do |pkg|
@@ -55,5 +55,5 @@ template node['postfix']['sasl_password_file'] do
   mode 0400
   notifies :run, 'execute[postmap-sasl_passwd]', :immediately
   notifies :restart, 'service[postfix]'
-  variables(:settings => node['postfix']['sasl'])
+  variables(settings: node['postfix']['sasl'])
 end

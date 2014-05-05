@@ -18,7 +18,7 @@ include_recipe 'postfix'
 
 execute 'update-postfix-aliases' do
   command 'newaliases'
-  environment :PATH => "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
+  environment PATH: "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
   action :nothing
 end
 

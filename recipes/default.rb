@@ -20,9 +20,7 @@
 
 package 'postfix'
 
-if node['postfix']['use_procmail']
-  package 'procmail'
-end
+package 'procmail' if node['postfix']['use_procmail']
 
 case node['platform_family']
 when 'rhel', 'fedora'
@@ -37,7 +35,7 @@ when 'rhel', 'fedora'
     not_if '/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix'
   end
 when 'omnios'
-  manifest_path = ::File.join(Chef::Config[:file_cache_path], "manifest-postfix.xml")
+  manifest_path = ::File.join(Chef::Config[:file_cache_path], 'manifest-postfix.xml')
 
   # we need to manage the postfix group and user
   # and then subscribe to the package install because it creates a
@@ -62,13 +60,13 @@ when 'omnios'
     owner 'root'
     group 'root'
     mode 00644
-    notifies :run, "execute[load postfix manifest]", :immediately
+    notifies :run, 'execute[load postfix manifest]', :immediately
   end
 
-  execute "load postfix manifest" do
+  execute 'load postfix manifest' do
     action :nothing
     command "svccfg import #{manifest_path}"
-    notifies :restart, "service[postfix]"
+    notifies :restart, 'service[postfix]'
   end
 end
 
@@ -77,21 +75,21 @@ execute 'update-postfix-sender_canonical' do
   action :nothing
 end
 
-if !node['postfix']['sender_canonical_map_entries'].empty?
+unless node['postfix']['sender_canonical_map_entries'].empty?
   template "#{node['postfix']['conf_dir']}/sender_canonical" do
     owner 'root'
     group 0
-    mode  '0644'
+    mode '0644'
     notifies :run, 'execute[update-postfix-sender_canonical]'
     notifies :reload, 'service[postfix]'
   end
 
-  if !node['postfix']['main'].key?('sender_canonical_maps')
+  unless node['postfix']['main'].key?('sender_canonical_maps')
     node.set['postfix']['main']['sender_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/sender_canonical"
   end
 end
 
-%w{main master}.each do |cfg|
+%w(main master).each do |cfg|
   template "#{node['postfix']['conf_dir']}/#{cfg}.cf" do
     source "#{cfg}.cf.erb"
     owner 'root'

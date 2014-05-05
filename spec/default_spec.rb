@@ -4,7 +4,7 @@ describe 'postfix::default' do
   before do
     stub_command('/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix').and_return(true)
   end
-  
+
   context 'on Centos 6.5' do
     let(:chef_run) do
       ChefSpec::Runner.new(platform: 'centos', version: 6.5).converge(described_recipe)
@@ -25,7 +25,7 @@ describe 'postfix::default' do
     end
 
     it '[COOK-4423] renders file main.cf without smtp_use_tls' do
-      expect(chef_run).to render_file('/opt/local/etc/postfix/main.cf').with_content(%r{smtp_use_tls += +no})
+      expect(chef_run).to render_file('/opt/local/etc/postfix/main.cf').with_content(/smtp_use_tls += +no/)
     end
 
     it '[COOK-4619] does not set recipient_delimiter' do
