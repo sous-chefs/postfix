@@ -15,8 +15,8 @@ platforms:
   run_list:
   - recipe[apt]
 
-- name: centos-6.4
-- name: centos-5.9
+- name: centos-6.5
+- name: centos-5.10
 - name: omnios-r151006c
   driver:
     box: omnios-r151006c
