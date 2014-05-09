@@ -3,6 +3,11 @@ postfix Cookbook CHANGELOG
 This file is used to list changes made in each version of the postfix cookbook.
 
 
+v3.2.0 (2014-05-09)
+-------------------
+- [COOK-4619] - no way to unset recipient_delimiter
+
+
 v3.1.8 (2014-03-27)
 -------------------
 - [COOK-4410] - Fix sender_canonical configuration by adding template
