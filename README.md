@@ -43,7 +43,6 @@ This change in namespace to `node['postfix']['main']` should allow for greater f
 * `node['postfix']['main']['inet_interfaces']` - set to `loopback-only`, or `all` for server recipe
 * `node['postfix']['main']['alias_maps']` - set to `hash:/etc/aliases`
 * `node['postfix']['main']['mailbox_size_limit']` - set to `0` (disabled)
-* `node['postfix']['main']['recipient_delimiter']` - set to `+`
 * `node['postfix']['main']['mydestination']` - default fqdn, hostname, localhost.localdomain, localhost
 * `node['postfix']['main']['smtpd_use_tls']` - (yes/no); default yes. See conditional cert/key attributes.
   - `node['postfix']['main']['smtpd_tls_cert_file']` - conditional attribute, set to full path of server's x509 certificate.
