@@ -22,7 +22,12 @@ attribute 'postfix/main',
 
 attribute 'postfix/aliases',
           display_name: 'Postfix Aliases',
-          description: "Hash of Postfix aliases mapping a name to a value.  Example 'root' => 'operator@example.com'.  See aliases man page for details.",
+          description: "Hash of Postfix aliases mapping a name to a value. Example 'root' => 'operator@example.com'. See aliases man page for details.",
+          type: 'hash'
+
+attribute 'postfix/transports',
+          display_name: 'Postfix Transports',
+          description: "Hash of Postfix transports mapping a destination to a smtp server. Example 'my.domain' => 'smtp:outbound-relay.my.domain'. See transport man page for details.",
           type: 'hash'
 
 attribute 'postfix/mail_type',
