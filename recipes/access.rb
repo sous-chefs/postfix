@@ -25,5 +25,4 @@ end
 template "/etc/postfix/access" do
   source "access.erb"
   notifies :run, "execute[update-postfix-access]"
-  notifies :restart, "service[postfix]"
 end

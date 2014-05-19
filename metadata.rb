@@ -25,6 +25,11 @@ attribute 'postfix/aliases',
           description: "Hash of Postfix aliases mapping a name to a value.  Example 'root' => 'operator@example.com'.  See aliases man page for details.",
           type: 'hash'
 
+attribute 'postfix/access',
+          display_name: 'Postfix Access Table',
+          description: "Hash of Postfix accesses mapping a pattern to a action.  Example 'domain.tld' => 'OK'.  See access man page for details.",
+          type: 'hash'
+
 attribute 'postfix/mail_type',
           display_name: 'Postfix Mail Type',
           description: 'Is this node a client or server?',
