@@ -21,6 +21,7 @@ default['postfix']['relayhost_role'] = 'relayhost'
 default['postfix']['multi_environment_relay'] = false
 default['postfix']['use_procmail'] = false
 default['postfix']['aliases'] = {}
+default['postfix']['access'] = {}
 default['postfix']['main_template_source'] = 'postfix'
 default['postfix']['master_template_source'] = 'postfix'
 default['postfix']['sender_canonical_map_entries'] = {}
@@ -29,13 +30,16 @@ case node['platform']
 when 'smartos'
   default['postfix']['conf_dir'] = '/opt/local/etc/postfix'
   default['postfix']['aliases_db'] = '/opt/local/etc/postfix/aliases'
+  default['postfix']['access_db'] = '/opt/local/etc/postfix/aliases'
 when 'omnios'
   default['postfix']['conf_dir'] = '/opt/omni/etc/postfix'
   default['postfix']['aliases_db'] = 'opt/omni/etc/postfix/aliases'
+  default['postfix']['access_db'] = 'opt/omni/etc/postfix/aliases'
   default['postfix']['uid'] = 11
 else
   default['postfix']['conf_dir'] = '/etc/postfix'
   default['postfix']['aliases_db'] = '/etc/aliases'
+  default['postfix']['access_db'] = '/etc/postfix/access'
 end
 
 # Non-default main.cf attributes
@@ -48,6 +52,7 @@ default['postfix']['main']['mydestination'] = [node['postfix']['main']['myhostna
 default['postfix']['main']['smtpd_use_tls'] = 'yes'
 default['postfix']['main']['smtp_use_tls'] = 'yes'
 default['postfix']['main']['alias_maps'] = ["hash:#{node['postfix']['aliases_db']}"]
+default['postfix']['main']['access_maps'] = ["hash:#{node['postfix']['access_db']}"]
 default['postfix']['main']['mailbox_size_limit'] = 0
 default['postfix']['main']['smtp_sasl_auth_enable'] = 'no'
 default['postfix']['main']['mynetworks'] = '127.0.0.0/8'

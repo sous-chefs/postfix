@@ -8,6 +8,7 @@ version '3.2.1'
 recipe 'postfix', 'Installs and configures postfix'
 recipe 'postfix::sasl_auth', 'Set up postfix to auth to a server with sasl'
 recipe 'postfix::aliases', 'Manages /etc/aliases'
+recipe 'postfix::access', 'Manages /etc/postfix/access'
 recipe 'postfix::client', 'Searches for the relayhost based on an attribute'
 recipe 'postfix::server', 'Sets the mail_type attribute to master'
 
@@ -23,6 +24,11 @@ attribute 'postfix/main',
 attribute 'postfix/aliases',
           display_name: 'Postfix Aliases',
           description: "Hash of Postfix aliases mapping a name to a value.  Example 'root' => 'operator@example.com'.  See aliases man page for details.",
+          type: 'hash'
+
+attribute 'postfix/access',
+          display_name: 'Postfix Access Table',
+          description: "Hash of Postfix accesses mapping a pattern to a action.  Example 'domain.tld' => 'OK'.  See access man page for details.",
           type: 'hash'
 
 attribute 'postfix/mail_type',
