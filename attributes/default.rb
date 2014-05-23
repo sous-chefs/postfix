@@ -50,7 +50,7 @@ default['postfix']['main']['smtp_use_tls'] = 'yes'
 default['postfix']['main']['alias_maps'] = ["hash:#{node['postfix']['aliases_db']}"]
 default['postfix']['main']['mailbox_size_limit'] = 0
 default['postfix']['main']['smtp_sasl_auth_enable'] = 'no'
-default['postfix']['main']['mynetworks'] = '127.0.0.0/8'
+default['postfix']['main']['mynetworks'] = nil
 default['postfix']['main']['inet_interfaces'] = 'loopback-only'
 
 # Conditional attributes
