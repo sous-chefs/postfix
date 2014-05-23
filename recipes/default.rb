@@ -59,7 +59,7 @@ when 'omnios'
     source 'manifest-postfix.xml.erb'
     owner 'root'
     group 'root'
-    mode 00644
+    mode '0644'
     notifies :run, 'execute[load postfix manifest]', :immediately
   end
 
@@ -94,7 +94,7 @@ end
     source "#{cfg}.cf.erb"
     owner 'root'
     group 0
-    mode 00644
+    mode '0644'
     notifies :restart, 'service[postfix]'
     variables(settings: node['postfix'][cfg])
     cookbook node['postfix']["#{cfg}_template_source"]
