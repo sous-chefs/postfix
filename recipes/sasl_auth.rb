@@ -1,10 +1,10 @@
 # encoding: utf-8
 #
-# Author:: Joshua Timberman(<joshua@opscode.com>)
+# Author:: Joshua Timberman(<joshua@getchef.com>)
 # Cookbook Name:: postfix
 # Recipe:: sasl_auth
 #
-# Copyright 2009, Opscode, Inc.
+# Copyright 2009-2014, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

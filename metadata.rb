@@ -1,8 +1,8 @@
 # encoding: utf-8
 name 'postfix'
 description 'Installs and configures postfix for client or outbound relayhost, or to do SASL auth'
-maintainer 'Opscode, Inc.'
-maintainer_email 'cookbooks@opscode.com'
+maintainer 'Chef Software, Inc.'
+maintainer_email 'cookbooks@getchef.com'
 license 'Apache 2.0'
 version '3.2.1'
 recipe 'postfix', 'Installs and configures postfix'
