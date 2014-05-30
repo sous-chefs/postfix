@@ -56,8 +56,15 @@ This change in namespace to `node['postfix']['main']` should allow for greater f
   - `node['postfix']['main']['smtp_sasl_password_maps']` - Set to `hash:/etc/postfix/sasl_passwd` template file
   - `node['postfix']['main']['smtp_sasl_security_options']` - Set to noanonymous
   - `node['postfix']['main']['relayhost']` - Set to empty string
-  - `node['postfix']['sasl']['smtp_sasl_user_name']` - SASL user to authenticate as.  Default empty
-  - `node['postfix']['sasl']['smtp_sasl_passwd']` - SASL password to use.  Default empty.
+  - `node['postfix']['sasl'][0]['host']` - SMTP host. Default empty
+  - `node['postfix']['sasl'][0]['username']` - SASL user to authenticate as.  Default empty
+  - `node['postfix']['sasl'][0]['passwd']` - SASL password to use.  Default empty.
+* `node['postfix']['transport']['enable']` - (yes/no); default no.  If enabled, see following conditional attributes.
+  - `node['postfix']['transport']['file']` - Set to `/etc/postfix/transport` template file
+  - `node['postfix']['main']['transport_maps']` - Set to `hash:/etc/postfix/transport` template file
+  - `node['postfix']['transport']['entries'][0]['pattern']` - Pattern. Default empty
+  - `node['postfix']['transport']['entries'][0]['transport']` - Transport.  Default empty
+  - `node['postfix']['transport']['entries'][0]['nexthop']` - Nexthop.  Default empty.
 
 ### master.cf template attributes
 * `node['postfix']['master']['submission'] - Whether to use submission (TCP 587) daemon. (true/false); default false
@@ -100,6 +107,8 @@ On systems that should simply send mail directly to a relay, or out to the inter
 On systems that should be the MX for a domain, set the attributes accordingly and make sure the `node['postfix']['mail_type']` attribute is `master`. See __Examples__ for information on how to use `recipe[postfix::server]` to do this automatically.
 
 If you need to use SASL authentication to send mail through your ISP (such as on a home network), use `postfix::sasl_auth` and set the appropriate attributes.
+
+If you need to send mail through different transports (such as send mails to some domain using a different SMTP), use `postfix::transport` and set the appropriate attributes.
 
 For each of these implementations, see __Examples__ for role usage.
 
@@ -157,9 +166,52 @@ override_attributes(
       "relayhost" => "[smtp.comcast.net]:587",
       "smtp_sasl_auth_enable" => "yes"
     },
-    "sasl" => {
-      "smtp_sasl_passwd" => "your_password",
-      "smtp_sasl_user_name" => "your_username"
+    "sasl" => [
+      {
+        "host" => "[smtp.comcast.net]:587",
+        "passwd" => "your_password",
+        "username" => "your_username"
+      }
+    }
+  }
+)
+```
+
+The following example shows a variant of `sasl_relayhost` sending emails to *@example.com using the Gmail's SMTP server.
+
+```ruby
+name "sasl_relayhost"
+run_list("recipe[postfix], recipe[postfix::sasl_auth]", recipe[postfix::transport]")
+override_attributes(
+  "postfix" => {
+    "mail_type" => "master",
+    "main" => {
+      "mynetworks" => "10.3.3.0/24",
+      "mydomain" => "example.com",
+      "myorigin" => "example.com",
+      "relayhost" => "[smtp.comcast.net]:587",
+      "smtp_sasl_auth_enable" => "yes"
+    },
+    "sasl" => [
+      {
+        "host" => "[smtp.comcast.net]:587",
+        "passwd" => "your_password",
+        "username" => "your_username"
+      },
+      {
+        "host" => "[smtp.gmail.com]:587",
+        "passwd" => "your_password",
+        "username" => "your_username"
+      }
+    },
+    "transport" => {
+      "enable" => "yes",
+      "entries" => [
+        {
+          "pattern" => "example.com",
+          "nexthop" => "[smtp.gmail.com]:587"
+        }
+      ]
     }
   }
 )
