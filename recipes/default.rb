@@ -1,9 +1,9 @@
 # encoding: utf-8
-# Author:: Joshua Timberman(<joshua@opscode.com>)
+# Author:: Joshua Timberman(<joshua@getchef.com>)
 # Cookbook Name:: postfix
 # Recipe:: default
 #
-# Copyright 2009-2012, Opscode, Inc.
+# Copyright 2009-2014, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ when 'omnios'
     source 'manifest-postfix.xml.erb'
     owner 'root'
     group 'root'
-    mode 00644
+    mode '0644'
     notifies :run, 'execute[load postfix manifest]', :immediately
   end
 
@@ -113,7 +113,7 @@ end
     source "#{cfg}.cf.erb"
     owner 'root'
     group 0
-    mode 00644
+    mode '0644'
     notifies :restart, 'service[postfix]'
     variables(settings: node['postfix'][cfg])
     cookbook node['postfix']["#{cfg}_template_source"]

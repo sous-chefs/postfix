@@ -4,6 +4,7 @@
 ###
 
 <% @settings.sort.map do |key, value| -%>
+<%  next if value.nil? -%>
 <%  if value.kind_of? Array -%>
 <%=   "#{key} = #{value.join(', ')}"%>
 <%  else -%>

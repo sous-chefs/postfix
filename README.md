@@ -39,7 +39,7 @@ This change in namespace to `node['postfix']['main']` should allow for greater f
 * `node['postfix']['main']['myhostname']` - defaults to fqdn from Ohai
 * `node['postfix']['main']['mydomain']` - defaults to domain from Ohai
 * `node['postfix']['main']['myorigin']` - defaults to $myhostname
-* `node['postfix']['main']['mynetworks']` - default is `127.0.0.0/8`
+* `node['postfix']['main']['mynetworks']` - default is nil, which forces Postfix to default to loopback addresses.
 * `node['postfix']['main']['inet_interfaces']` - set to `loopback-only`, or `all` for server recipe
 * `node['postfix']['main']['alias_maps']` - set to `hash:/etc/aliases`
 * `node['postfix']['main']['mailbox_size_limit']` - set to `0` (disabled)
@@ -250,10 +250,10 @@ override_attributes(
 
 License & Authors
 -----------------
-- Author:: Joshua Timberman <joshua@opscode.com>
+- Author:: Joshua Timberman <joshua@getchef.com>
 
 ```text
-Copyright:: 2009-2012, Opscode, Inc
+Copyright:: 2009-2014, Chef Software, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

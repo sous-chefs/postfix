@@ -1,6 +1,6 @@
 # encoding: utf-8
-# Author:: Joshua Timberman <joshua@opscode.com>
-# Copyright:: Copyright (c) 2009, Opscode, Inc.
+# Author:: Joshua Timberman <joshua@getchef.com>
+# Copyright:: Copyright 2009-2014, Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,7 +64,7 @@ default['postfix']['main']['transport_maps'] = [ "hash:#{node['postfix']['transp
 default['postfix']['main']['access_maps'] = ["hash:#{node['postfix']['access_db']}"]
 default['postfix']['main']['mailbox_size_limit'] = 0
 default['postfix']['main']['smtp_sasl_auth_enable'] = 'no'
-default['postfix']['main']['mynetworks'] = '127.0.0.0/8'
+default['postfix']['main']['mynetworks'] = nil
 default['postfix']['main']['inet_interfaces'] = 'loopback-only'
 
 # Conditional attributes
