@@ -95,7 +95,7 @@ http://wiki.opscode.com/display/chef/Templates#Templates-TemplateLocationSpecifi
 
 Usage
 -----
-On systems that should simply send mail directly to a relay, or out to the internet, use `recipe[postfix]` and modify the `node['postfix']['relayhost']` attribute via a role.
+On systems that should simply send mail directly to a relay, or out to the internet, use `recipe[postfix]` and modify the `node['postfix']['main']['relayhost']` attribute via a role.
 
 On systems that should be the MX for a domain, set the attributes accordingly and make sure the `node['postfix']['mail_type']` attribute is `master`. See __Examples__ for information on how to use `recipe[postfix::server]` to do this automatically.
 
