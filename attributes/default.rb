@@ -90,6 +90,18 @@ if node['postfix']['main']['smtp_sasl_auth_enable'] == 'yes'
   default['postfix']['main']['relayhost'] = ''
 end
 
+if node['postfix']['use_virtual_aliases'] == 'yes'
+  default['postfix']['main']['virtual_alias_domains'] = []
+  case node['platform']
+  when 'smartos'
+    default['postfix']['virtual_alias_db'] = '/opt/local/etc/postfix/virtual'
+  else
+    default['postfix']['virtual_alias_db'] = '/etc/postfix/virtual'
+  end
+  default['postfix']['main']['virtual_alias_maps'] = "hash:#{node['postfix']['virtual_alias_db']}"
+  default['postfix']['virtual_aliases'] = {}
+end
+
 # # Default main.cf attributes according to `postconf -d`
 # default['postfix']['main']['relayhost'] = ''
 # default['postfix']['main']['milter_default_action']  = 'tempfail'
