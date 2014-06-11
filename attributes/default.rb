@@ -105,3 +105,9 @@ end
 
 # Master.cf attributes
 default['postfix']['master']['submission'] = false
+
+default['postfix']['virtual']['virtual_aliases'] = {}
+unless node['postfix']['virtual']['virtual_aliases'].empty?
+  default['postfix']['main']['virtual_alias_domains'] = ''
+  default['postfix']['main']['virtual_alias_maps']    = 'hash:/etc/postfix/virtual'
+end
