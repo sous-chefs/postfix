@@ -1,6 +1,0 @@
-# This file was created by Chef for <%= node['fqdn'] %>
-# Do NOT modify this file by hand!
-
-<% node['postfix']['virtual']['virtual_aliases'].each do |from, to| %>
-<%= from %> <%= to %>
-<% end %>
