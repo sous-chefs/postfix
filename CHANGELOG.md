@@ -3,6 +3,11 @@ postfix Cookbook CHANGELOG
 This file is used to list changes made in each version of the postfix cookbook.
 
 
+v3.3.1 (2014-06-11)
+-------------------
+Reverting #37 - [COOK-3418] Virtual Domain Support PR - duplicate of #55
+
+
 v3.3.0 (2014-06-11)
 -------------------
 #37 - [COOK-3418] - Virtual Domain Support
