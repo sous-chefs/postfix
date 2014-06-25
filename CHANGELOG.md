@@ -10,14 +10,14 @@ Reverting #37 - [COOK-3418] Virtual Domain Support PR - duplicate of #55
 
 v3.3.0 (2014-06-11)
 -------------------
-#37 - [COOK-3418] - Virtual Domain Support
-#44 - Fix minor formatting issue in attributes
-#55 - Add support for virtual aliases
-#57 - Fixing attributes bug in README
-#64 - add smtp_generic maps configuration option
-#66 - [COOK-3652] Add support for transport mappings
-#67 - [COOK-4662] Added support for access control
-#68 - Properly handle binding to loopback on mixed IPV4/IPV6 systems
+- #37 - [COOK-3418] - Virtual Domain Support
+- #44 - Fix minor formatting issue in attributes
+- #55 - Add support for virtual aliases
+- #57 - Fixing attributes bug in README
+- #64 - add smtp_generic maps configuration option
+- #66 - [COOK-3652] Add support for transport mappings
+- #67 - [COOK-4662] Added support for access control
+- #68 - Properly handle binding to loopback on mixed IPV4/IPV6 systems
 
 
 v3.2.0 (2014-05-09)
