@@ -61,7 +61,7 @@ default['postfix']['main']['smtpd_use_tls'] = 'yes'
 default['postfix']['main']['smtp_use_tls'] = 'yes'
 default['postfix']['main']['alias_maps'] = ["hash:#{node['postfix']['aliases_db']}"]
 default['postfix']['main']['transport_maps'] = [ "hash:#{node['postfix']['transport_db']}" ]
-default['postfix']['main']['access_maps'] = ["hash:#{node['postfix']['access_db']}"]
+default['postfix']['main']['access_maps'] = ["hash:#{node['postfix']['access_db']}"] if node['platform_version'] != "14.04"
 default['postfix']['main']['mailbox_size_limit'] = 0
 default['postfix']['main']['smtp_sasl_auth_enable'] = 'no'
 default['postfix']['main']['mynetworks'] = nil
