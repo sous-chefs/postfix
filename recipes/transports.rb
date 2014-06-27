@@ -23,6 +23,6 @@ execute "update-postfix-transport" do
 end
 
 template node['postfix']['transport_db'] do
-  source "transport.erb"
+  source "transports.erb"
   notifies :run, "execute[update-postfix-transport]"
 end
