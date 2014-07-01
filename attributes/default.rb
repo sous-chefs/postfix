@@ -23,6 +23,7 @@ default['postfix']['use_procmail'] = false
 default['postfix']['aliases'] = {}
 default['postfix']['transports'] = {}
 default['postfix']['access'] = {}
+default['postfix']['virtual_aliases'] = {}
 default['postfix']['main_template_source'] = 'postfix'
 default['postfix']['master_template_source'] = 'postfix'
 default['postfix']['sender_canonical_map_entries'] = {}
@@ -33,21 +34,21 @@ when 'smartos'
   default['postfix']['conf_dir'] = '/opt/local/etc/postfix'
   default['postfix']['aliases_db'] = '/opt/local/etc/postfix/aliases'
   default['postfix']['transport_db'] = '/opt/local/etc/postfix/transport'
+  default['postfix']['access_db'] = '/opt/local/etc/postfix/access'
+  default['postfix']['virtual_alias_db'] = '/opt/local/etc/postfix/virtual'
 when 'omnios'
   default['postfix']['conf_dir'] = '/opt/omni/etc/postfix'
   default['postfix']['aliases_db'] = 'opt/omni/etc/postfix/aliases'
   default['postfix']['transport_db'] = '/opt/omni/etc/postfix/transport'
-  default['postfix']['access_db'] = '/opt/local/etc/postfix/aliases'
-when 'omnios'
-  default['postfix']['conf_dir'] = '/opt/omni/etc/postfix'
-  default['postfix']['aliases_db'] = 'opt/omni/etc/postfix/aliases'
-  default['postfix']['access_db'] = 'opt/omni/etc/postfix/aliases'
+  default['postfix']['access_db'] = '/opt/omni/etc/postfix/access'
+  default['postfix']['virtual_alias_db'] = '/etc/omni/etc/postfix/virtual'
   default['postfix']['uid'] = 11
 else
   default['postfix']['conf_dir'] = '/etc/postfix'
   default['postfix']['aliases_db'] = '/etc/aliases'
   default['postfix']['transport_db'] = '/etc/postfix/transport'
   default['postfix']['access_db'] = '/etc/postfix/access'
+  default['postfix']['virtual_alias_db'] = '/etc/postfix/virtual'
 end
 
 # Non-default main.cf attributes
@@ -59,11 +60,12 @@ default['postfix']['main']['myorigin'] = '$myhostname'
 default['postfix']['main']['mydestination'] = [node['postfix']['main']['myhostname'], node['hostname'], 'localhost.localdomain', 'localhost'].compact
 default['postfix']['main']['smtpd_use_tls'] = 'yes'
 default['postfix']['main']['smtp_use_tls'] = 'yes'
-default['postfix']['main']['alias_maps'] = ["hash:#{node['postfix']['aliases_db']}"]
-default['postfix']['main']['transport_maps'] = [ "hash:#{node['postfix']['transport_db']}" ]
-default['postfix']['main']['access_maps'] = ["hash:#{node['postfix']['access_db']}"]
-default['postfix']['main']['mailbox_size_limit'] = 0
 default['postfix']['main']['smtp_sasl_auth_enable'] = 'no'
+default['postfix']['main']['use_alias_maps'] = 'no'
+default['postfix']['main']['use_transport_maps'] = 'no'
+default['postfix']['main']['use_access_maps'] = 'no'
+default['postfix']['main']['use_virtual_aliases'] = 'no'
+default['postfix']['main']['mailbox_size_limit'] = 0
 default['postfix']['main']['mynetworks'] = nil
 default['postfix']['main']['inet_interfaces'] = 'loopback-only'
 
@@ -104,16 +106,20 @@ if node['postfix']['main']['smtp_sasl_auth_enable'] == 'yes'
   default['postfix']['main']['relayhost'] = ''
 end
 
-if node['postfix']['use_virtual_aliases'] == 'yes'
-  default['postfix']['main']['virtual_alias_domains'] = []
-  case node['platform']
-  when 'smartos'
-    default['postfix']['virtual_alias_db'] = '/opt/local/etc/postfix/virtual'
-  else
-    default['postfix']['virtual_alias_db'] = '/etc/postfix/virtual'
-  end
-  default['postfix']['main']['virtual_alias_maps'] = "hash:#{node['postfix']['virtual_alias_db']}"
-  default['postfix']['virtual_aliases'] = {}
+if node['postfix']['main']['use_alias_maps'] == 'yes'
+   default['postfix']['main']['alias_maps'] = ["hash:#{node['postfix']['aliases_db']}"]
+end
+
+if node['postfix']['main']['use_transport_maps'] == 'yes'
+   default['postfix']['main']['transport_maps'] = ["hash:#{node['postfix']['transport_db']}"]
+end
+
+if node['postfix']['main']['use_access_maps'] == 'yes'
+   default['postfix']['main']['access_maps'] = ["hash:#{node['postfix']['access_db']}"]
+end
+
+if node['postfix']['main']['use_virtual_aliases'] == 'yes'
+  default['postfix']['main']['virtual_alias_maps'] = ["hash:#{node['postfix']['virtual_alias_db']}"]
 end
 
 # # Default main.cf attributes according to `postconf -d`
