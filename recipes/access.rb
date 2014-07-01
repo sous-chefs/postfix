@@ -14,15 +14,15 @@
 # limitations under the License.
 #
 
-include_recipe "postfix"
+include_recipe 'postfix::_common'
 
-execute "update-postfix-access" do
+execute 'update-postfix-access' do
   command "postmap #{node['postfix']['access_db']}"
   environment PATH: "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
   action :nothing
 end
 
-template "/etc/postfix/access" do
-  source "access.erb"
-  notifies :run, "execute[update-postfix-access]"
+template node['postfix']['access_db'] do
+  source 'access.erb'
+  notifies :run, 'execute[update-postfix-access]'
 end

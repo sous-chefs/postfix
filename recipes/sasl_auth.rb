@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-include_recipe 'postfix'
+include_recipe 'postfix::_common'
 
 sasl_pkgs = []
 
