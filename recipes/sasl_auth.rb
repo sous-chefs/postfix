@@ -51,7 +51,7 @@ end
 template node['postfix']['sasl_password_file'] do
   source 'sasl_passwd.erb'
   owner 'root'
-  group 'root'
+  group node['root_group']
   mode 0400
   notifies :run, 'execute[postmap-sasl_passwd]', :immediately
   notifies :restart, 'service[postfix]'
