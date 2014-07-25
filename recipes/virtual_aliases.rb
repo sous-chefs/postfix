@@ -14,18 +14,15 @@
 # limitations under the License.
 #
 
-include_recipe 'postfix'
+include_recipe 'postfix::_common'
 
-execute 'postmap-virtual-alias' do
-  command "postmap #{node['postfix']['main']['virtual_alias_maps']}"
+execute 'update-postfix-virtual-alias' do
+  command "postmap #{node['postfix']['virtual_alias_db']}"
+  environment PATH: "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
   action :nothing
 end
 
 template node['postfix']['virtual_alias_db'] do
   source 'virtual_aliases.erb'
-  owner 'root'
-  group 'root'
-  mode 0400
-  notifies :run, 'execute[postmap-virtual-alias]', :immediately
-  notifies :restart, 'service[postfix]'
+  notifies :run, 'execute[update-postfix-virtual-alias]'
 end

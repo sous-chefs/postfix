@@ -14,15 +14,15 @@
 # limitations under the License.
 #
 
-include_recipe "postfix"
+include_recipe 'postfix::_common'
 
-execute "update-postfix-transport" do
+execute 'update-postfix-transport' do
   command "postmap #{node['postfix']['transport_db']}"
   environment PATH: "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
   action :nothing
 end
 
 template node['postfix']['transport_db'] do
-  source "transport.erb"
-  notifies :run, "execute[update-postfix-transport]"
+  source 'transport.erb'
+  notifies :run, 'execute[update-postfix-transport]'
 end
