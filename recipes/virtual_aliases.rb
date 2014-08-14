@@ -22,7 +22,18 @@ execute 'update-postfix-virtual-alias' do
   action :nothing
 end
 
+execute 'update-postfix-virtual-alias-domains' do
+  command "postmap #{node['postfix']['virtual_alias_domains_db']}"
+  environment PATH: "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
+  action :nothing
+end
+
 template node['postfix']['virtual_alias_db'] do
   source 'virtual_aliases.erb'
   notifies :run, 'execute[update-postfix-virtual-alias]'
+end
+
+template node['postfix']['virtual_alias_domains_db'] do
+  source 'virtual_aliases_domains.erb'
+  notifies :run, 'execute[update-postfix-virtual-alias-domains]'
 end

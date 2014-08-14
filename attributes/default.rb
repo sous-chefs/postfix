@@ -37,22 +37,40 @@ case node['platform']
 when 'smartos'
   default['postfix']['conf_dir'] = '/opt/local/etc/postfix'
   default['postfix']['aliases_db'] = '/opt/local/etc/postfix/aliases'
+  default['postfix']['aliases_db_type'] = 'hash'
   default['postfix']['transport_db'] = '/opt/local/etc/postfix/transport'
+  default['postfix']['transport_db_type'] = 'hash'
   default['postfix']['access_db'] = '/opt/local/etc/postfix/access'
+  default['postfix']['access_db_type'] = 'hash'
   default['postfix']['virtual_alias_db'] = '/opt/local/etc/postfix/virtual'
+  default['postfix']['virtual_alias_db_type'] = 'hash'
+  default['postfix']['virtual_alias_domains_db'] = '/opt/local/etc/postfix/virtual_domains'
+  default['postfix']['virtual_alias_domains_db_type'] = 'hash'
 when 'omnios'
   default['postfix']['conf_dir'] = '/opt/omni/etc/postfix'
   default['postfix']['aliases_db'] = 'opt/omni/etc/postfix/aliases'
+  default['postfix']['aliases_db_type'] = 'hash'
   default['postfix']['transport_db'] = '/opt/omni/etc/postfix/transport'
+  default['postfix']['transport_db_type'] = 'hash'
   default['postfix']['access_db'] = '/opt/omni/etc/postfix/access'
+  default['postfix']['access_db_type'] = 'hash'
   default['postfix']['virtual_alias_db'] = '/etc/omni/etc/postfix/virtual'
+  default['postfix']['virtual_alias_db_type'] = 'hash'
+  default['postfix']['virtual_alias_domains_db'] = '/etc/omni/etc/postfix/virtual_domains'
+  default['postfix']['virtual_alias_domains_db_type'] = 'hash'
   default['postfix']['uid'] = 11
 else
   default['postfix']['conf_dir'] = '/etc/postfix'
   default['postfix']['aliases_db'] = '/etc/aliases'
+  default['postfix']['aliases_db_type'] = 'hash'
   default['postfix']['transport_db'] = '/etc/postfix/transport'
+  default['postfix']['transport_db_type'] = 'hash'
   default['postfix']['access_db'] = '/etc/postfix/access'
+  default['postfix']['access_db_type'] = 'hash'
   default['postfix']['virtual_alias_db'] = '/etc/postfix/virtual'
+  default['postfix']['virtual_alias_db_type'] = 'hash'
+  default['postfix']['virtual_alias_domains_db'] = '/etc/postfix/virtual_domains'
+  default['postfix']['virtual_alias_domains_db_type'] = 'hash'
 end
 
 # Non-default main.cf attributes
@@ -119,7 +137,8 @@ if node['postfix']['use_access_maps']
 end
 
 if node['postfix']['use_virtual_aliases']
-  default['postfix']['main']['virtual_alias_maps'] = ["hash:#{node['postfix']['virtual_alias_db']}"]
+  default['postfix']['main']['virtual_alias_maps'] = ["#{node['postfix']['virtual_alias_db_type']}:#{node['postfix']['virtual_alias_db']}"]
+  default['postfix']['main']['virtual_alias_domains'] = ["#{node['postfix']['virtual_alias_domains_db_type']}:#{node['postfix']['virtual_alias_domains_db']}"]
 end
 
 # # Default main.cf attributes according to `postconf -d`
