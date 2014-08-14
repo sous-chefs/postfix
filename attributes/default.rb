@@ -127,8 +127,8 @@ if node['postfix']['use_access_maps']
 end
 
 if node['postfix']['use_virtual_aliases']
-  default['postfix']['main']['virtual_alias_maps'] = ["#{node['postfix']['virtual_alias_db_type']}:#{node['postfix']['virtual_alias_db']}"]
-  default['postfix']['main']['virtual_alias_domains'] = ["#{node['postfix']['virtual_alias_domains_db_type']}:#{node['postfix']['virtual_alias_domains_db']}"]
+  default['postfix']['main']['virtual_alias_maps'] = ["#{node['postfix']['virtual_alias_db_type']}:#{node['postfix']['virtual_alias_db']}"] unless default['postfix']['virtual_aliases'].nil?
+  default['postfix']['main']['virtual_alias_domains'] = ["#{node['postfix']['virtual_alias_domains_db_type']}:#{node['postfix']['virtual_alias_domains_db']}"] unless default['postfix']['virtual_aliases_domains'].nil?
 end
 
 # # Default main.cf attributes according to `postconf -d`
