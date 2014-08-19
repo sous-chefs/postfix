@@ -24,18 +24,18 @@ if node['postfix']['main']['smtp_sasl_auth_enable'] == 'yes'
   include_recipe 'postfix::sasl_auth'
 end
 
-if node['postfix']['main']['use_alias_maps'] == 'yes'
+if node['postfix']['use_alias_maps']
   include_recipe 'postfix::aliases'
 end
 
-if node['postfix']['main']['use_transport_maps'] == 'yes'
+if node['postfix']['use_transport_maps']
   include_recipe 'postfix::transports'
 end
 
-if node['postfix']['main']['use_access_maps'] == 'yes'
+if node['postfix']['use_access_maps']
   include_recipe 'postfix::access'
 end
 
-if node['postfix']['main']['use_virtual_aliases'] == 'yes'
+if node['postfix']['use_virtual_aliases']
   include_recipe 'postfix::virtual_aliases'
 end
