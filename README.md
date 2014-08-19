@@ -25,7 +25,14 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['relayhost_role']` - name of a role used for search in the client recipe.
 * `node['postfix']['multi_environment_relay']` - set to true if nodes should not constrain search for the relayhost in their own environment.
 * `node['postfix']['use_procmail']` - set to true if nodes should use procmail as the delivery agent.
+* `node['postfix']['use_alias_maps']` - set to true if you want the cookbook to use/configure alias maps
+* `node['postfix']['use_transport_maps']` - set to true if you want the cookbook to use/configure transport maps
+* `node['postfix']['use_access_maps']` - set to true if you want the cookbook to use/configure access maps
+* `node['postfix']['use_virtual_aliases']` - set to true if you want the cookbook to use/configure virtual alias maps
 * `node['postfix']['aliases']` - hash of aliases to create with `recipe[postfix::aliases]`, see below under __Recipes__ for more information.
+* `node['postfix']['transports']` - hash of transports to create with `recipe[postfix::transports]`, see below under __Recipes__ for more information.
+* `node['postfix']['access']` - hash of access to create with `recipe[postfix::access]`, see below under __Recipes__ for more information.
+* `node['postfix']['virtual_aliases']` - hash of virtual_aliases to create with `recipe[postfix::virtual_aliases]`, see below under __Recipes__ for more information.
 * `node['postfix']['main_template_source']` - Cookbook source for main.cf template. Default 'postfix'
 * `node['postfix']['master_template_source']` - Cookbook source for master.cf template. Default 'postfix'
 
@@ -78,7 +85,7 @@ Example of json role config, for setup *_map_entries:
 Recipes
 -------
 ### default
-Installs the postfix package and manages the service and the main configuration files (`/etc/postfix/main.cf` and `/etc/postfix/master.cf`). See __Usage__ and __Examples__ to see how to affect behavior of this recipe through configuration.
+Installs the postfix package and manages the service and the main configuration files (`/etc/postfix/main.cf` and `/etc/postfix/master.cf`). See __Usage__ and __Examples__ to see how to affect behavior of this recipe through configuration. Depending on the `node['postfix']['use_alias_maps']`, `node['postfix']['use_transport_maps']`, `node['postfix']['use_access_maps']` and `node['postfix']['use_virtual_aliases']` attributes the default recipe can call additional recipes to manage additional postfix configuration files
 
 For a more dynamic approach to discovery for the relayhost, see the `client` and `server` recipes below.
 
@@ -101,6 +108,19 @@ To use Chef Server search to automatically detect a node that is the relayhost, 
 Manage `/etc/aliases` with this recipe. Currently only Ubuntu 10.04 platform has a template for the aliases file. Add your aliases template to the `templates/default` or to the appropriate platform+version directory per the File Specificity rules for templates. Then specify a hash of aliases for the `node['postfix']['aliases']` attribute.
 
 Arrays are supported as alias values, since postfix supports comma separated values per alias, simply specify your alias as an array to use this handy feature.
+
+### aliases
+Manage `/etc/aliases` with this recipe.
+
+### transports
+Manage `/etc/postfix/transport` with this recipe.
+
+### access
+Manage `/etc/postfix/access` with this recipe.
+
+### virtual_aliases
+Manage `/etc/postfix/virtual` with this recipe.
+
 
 http://wiki.opscode.com/display/chef/Templates#Templates-TemplateLocationSpecificity
 
