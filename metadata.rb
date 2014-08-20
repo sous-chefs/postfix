@@ -4,7 +4,7 @@ description 'Installs and configures postfix for client or outbound relayhost, o
 maintainer 'Chef Software, Inc.'
 maintainer_email 'cookbooks@getchef.com'
 license 'Apache 2.0'
-version '3.4.0'
+version '3.4.1'
 recipe 'postfix', 'Installs and configures postfix'
 recipe 'postfix::sasl_auth', 'Set up postfix to auth to a server with sasl'
 recipe 'postfix::aliases', 'Manages /etc/aliases'
