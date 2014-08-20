@@ -20,6 +20,10 @@ default['postfix']['mail_type']  = 'client'
 default['postfix']['relayhost_role'] = 'relayhost'
 default['postfix']['multi_environment_relay'] = false
 default['postfix']['use_procmail'] = false
+default['postfix']['use_alias_maps'] = false
+default['postfix']['use_transport_maps'] = false
+default['postfix']['use_access_maps'] = false
+default['postfix']['use_virtual_aliases'] = false
 default['postfix']['aliases'] = {}
 default['postfix']['transports'] = {}
 default['postfix']['access'] = {}
@@ -61,10 +65,6 @@ default['postfix']['main']['mydestination'] = [node['postfix']['main']['myhostna
 default['postfix']['main']['smtpd_use_tls'] = 'yes'
 default['postfix']['main']['smtp_use_tls'] = 'yes'
 default['postfix']['main']['smtp_sasl_auth_enable'] = 'no'
-default['postfix']['main']['use_alias_maps'] = 'no'
-default['postfix']['main']['use_transport_maps'] = 'no'
-default['postfix']['main']['use_access_maps'] = 'no'
-default['postfix']['main']['use_virtual_aliases'] = 'no'
 default['postfix']['main']['mailbox_size_limit'] = 0
 default['postfix']['main']['mynetworks'] = nil
 default['postfix']['main']['inet_interfaces'] = 'loopback-only'
@@ -106,19 +106,19 @@ if node['postfix']['main']['smtp_sasl_auth_enable'] == 'yes'
   default['postfix']['main']['relayhost'] = ''
 end
 
-if node['postfix']['main']['use_alias_maps'] == 'yes'
+if node['postfix']['use_alias_maps']
    default['postfix']['main']['alias_maps'] = ["hash:#{node['postfix']['aliases_db']}"]
 end
 
-if node['postfix']['main']['use_transport_maps'] == 'yes'
+if node['postfix']['use_transport_maps']
    default['postfix']['main']['transport_maps'] = ["hash:#{node['postfix']['transport_db']}"]
 end
 
-if node['postfix']['main']['use_access_maps'] == 'yes'
+if node['postfix']['use_access_maps']
    default['postfix']['main']['access_maps'] = ["hash:#{node['postfix']['access_db']}"]
 end
 
-if node['postfix']['main']['use_virtual_aliases'] == 'yes'
+if node['postfix']['use_virtual_aliases']
   default['postfix']['main']['virtual_alias_maps'] = ["hash:#{node['postfix']['virtual_alias_db']}"]
 end
 
