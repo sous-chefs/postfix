@@ -24,10 +24,12 @@ default['postfix']['use_alias_maps'] = false
 default['postfix']['use_transport_maps'] = false
 default['postfix']['use_access_maps'] = false
 default['postfix']['use_virtual_aliases'] = false
+default['postfix']['use_virtual_aliases_domains'] = false
 default['postfix']['aliases'] = {}
 default['postfix']['transports'] = {}
 default['postfix']['access'] = {}
 default['postfix']['virtual_aliases'] = {}
+default['postfix']['virtual_aliases_domains'] = {}
 default['postfix']['main_template_source'] = 'postfix'
 default['postfix']['master_template_source'] = 'postfix'
 default['postfix']['sender_canonical_map_entries'] = {}
@@ -127,8 +129,11 @@ if node['postfix']['use_access_maps']
 end
 
 if node['postfix']['use_virtual_aliases']
-  default['postfix']['main']['virtual_alias_maps'] = ["#{node['postfix']['virtual_alias_db_type']}:#{node['postfix']['virtual_alias_db']}"] unless default['postfix']['virtual_aliases'].nil?
-  default['postfix']['main']['virtual_alias_domains'] = ["#{node['postfix']['virtual_alias_domains_db_type']}:#{node['postfix']['virtual_alias_domains_db']}"] unless default['postfix']['virtual_aliases_domains'].nil?
+  default['postfix']['main']['virtual_alias_maps'] = ["#{node['postfix']['virtual_alias_db_type']}:#{node['postfix']['virtual_alias_db']}"]
+end
+
+if node['postfix']['use_virtual_aliases_domains']
+  default['postfix']['main']['virtual_alias_domains'] = ["#{node['postfix']['virtual_alias_domains_db_type']}:#{node['postfix']['virtual_alias_domains_db']}"]
 end
 
 # # Default main.cf attributes according to `postconf -d`
