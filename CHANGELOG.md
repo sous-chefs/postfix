@@ -2,6 +2,10 @@ postfix Cookbook CHANGELOG
 ==========================
 This file is used to list changes made in each version of the postfix cookbook.
 
+v3.5.0 (2014-08-25)
+-------------------
+Adding virtual_domains functionality
+
 v3.4.1 (2014-08-20)
 -------------------
 Removing unused parameters from main.cf
