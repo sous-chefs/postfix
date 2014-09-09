@@ -79,61 +79,16 @@ default['postfix']['main']['mailbox_size_limit'] = 0
 default['postfix']['main']['mynetworks'] = nil
 default['postfix']['main']['inet_interfaces'] = 'loopback-only'
 
-# Conditional attributes
+# Conditional attributes, also reference _attributes recipe
 case node['platform_family']
 when 'smartos'
   default['postfix']['main']['smtpd_use_tls'] = 'no'
   default['postfix']['main']['smtp_use_tls'] = 'no'
-  cafile = '/opt/local/etc/postfix/cacert.pem'
+  default['postfix']['cafile'] = '/opt/local/etc/postfix/cacert.pem'
 when 'rhel'
-  cafile = '/etc/pki/tls/cert.pem'
+  default['postfix']['cafile'] = '/etc/pki/tls/cert.pem'
 else
-  cafile = "#{node['postfix']['conf_dir']}/cacert.pem"
-end
-
-if node['postfix']['use_procmail']
-  default['postfix']['main']['mailbox_command'] = '/usr/bin/procmail -a "$EXTENSION"'
-end
-
-if node['postfix']['main']['smtpd_use_tls'] == 'yes'
-  default['postfix']['main']['smtpd_tls_cert_file'] = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
-  default['postfix']['main']['smtpd_tls_key_file'] = '/etc/ssl/private/ssl-cert-snakeoil.key'
-  default['postfix']['main']['smtpd_tls_CAfile'] = cafile
-  default['postfix']['main']['smtpd_tls_session_cache_database'] = 'btree:${data_directory}/smtpd_scache'
-end
-
-if node['postfix']['main']['smtp_use_tls'] == 'yes'
-  default['postfix']['main']['smtp_tls_CAfile'] = cafile
-  default['postfix']['main']['smtp_tls_session_cache_database'] = 'btree:${data_directory}/smtp_scache'
-end
-
-if node['postfix']['main']['smtp_sasl_auth_enable'] == 'yes'
-  default['postfix']['sasl_password_file'] = "#{node['postfix']['conf_dir']}/sasl_passwd"
-  default['postfix']['main']['smtp_sasl_password_maps'] = "hash:#{node['postfix']['sasl_password_file']}"
-  default['postfix']['main']['smtp_sasl_security_options'] = 'noanonymous'
-  default['postfix']['sasl']['smtp_sasl_user_name'] = ''
-  default['postfix']['sasl']['smtp_sasl_passwd']    = ''
-  default['postfix']['main']['relayhost'] = ''
-end
-
-if node['postfix']['use_alias_maps']
-   default['postfix']['main']['alias_maps'] = ["hash:#{node['postfix']['aliases_db']}"]
-end
-
-if node['postfix']['use_transport_maps']
-   default['postfix']['main']['transport_maps'] = ["hash:#{node['postfix']['transport_db']}"]
-end
-
-if node['postfix']['use_access_maps']
-   default['postfix']['main']['access_maps'] = ["hash:#{node['postfix']['access_db']}"]
-end
-
-if node['postfix']['use_virtual_aliases']
-  default['postfix']['main']['virtual_alias_maps'] = ["#{node['postfix']['virtual_alias_db_type']}:#{node['postfix']['virtual_alias_db']}"]
-end
-
-if node['postfix']['use_virtual_aliases_domains']
-  default['postfix']['main']['virtual_alias_domains'] = ["#{node['postfix']['virtual_alias_domains_db_type']}:#{node['postfix']['virtual_alias_domains_db']}"]
+  default['postfix']['cafile'] = "#{node['postfix']['conf_dir']}/cacert.pem"
 end
 
 # # Default main.cf attributes according to `postconf -d`
