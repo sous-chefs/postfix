@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+include_recipe 'postfix::_attributes'
+
 package 'postfix'
 
 package 'procmail' if node['postfix']['use_procmail']
