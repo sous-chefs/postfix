@@ -25,4 +25,5 @@ end
 template node['postfix']['virtual_alias_db'] do
   source 'virtual_aliases.erb'
   notifies :run, 'execute[update-postfix-virtual-alias]'
+  notifies :restart, 'service[postfix]'
 end
