@@ -44,18 +44,6 @@ suites:
   run_list:
   - recipe[postfix::server]
 
-- name: sasl_auth
-  run_list:
-  - recipe[postfix::sasl_auth]
-  attributes:
-    postfix:
-      main:
-        relayhost: "localhost"
-        smtp_sasl_auth_enable: "yes"
-      sasl:
-        smtp_sasl_user_name: "kitchenuser"
-        smtp_sasl_passwd: "not-a-real-thing"
-
 - name: canonical
   run_list:
   - recipe[postfix]
@@ -64,3 +52,40 @@ suites:
       recipient_canonical_map_entries:
         john: john@doe.com
         
+- name: sasl_auth_none
+  run_list:
+  - recipe[postfix::sasl_auth]
+  attributes:
+    postfix:
+      main:
+        relayhost: "localhost"
+        smtp_sasl_auth_enable: "yes"
+
+- name: sasl_auth_multiple
+  run_list:
+  - recipe[postfix::sasl_auth]
+  attributes:
+    postfix:
+      main:
+        relayhost: "localhost"
+        smtp_sasl_auth_enable: "yes"
+      sasl:
+        relayhost1:
+          username: "kitchenuser"
+          password: "not-a-real-thing"
+        relayhost2:
+          username: "anotherkitchenuser"
+          password: "yet-not-a-real-thing"
+
+- name: sasl_auth_one
+  run_list:
+  - recipe[postfix::sasl_auth]
+  attributes:
+    postfix:
+      main:
+        relayhost: "localhost"
+        smtp_sasl_auth_enable: "yes"
+      sasl:
+        relayhost:
+          username: "kitchenuser"
+          password: "not-a-real-thing"

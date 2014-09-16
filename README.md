@@ -75,12 +75,20 @@ This change in namespace to `node['postfix']['main']` should allow for greater f
 - `node['postfix']['main']['smtp_sasl_password_maps']` - Set to `hash:/etc/postfix/sasl_passwd` template file
 - `node['postfix']['main']['smtp_sasl_security_options']` - Set to noanonymous
 - `node['postfix']['main']['relayhost']` - Set to empty string
-- `node['postfix']['sasl']['smtp_sasl_user_name']` - SASL user to authenticate as. Default empty
-- `node['postfix']['sasl']['smtp_sasl_passwd']` - SASL password to use. Default empty.
 - `node['postfix']['sender_canonical_map_entries']` - (hash with key value pairs); default not configured. Setup generic canonical maps. See `man 5 canonical`. If has at least one value, then will be enabled in config.
 - `node['postfix']['smtp_generic_map_entries']` - (hash with key value pairs); default not configured. Setup generic postfix maps. See `man 5 generic`. If has at least one value, then will be enabled in config.
 - `node['postfix']['recipient_canonical_map_entries']` - (hash with key value pairs); default not configured. Setup generic canonical maps. See `man 5 canonical`. If has at least one value, then will be enabled in config.
-
+- `node['postfix']['sasl']['smtp_sasl_user_name']` - SASL user to authenticate as. Default empty. You can only use this until the current version. The new syntax is below.
+- `node['postfix']['sasl']['smtp_sasl_passwd']` - SASL password to use. Default empty. You can only use this until the current version. The new syntax is below.
+- `node['postfix']['sasl']` = ```json {
+    "relayhost1" => {
+      'username' => 'foo',
+      'password' => 'bar'
+    },
+    "relayhost2" => {
+      ...
+    }
+  }``` - You must set the following attribute, otherwise the attribute will default to empty
 
 Example of json role config, for setup *_map_entries:
 
@@ -333,8 +341,14 @@ override_attributes(
       "smtp_sasl_auth_enable" => "yes"
     },
     "sasl" => {
-      "smtp_sasl_passwd" => "your_password",
-      "smtp_sasl_user_name" => "your_username"
+      "relayhost1" => {
+        "username" => "your_password",
+        "password" => "your_username"
+      },
+      "relayhost2" => {
+        ...
+      },
+      ...
     }
   }
 )
