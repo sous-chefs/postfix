@@ -90,7 +90,7 @@ Installs the postfix package and manages the service and the main configuration 
 For a more dynamic approach to discovery for the relayhost, see the `client` and `server` recipes below.
 
 ### client
-Use this recipe to have nodes automatically search for the mail relay based which node has the `node['postfix']['relayhost_role']` role. Sets the `node['postfix']['relayhost']` attribute to the first result from the search.
+Use this recipe to have nodes automatically search for the mail relay based which node has the `node['postfix']['relayhost_role']` role. Sets the `node['postfix']['main']['relayhost']` attribute to the first result from the search.
 
 Includes the default recipe to install, configure and start postfix.
 
