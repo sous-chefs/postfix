@@ -51,12 +51,12 @@ This change in namespace to `node['postfix']['main']` should allow for greater f
 * `node['postfix']['main']['alias_maps']` - set to `hash:/etc/aliases`
 * `node['postfix']['main']['mailbox_size_limit']` - set to `0` (disabled)
 * `node['postfix']['main']['mydestination']` - default fqdn, hostname, localhost.localdomain, localhost
-* `node['postfix']['main']['smtpd_use_tls']` - (yes/no); default yes. See conditional cert/key attributes.
+* `node['postfix']['main']['smtpd_tls_security_level']` - (none/may/encrypt); default may. See conditional cert/key attributes.
   - `node['postfix']['main']['smtpd_tls_cert_file']` - conditional attribute, set to full path of server's x509 certificate.
   - `node['postfix']['main']['smtpd_tls_key_file']` - conditional attribute, set to full path of server's private key
   - `node['postfix']['main']['smtpd_tls_CAfile']` - set to platform specific CA bundle
   - `node['postfix']['main']['smtpd_tls_session_cache_database']` - set to `btree:${data_directory}/smtpd_scache`
-* `node['postfix']['main']['smtp_use_tls']` - (yes/no); default yes.  See following conditional attributes.
+* `node['postfix']['main']['smtp_tls_security_level']` - (may/encrypt/dane/dane-only/fingerprint/verify/secure/none); default may.  See following conditional attributes.
   - `node['postfix']['main']['smtp_tls_CAfile']` - set to platform specific CA bundle
   - `node['postfix']['main']['smtp_tls_session_cache_database']` - set to `btree:${data_directory}/smtpd_scache`
 * `node['postfix']['main']['smtp_sasl_auth_enable']` - (yes/no); default no.  If enabled, see following conditional attributes.
