@@ -54,7 +54,7 @@ attribute 'postfix/smtp_sasl_passwd',
           default: ''
 
 attribute 'postfix/relayhost_role',
-          display_name: "Postfix Relayhost's role",
+          display_name: 'Postfix Relayhost role',
           description: 'String containing the role name',
           default: 'relayhost'
 
