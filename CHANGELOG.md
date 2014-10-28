@@ -2,6 +2,11 @@ postfix Cookbook CHANGELOG
 ==========================
 This file is used to list changes made in each version of the postfix cookbook.
 
+v3.6.1 (2014-10-28)
+-------------------
+- Fix documentation around node['postfix']['main']['relayhost'] attribute
+- Fix logic around include_recipe 'postfix::virtual_aliases_domains'
+
 v3.6.0 (2014-08-25)
 -------------------
 - restart postfix after updating virtual alias templates #86
