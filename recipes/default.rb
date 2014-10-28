@@ -39,3 +39,7 @@ end
 if node['postfix']['use_virtual_aliases']
   include_recipe 'postfix::virtual_aliases'
 end
+
+if node['postfix']['use_virtual_aliases_domains']
+  include_recipe 'postfix::virtual_aliases_domains'
+end
