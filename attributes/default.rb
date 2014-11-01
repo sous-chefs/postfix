@@ -20,12 +20,11 @@ default['postfix']['mail_type']  = 'client'
 default['postfix']['relayhost_role'] = 'relayhost'
 default['postfix']['multi_environment_relay'] = false
 default['postfix']['use_procmail'] = false
-default['postfix']['use_alias_maps'] = false
+default['postfix']['use_alias_maps'] = (node['platform'] == 'freebsd')
 default['postfix']['use_transport_maps'] = false
 default['postfix']['use_access_maps'] = false
 default['postfix']['use_virtual_aliases'] = false
 default['postfix']['use_virtual_aliases_domains'] = false
-default['postfix']['aliases'] = {}
 default['postfix']['transports'] = {}
 default['postfix']['access'] = {}
 default['postfix']['virtual_aliases'] = {}
@@ -48,6 +47,13 @@ when 'smartos'
   default['postfix']['access_db'] = '/opt/local/etc/postfix/access'
   default['postfix']['virtual_alias_db'] = '/opt/local/etc/postfix/virtual'
   default['postfix']['virtual_alias_domains_db'] = '/opt/local/etc/postfix/virtual_domains'
+when 'freebsd'
+  default['postfix']['conf_dir'] = '/usr/local/etc/postfix'
+  default['postfix']['aliases_db'] = '/etc/aliases'
+  default['postfix']['transport_db'] = '/usr/local/etc/postfix/transport'
+  default['postfix']['access_db'] = '/usr/local/etc/postfix/access'
+  default['postfix']['virtual_alias_db'] = '/usr/local/etc/postfix/virtual'
+  default['postfix']['virtual_alias_domains_db'] = '/usr/local/etc/postfix/virtual_domains'
 when 'omnios'
   default['postfix']['conf_dir'] = '/opt/omni/etc/postfix'
   default['postfix']['aliases_db'] = '/opt/omni/etc/postfix/aliases'
@@ -106,3 +112,26 @@ end
 
 # Master.cf attributes
 default['postfix']['master']['submission'] = false
+
+
+# OS Aliases
+case node['platform']
+when 'freebsd'
+  default['postfix']['aliases'] = {
+    'MAILER-DAEMON' =>  'postmaster',
+    'bin' =>            'root',
+    'daemon' =>         'root',
+    'named' =>          'root',
+    'nobody' =>         'root',
+    'uucp' =>           'root',
+    'www' =>            'root',
+    'ftp-bugs' =>       'root',
+    'postfix' =>        'root',
+    'manager' =>        'root',
+    'dumper' =>         'root',
+    'operator' =>       'root',
+    'abuse' =>          'postmaster'
+  }
+else
+  default['postfix']['aliases'] = {}
+end
