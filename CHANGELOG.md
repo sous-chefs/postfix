@@ -2,6 +2,10 @@ postfix Cookbook CHANGELOG
 ==========================
 This file is used to list changes made in each version of the postfix cookbook.
 
+v3.6.2 (2014-10-31)
+-------------------
+- Fix FreeBSDisms
+
 v3.6.1 (2014-10-28)
 -------------------
 - Fix documentation around node['postfix']['main']['relayhost'] attribute
