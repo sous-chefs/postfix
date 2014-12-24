@@ -39,7 +39,7 @@ describe 'postfix::default' do
     end
 
     it '[COOK-4423] renders file main.cf with /etc/postfix/cacert.pem' do
-      expect(chef_run).to render_file('/etc/postfix/main.cf').with_content(%r{smtp_tls_CAfile += +/etc/postfix/cacert.pem})
+      expect(chef_run).to render_file('/etc/postfix/main.cf').with_content(%r{smtp_tls_CAfile += +/etc/ssl/certs/ca-certificates.crt})
     end
 
     it '[COOK-4619] does not set recipient_delimiter' do
