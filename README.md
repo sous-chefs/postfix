@@ -80,6 +80,7 @@ Example of json role config, for setup *_map_entries:
 
 ### master.cf template attributes
 * `node['postfix']['master']['submission'] - Whether to use submission (TCP 587) daemon. (true/false); default false
+* `node['postfix']['master']['amavis'] - Whether to use amavis (TCP 10025) daemon. (true/false); default false
 
 
 Recipes
