@@ -110,7 +110,7 @@ unless node['postfix']['smtp_generic_map_entries'].empty?
   end
 end
 
-%w{main master}.each do |cfg|
+%w( main master ).each do |cfg|
   template "#{node['postfix']['conf_dir']}/#{cfg}.cf" do
     source "#{cfg}.cf.erb"
     owner 'root'

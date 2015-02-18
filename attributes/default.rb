@@ -115,7 +115,6 @@ end
 # Master.cf attributes
 default['postfix']['master']['submission'] = false
 
-
 # OS Aliases
 case node['platform']
 when 'freebsd'
