@@ -2,7 +2,7 @@
 name 'postfix'
 description 'Installs and configures postfix for client or outbound relayhost, or to do SASL auth'
 maintainer 'Chef Software, Inc.'
-maintainer_email 'cookbooks@getchef.com'
+maintainer_email 'cookbooks@chef.io'
 license 'Apache 2.0'
 version '3.6.2'
 recipe 'postfix', 'Installs and configures postfix'

@@ -1,5 +1,5 @@
 # encoding: utf-8
-# Author:: Joshua Timberman <joshua@getchef.com>
+# Author:: Joshua Timberman <joshua@chef.io>
 # Copyright:: Copyright 2009-2014, Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #

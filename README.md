@@ -122,7 +122,7 @@ Manage `/etc/postfix/access` with this recipe.
 Manage `/etc/postfix/virtual` with this recipe.
 
 
-http://wiki.opscode.com/display/chef/Templates#Templates-TemplateLocationSpecificity
+http://wiki.chef.io/display/chef/Templates#Templates-TemplateLocationSpecificity
 
 
 Usage
@@ -270,7 +270,7 @@ override_attributes(
 
 License & Authors
 -----------------
-- Author:: Joshua Timberman <joshua@getchef.com>
+- Author:: Joshua Timberman <joshua@chef.io>
 
 ```text
 Copyright:: 2009-2014, Chef Software, Inc
