@@ -87,6 +87,8 @@ default['postfix']['main']['inet_interfaces'] = 'loopback-only'
 
 # Conditional attributes, also reference _attributes recipe
 case node['platform_family']
+when 'debian'
+  default['postfix']['cafile'] = '/etc/ssl/certs/ca-certificates.crt'
 when 'smartos'
   default['postfix']['main']['smtpd_use_tls'] = 'no'
   default['postfix']['main']['smtp_use_tls'] = 'no'
