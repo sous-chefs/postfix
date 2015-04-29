@@ -2,6 +2,10 @@ postfix Cookbook CHANGELOG
 ==========================
 This file is used to list changes made in each version of the postfix cookbook.
 
+v3.6.3 (2015-04-30)
+-------------------
+- Adding support for relay restrictions
+
 v3.6.2 (2014-10-31)
 -------------------
 - Fix FreeBSDisms
