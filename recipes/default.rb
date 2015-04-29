@@ -43,3 +43,8 @@ end
 if node['postfix']['use_virtual_aliases_domains']
   include_recipe 'postfix::virtual_aliases_domains'
 end
+
+if node['postfix']['use_relay_restirictions_maps']
+  include_recipe 'postfix::relay_restrictions'
+end
+
