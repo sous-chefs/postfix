@@ -49,6 +49,7 @@ execute 'postmap-sasl_passwd' do
 end
 
 template node['postfix']['sasl_password_file'] do
+  sensitive true
   source 'sasl_passwd.erb'
   owner 'root'
   group node['root_group']
