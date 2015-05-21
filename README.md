@@ -67,6 +67,7 @@ This change in namespace to `node['postfix']['main']` should allow for greater f
   - `node['postfix']['sasl']['smtp_sasl_passwd']` - SASL password to use.  Default empty.
 * `node['postfix']['sender_canonical_map_entries']` - (hash with key value pairs); default not configured.  Setup generic canonical maps. See `man 5 canonical`. If has at least one value, then will be enabled in config.
 * `node['postfix']['smtp_generic_map_entries']` - (hash with key value pairs); default not configured.  Setup generic postfix maps. See `man 5 generic`. If has at least one value, then will be enabled in config.
+* `node['postfix']['recipient_canonical_map_entries']` - (hash with key value pairs); default not configured.  Setup recipient canonical postfix maps. See `man 5 generic`. If has at least one value, then will be enabled in config.
 
 Example of json role config, for setup *_map_entries:
 

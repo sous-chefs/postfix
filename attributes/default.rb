@@ -33,6 +33,7 @@ default['postfix']['main_template_source'] = 'postfix'
 default['postfix']['master_template_source'] = 'postfix'
 default['postfix']['sender_canonical_map_entries'] = {}
 default['postfix']['smtp_generic_map_entries'] = {}
+default['postfix']['recipient_canonical_map_entries'] = {}
 default['postfix']['access_db_type'] = 'hash'
 default['postfix']['aliases_db_type'] = 'hash'
 default['postfix']['transport_db_type'] = 'hash'
