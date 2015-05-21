@@ -25,7 +25,14 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['relayhost_role']` - name of a role used for search in the client recipe.
 * `node['postfix']['multi_environment_relay']` - set to true if nodes should not constrain search for the relayhost in their own environment.
 * `node['postfix']['use_procmail']` - set to true if nodes should use procmail as the delivery agent.
+* `node['postfix']['use_alias_maps']` - set to true if you want the cookbook to use/configure alias maps
+* `node['postfix']['use_transport_maps']` - set to true if you want the cookbook to use/configure transport maps
+* `node['postfix']['use_access_maps']` - set to true if you want the cookbook to use/configure access maps
+* `node['postfix']['use_virtual_aliases']` - set to true if you want the cookbook to use/configure virtual alias maps
 * `node['postfix']['aliases']` - hash of aliases to create with `recipe[postfix::aliases]`, see below under __Recipes__ for more information.
+* `node['postfix']['transports']` - hash of transports to create with `recipe[postfix::transports]`, see below under __Recipes__ for more information.
+* `node['postfix']['access']` - hash of access to create with `recipe[postfix::access]`, see below under __Recipes__ for more information.
+* `node['postfix']['virtual_aliases']` - hash of virtual_aliases to create with `recipe[postfix::virtual_aliases]`, see below under __Recipes__ for more information.
 * `node['postfix']['main_template_source']` - Cookbook source for main.cf template. Default 'postfix'
 * `node['postfix']['master_template_source']` - Cookbook source for master.cf template. Default 'postfix'
 
@@ -39,11 +46,10 @@ This change in namespace to `node['postfix']['main']` should allow for greater f
 * `node['postfix']['main']['myhostname']` - defaults to fqdn from Ohai
 * `node['postfix']['main']['mydomain']` - defaults to domain from Ohai
 * `node['postfix']['main']['myorigin']` - defaults to $myhostname
-* `node['postfix']['main']['mynetworks']` - default is `127.0.0.0/8`
+* `node['postfix']['main']['mynetworks']` - default is nil, which forces Postfix to default to loopback addresses.
 * `node['postfix']['main']['inet_interfaces']` - set to `loopback-only`, or `all` for server recipe
 * `node['postfix']['main']['alias_maps']` - set to `hash:/etc/aliases`
 * `node['postfix']['main']['mailbox_size_limit']` - set to `0` (disabled)
-* `node['postfix']['main']['recipient_delimiter']` - set to `+`
 * `node['postfix']['main']['mydestination']` - default fqdn, hostname, localhost.localdomain, localhost
 * `node['postfix']['main']['smtpd_use_tls']` - (yes/no); default yes. See conditional cert/key attributes.
   - `node['postfix']['main']['smtpd_tls_cert_file']` - conditional attribute, set to full path of server's x509 certificate.
@@ -79,12 +85,12 @@ Example of json role config, for setup *_map_entries:
 Recipes
 -------
 ### default
-Installs the postfix package and manages the service and the main configuration files (`/etc/postfix/main.cf` and `/etc/postfix/master.cf`). See __Usage__ and __Examples__ to see how to affect behavior of this recipe through configuration.
+Installs the postfix package and manages the service and the main configuration files (`/etc/postfix/main.cf` and `/etc/postfix/master.cf`). See __Usage__ and __Examples__ to see how to affect behavior of this recipe through configuration. Depending on the `node['postfix']['use_alias_maps']`, `node['postfix']['use_transport_maps']`, `node['postfix']['use_access_maps']` and `node['postfix']['use_virtual_aliases']` attributes the default recipe can call additional recipes to manage additional postfix configuration files
 
 For a more dynamic approach to discovery for the relayhost, see the `client` and `server` recipes below.
 
 ### client
-Use this recipe to have nodes automatically search for the mail relay based which node has the `node['postfix']['relayhost_role']` role. Sets the `node['postfix']['relayhost']` attribute to the first result from the search.
+Use this recipe to have nodes automatically search for the mail relay based which node has the `node['postfix']['relayhost_role']` role. Sets the `node['postfix']['main']['relayhost']` attribute to the first result from the search.
 
 Includes the default recipe to install, configure and start postfix.
 
@@ -103,12 +109,25 @@ Manage `/etc/aliases` with this recipe. Currently only Ubuntu 10.04 platform has
 
 Arrays are supported as alias values, since postfix supports comma separated values per alias, simply specify your alias as an array to use this handy feature.
 
-http://wiki.opscode.com/display/chef/Templates#Templates-TemplateLocationSpecificity
+### aliases
+Manage `/etc/aliases` with this recipe.
+
+### transports
+Manage `/etc/postfix/transport` with this recipe.
+
+### access
+Manage `/etc/postfix/access` with this recipe.
+
+### virtual_aliases
+Manage `/etc/postfix/virtual` with this recipe.
+
+
+http://wiki.chef.io/display/chef/Templates#Templates-TemplateLocationSpecificity
 
 
 Usage
 -----
-On systems that should simply send mail directly to a relay, or out to the internet, use `recipe[postfix]` and modify the `node['postfix']['relayhost']` attribute via a role.
+On systems that should simply send mail directly to a relay, or out to the internet, use `recipe[postfix]` and modify the `node['postfix']['main']['relayhost']` attribute via a role.
 
 On systems that should be the MX for a domain, set the attributes accordingly and make sure the `node['postfix']['mail_type']` attribute is `master`. See __Examples__ for information on how to use `recipe[postfix::server]` to do this automatically.
 
@@ -126,8 +145,8 @@ The `base` role is applied to all nodes in the environment.
 name "base"
 run_list("recipe[postfix]")
 override_attributes(
-  "mail_type" => "client",
   "postfix" => {
+    "mail_type" => "client",
     "main" => {
       "mydomain" => "example.com",
       "myorigin" => "example.com",
@@ -251,10 +270,10 @@ override_attributes(
 
 License & Authors
 -----------------
-- Author:: Joshua Timberman <joshua@opscode.com>
+- Author:: Joshua Timberman <joshua@chef.io>
 
 ```text
-Copyright:: 2009-2012, Opscode, Inc
+Copyright:: 2009-2014, Chef Software, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

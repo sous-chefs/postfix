@@ -1,9 +1,9 @@
 # encoding: utf-8
-# Author:: Joshua Timberman(<joshua@opscode.com>)
+# Author:: Joshua Timberman(<joshua@chef.io>)
 # Cookbook Name:: postfix
 # Recipe:: client
 #
-# Copyright 2009-2012, Opscode, Inc.
+# Copyright 2009-2014, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ end
 
 query = "role:#{node['postfix']['relayhost_role']}"
 relayhost = ''
-results = []
+# results = []
 
 if node.run_list.roles.include?(node['postfix']['relayhost_role'])
   relayhost << node['ipaddress']

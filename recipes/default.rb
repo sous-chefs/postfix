@@ -1,9 +1,9 @@
 # encoding: utf-8
-# Author:: Joshua Timberman(<joshua@opscode.com>)
+# Author:: Joshua Timberman(<joshua@chef.io>)
 # Cookbook Name:: postfix
 # Recipe:: default
 #
-# Copyright 2009-2012, Opscode, Inc.
+# Copyright 2009-2014, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,79 +18,25 @@
 # limitations under the License.
 #
 
-package 'postfix'
+include_recipe 'postfix::_common'
 
-if node['postfix']['use_procmail']
-  package 'procmail'
+if node['postfix']['main']['smtp_sasl_auth_enable'] == 'yes'
+  include_recipe 'postfix::sasl_auth'
 end
 
-case node['platform_family']
-when 'rhel', 'fedora'
-  service 'sendmail' do
-    action :nothing
-  end
-
-  execute 'switch_mailer_to_postfix' do
-    command '/usr/sbin/alternatives --set mta /usr/sbin/sendmail.postfix'
-    notifies :stop, 'service[sendmail]'
-    notifies :start, 'service[postfix]'
-    not_if '/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix'
-  end
-when 'omnios'
-  manifest_path = ::File.join(Chef::Config[:file_cache_path], "manifest-postfix.xml")
-
-  # we need to manage the postfix group and user
-  # and then subscribe to the package install because it creates a
-  # postdrop group and adds postfix user to it.
-  group 'postfix' do
-    append true
-  end
-
-  user 'postfix' do
-    uid node['postfix']['uid']
-    gid 'postfix'
-    home '/var/spool/postfix'
-    subscribes :manage, 'package[postfix]'
-    notifies :run, 'execute[/opt/omni/sbin/postfix set-permissions]', :immediately
-  end
-
-  # we don't guard this because if the user creation was successful (or happened out of band), then this won't get executed when the action is :nothing.
-  execute '/opt/omni/sbin/postfix set-permissions'
-
-  template manifest_path  do
-    source 'manifest-postfix.xml.erb'
-    owner 'root'
-    group 'root'
-    mode 00644
-    notifies :run, "execute[load postfix manifest]", :immediately
-  end
-
-  execute "load postfix manifest" do
-    action :nothing
-    command "svccfg import #{manifest_path}"
-    notifies :restart, "service[postfix]"
-  end
+if node['postfix']['use_alias_maps']
+  include_recipe 'postfix::aliases'
 end
 
-execute 'update-postfix-sender_canonical' do
-  command "postmap #{node['postfix']['conf_dir']}/sender_canonical"
-  action :nothing
+if node['postfix']['use_transport_maps']
+  include_recipe 'postfix::transports'
 end
 
-if !node['postfix']['sender_canonical_map_entries'].empty?
-  template "#{node['postfix']['conf_dir']}/sender_canonical" do
-    owner 'root'
-    group 0
-    mode  '0644'
-    notifies :run, 'execute[update-postfix-sender_canonical]'
-    notifies :reload, 'service[postfix]'
-  end
-
-  if !node['postfix']['main'].key?('sender_canonical_maps')
-    node.set['postfix']['main']['sender_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/sender_canonical"
-  end
+if node['postfix']['use_access_maps']
+  include_recipe 'postfix::access'
 end
 
+<<<<<<< HEAD
 execute 'update-postfix-smtp_generic' do
   command "postmap #{node['postfix']['conf_dir']}/smtp_generic"
   action :nothing
@@ -121,9 +67,12 @@ end
     variables(settings: node['postfix'][cfg])
     cookbook node['postfix']["#{cfg}_template_source"]
   end
+=======
+if node['postfix']['use_virtual_aliases']
+  include_recipe 'postfix::virtual_aliases'
+>>>>>>> upstream/master
 end
 
-service 'postfix' do
-  supports status: true, restart: true, reload: true
-  action [:enable, :start]
+if node['postfix']['use_virtual_aliases_domains']
+  include_recipe 'postfix::virtual_aliases_domains'
 end

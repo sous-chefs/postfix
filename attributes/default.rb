@@ -1,6 +1,6 @@
 # encoding: utf-8
-# Author:: Joshua Timberman <joshua@opscode.com>
-# Copyright:: Copyright (c) 2009, Opscode, Inc.
+# Author:: Joshua Timberman <joshua@chef.io>
+# Copyright:: Copyright 2009-2014, Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,23 +20,58 @@ default['postfix']['mail_type']  = 'client'
 default['postfix']['relayhost_role'] = 'relayhost'
 default['postfix']['multi_environment_relay'] = false
 default['postfix']['use_procmail'] = false
-default['postfix']['aliases'] = {}
+default['postfix']['use_alias_maps'] = (node['platform'] == 'freebsd')
+default['postfix']['use_transport_maps'] = false
+default['postfix']['use_access_maps'] = false
+default['postfix']['use_virtual_aliases'] = false
+default['postfix']['use_virtual_aliases_domains'] = false
+default['postfix']['transports'] = {}
+default['postfix']['access'] = {}
+default['postfix']['virtual_aliases'] = {}
+default['postfix']['virtual_aliases_domains'] = {}
 default['postfix']['main_template_source'] = 'postfix'
 default['postfix']['master_template_source'] = 'postfix'
 default['postfix']['sender_canonical_map_entries'] = {}
 default['postfix']['smtp_generic_map_entries'] = {}
+<<<<<<< HEAD
+=======
+default['postfix']['access_db_type'] = 'hash'
+default['postfix']['aliases_db_type'] = 'hash'
+default['postfix']['transport_db_type'] = 'hash'
+default['postfix']['virtual_alias_db_type'] = 'hash'
+default['postfix']['virtual_alias_domains_db_type'] = 'hash'
+>>>>>>> upstream/master
 
 case node['platform']
 when 'smartos'
   default['postfix']['conf_dir'] = '/opt/local/etc/postfix'
   default['postfix']['aliases_db'] = '/opt/local/etc/postfix/aliases'
+  default['postfix']['transport_db'] = '/opt/local/etc/postfix/transport'
+  default['postfix']['access_db'] = '/opt/local/etc/postfix/access'
+  default['postfix']['virtual_alias_db'] = '/opt/local/etc/postfix/virtual'
+  default['postfix']['virtual_alias_domains_db'] = '/opt/local/etc/postfix/virtual_domains'
+when 'freebsd'
+  default['postfix']['conf_dir'] = '/usr/local/etc/postfix'
+  default['postfix']['aliases_db'] = '/etc/aliases'
+  default['postfix']['transport_db'] = '/usr/local/etc/postfix/transport'
+  default['postfix']['access_db'] = '/usr/local/etc/postfix/access'
+  default['postfix']['virtual_alias_db'] = '/usr/local/etc/postfix/virtual'
+  default['postfix']['virtual_alias_domains_db'] = '/usr/local/etc/postfix/virtual_domains'
 when 'omnios'
   default['postfix']['conf_dir'] = '/opt/omni/etc/postfix'
-  default['postfix']['aliases_db'] = 'opt/omni/etc/postfix/aliases'
+  default['postfix']['aliases_db'] = '/opt/omni/etc/postfix/aliases'
+  default['postfix']['transport_db'] = '/opt/omni/etc/postfix/transport'
+  default['postfix']['access_db'] = '/opt/omni/etc/postfix/access'
+  default['postfix']['virtual_alias_db'] = '/etc/omni/etc/postfix/virtual'
+  default['postfix']['virtual_alias_domains_db'] = '/etc/omni/etc/postfix/virtual_domains'
   default['postfix']['uid'] = 11
 else
   default['postfix']['conf_dir'] = '/etc/postfix'
   default['postfix']['aliases_db'] = '/etc/aliases'
+  default['postfix']['transport_db'] = '/etc/postfix/transport'
+  default['postfix']['access_db'] = '/etc/postfix/access'
+  default['postfix']['virtual_alias_db'] = '/etc/postfix/virtual'
+  default['postfix']['virtual_alias_domains_db'] = '/etc/postfix/virtual_domains'
 end
 
 # Non-default main.cf attributes
@@ -48,48 +83,23 @@ default['postfix']['main']['myorigin'] = '$myhostname'
 default['postfix']['main']['mydestination'] = [node['postfix']['main']['myhostname'], node['hostname'], 'localhost.localdomain', 'localhost'].compact
 default['postfix']['main']['smtpd_use_tls'] = 'yes'
 default['postfix']['main']['smtp_use_tls'] = 'yes'
-default['postfix']['main']['alias_maps'] = ["hash:#{node['postfix']['aliases_db']}"]
-default['postfix']['main']['mailbox_size_limit'] = 0
-default['postfix']['main']['recipient_delimiter'] = '+'
 default['postfix']['main']['smtp_sasl_auth_enable'] = 'no'
-default['postfix']['main']['mynetworks'] = '127.0.0.0/8'
+default['postfix']['main']['mailbox_size_limit'] = 0
+default['postfix']['main']['mynetworks'] = nil
 default['postfix']['main']['inet_interfaces'] = 'loopback-only'
 
-# Conditional attributes
+# Conditional attributes, also reference _attributes recipe
 case node['platform_family']
+when 'debian'
+  default['postfix']['cafile'] = '/etc/ssl/certs/ca-certificates.crt'
 when 'smartos'
   default['postfix']['main']['smtpd_use_tls'] = 'no'
   default['postfix']['main']['smtp_use_tls'] = 'no'
-  cafile = '/opt/local/etc/postfix/cacert.pem'
+  default['postfix']['cafile'] = '/opt/local/etc/postfix/cacert.pem'
 when 'rhel'
-  cafile = '/etc/pki/tls/cert.pem'
+  default['postfix']['cafile'] = '/etc/pki/tls/cert.pem'
 else
-  cafile = "#{node['postfix']['conf_dir']}/cacert.pem"
-end
-
-if node['postfix']['use_procmail']
-  default['postfix']['main']['mailbox_command'] = '/usr/bin/procmail -a "$EXTENSION"'
-end
-
-if node['postfix']['main']['smtpd_use_tls'] == 'yes'
-  default['postfix']['main']['smtpd_tls_cert_file'] = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
-  default['postfix']['main']['smtpd_tls_key_file'] = '/etc/ssl/private/ssl-cert-snakeoil.key'
-  default['postfix']['main']['smtpd_tls_CAfile'] = cafile
-  default['postfix']['main']['smtpd_tls_session_cache_database'] = 'btree:${data_directory}/smtpd_scache'
-end
-
-if node['postfix']['main']['smtp_use_tls'] == 'yes'
-  default['postfix']['main']['smtp_tls_CAfile'] = cafile
-  default['postfix']['main']['smtp_tls_session_cache_database'] = 'btree:${data_directory}/smtp_scache'
-end
-
-if node['postfix']['main']['smtp_sasl_auth_enable'] == 'yes'
-  default['postfix']['sasl_password_file'] = "#{node['postfix']['conf_dir']}/sasl_passwd"
-  default['postfix']['main']['smtp_sasl_password_maps'] = "hash:#{node['postfix']['sasl_password_file']}"
-  default['postfix']['main']['smtp_sasl_security_options'] = 'noanonymous'
-  default['postfix']['sasl']['smtp_sasl_user_name'] = ''
-  default['postfix']['sasl']['smtp_sasl_passwd']    = ''
-  default['postfix']['main']['relayhost'] = ''
+  default['postfix']['cafile'] = "#{node['postfix']['conf_dir']}/cacert.pem"
 end
 
 # # Default main.cf attributes according to `postconf -d`
@@ -107,3 +117,25 @@ end
 
 # Master.cf attributes
 default['postfix']['master']['submission'] = false
+
+# OS Aliases
+case node['platform']
+when 'freebsd'
+  default['postfix']['aliases'] = {
+    'MAILER-DAEMON' =>  'postmaster',
+    'bin' =>            'root',
+    'daemon' =>         'root',
+    'named' =>          'root',
+    'nobody' =>         'root',
+    'uucp' =>           'root',
+    'www' =>            'root',
+    'ftp-bugs' =>       'root',
+    'postfix' =>        'root',
+    'manager' =>        'root',
+    'dumper' =>         'root',
+    'operator' =>       'root',
+    'abuse' =>          'postmaster'
+  }
+else
+  default['postfix']['aliases'] = {}
+end
