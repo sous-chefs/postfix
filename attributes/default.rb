@@ -81,6 +81,7 @@ default['postfix']['main']['mydestination'] = [node['postfix']['main']['myhostna
 default['postfix']['main']['smtpd_use_tls'] = 'yes'
 default['postfix']['main']['smtp_use_tls'] = 'yes'
 default['postfix']['main']['smtp_sasl_auth_enable'] = 'no'
+default['postfix']['main']['smtp_sender_dependent_authentication'] = 'no'
 default['postfix']['main']['mailbox_size_limit'] = 0
 default['postfix']['main']['mynetworks'] = nil
 default['postfix']['main']['inet_interfaces'] = 'loopback-only'
