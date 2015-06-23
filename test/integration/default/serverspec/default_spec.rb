@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require_relative '../../../kitchen/data/spec_helper'
+require_relative './spec_helper'
 
 describe 'postfix::default' do
   describe package('postfix') do

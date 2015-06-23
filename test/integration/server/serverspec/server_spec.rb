@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require_relative '../../../kitchen/data/spec_helper'
+require_relative './spec_helper'
 
 describe 'postfix::server' do
   it 'doesnt configure postfix because solo is unsupported' do
