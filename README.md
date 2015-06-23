@@ -29,6 +29,7 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['use_transport_maps']` - set to true if you want the cookbook to use/configure transport maps
 * `node['postfix']['use_access_maps']` - set to true if you want the cookbook to use/configure access maps
 * `node['postfix']['use_virtual_aliases']` - set to true if you want the cookbook to use/configure virtual alias maps
+* `node['postfix']['use_relay_restrictions_maps']` - set to true if you want the cookbook to use/configure a list of domains to which postfix will allow relay
 * `node['postfix']['aliases']` - hash of aliases to create with `recipe[postfix::aliases]`, see below under __Recipes__ for more information.
 * `node['postfix']['transports']` - hash of transports to create with `recipe[postfix::transports]`, see below under __Recipes__ for more information.
 * `node['postfix']['access']` - hash of access to create with `recipe[postfix::access]`, see below under __Recipes__ for more information.
@@ -120,6 +121,10 @@ Manage `/etc/postfix/access` with this recipe.
 
 ### virtual_aliases
 Manage `/etc/postfix/virtual` with this recipe.
+
+### relay_restrictions
+Manage `/etc/postfix/relay_restriction` with this recipe
+The postfix option smtpd_relay_restrictions in main.cf will point to this hash map db.  
 
 
 http://wiki.chef.io/display/chef/Templates#Templates-TemplateLocationSpecificity
@@ -263,6 +268,21 @@ override_attributes(
     "main" => {
       "mydomain" => "example.com",
       "myorigin" => "example.com"
+    }
+  }
+)
+```
+
+To use relay restrictions override the relay restrictions attribute in this format:
+
+```ruby
+override_attributes(
+  "postfix" => {
+    "use_relay_restrictions_maps" => true,
+    "relay_restrictions" => {
+      "chef.io" => "OK",
+      ".chef.io" => "OK",
+      "example.com" => "OK"
     }
   }
 )
