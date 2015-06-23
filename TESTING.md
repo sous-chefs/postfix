@@ -11,6 +11,11 @@ Install the berkshelf plugin for vagrant, and berkshelf to your local Ruby envir
     vagrant plugin install vagrant-berkshelf
     gem install berkshelf
 
+To test the OmniOS platform, you need to install the omnios vagrant
+plugin
+
+    vagrant plugin install vagrant-guest-omnios
+
 Install Test Kitchen and its Vagrant driver.
 
     bundle install
