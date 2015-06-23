@@ -7,7 +7,7 @@ describe 'postfix::default' do
 
   context 'on Centos 6.5' do
     let(:chef_run) do
-      ChefSpec::Runner.new(platform: 'centos', version: 6.5).converge(described_recipe)
+      ChefSpec::ServerRunner.new(platform: 'centos', version: 6.5).converge(described_recipe)
     end
 
     it '[COOK-4423] renders file main.cf with /etc/pki/tls/cert.pem' do
@@ -21,7 +21,7 @@ describe 'postfix::default' do
 
   context 'on SmartOS' do
     let(:chef_run) do
-      ChefSpec::Runner.new(platform: 'smartos', version: 'joyent_20130111T180733Z').converge(described_recipe)
+      ChefSpec::ServerRunner.new(platform: 'smartos', version: 'joyent_20130111T180733Z').converge(described_recipe)
     end
 
     it '[COOK-4423] renders file main.cf without smtp_use_tls' do
@@ -35,7 +35,7 @@ describe 'postfix::default' do
 
   context 'on Ubuntu 13.04' do
     let(:chef_run) do
-      ChefSpec::Runner.new(platform: 'ubuntu', version: 13.04).converge(described_recipe)
+      ChefSpec::ServerRunner.new(platform: 'ubuntu', version: 13.04).converge(described_recipe)
     end
 
     it '[COOK-4423] renders file main.cf with /etc/postfix/cacert.pem' do

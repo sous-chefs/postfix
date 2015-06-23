@@ -4,7 +4,7 @@ describe 'postfix::sasl_auth' do
   let(:password_file) { '/etc/postfix/sasl_passwd' }
 
   let(:chef_run) do
-    ChefSpec::Runner.new do |node|
+    ChefSpec::ServerRunner.new do |node|
       node.default['postfix']['sasl_password_file'] = password_file
     end.converge(described_recipe)
   end
