@@ -4,7 +4,7 @@ description 'Installs and configures postfix for client or outbound relayhost, o
 maintainer 'Chef Software, Inc.'
 maintainer_email 'cookbooks@chef.io'
 license 'Apache 2.0'
-version '3.6.3'
+version '3.7.0'
 issues_url 'https://github.com/opscode-cookbooks/postfix/issues'
 source_url 'https://github.com/opscode-cookbooks/postfix'
 recipe 'postfix', 'Installs and configures postfix'

@@ -2,9 +2,10 @@ postfix Cookbook CHANGELOG
 ==========================
 This file is used to list changes made in each version of the postfix cookbook.
 
-v3.6.3 (2015-04-30)
+v3.7.0 (2015-04-30)
 -------------------
 - Adding support for relay restrictions
+- Update chefspec and serverspec tests
 
 v3.6.2 (2014-10-31)
 -------------------
