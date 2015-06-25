@@ -83,20 +83,28 @@ default['postfix']['main']['myhostname'] = (node['fqdn'] || node['hostname']).to
 default['postfix']['main']['mydomain'] = (node['domain'] || node['hostname']).to_s.chomp('.')
 default['postfix']['main']['myorigin'] = '$myhostname'
 default['postfix']['main']['mydestination'] = [node['postfix']['main']['myhostname'], node['hostname'], 'localhost.localdomain', 'localhost'].compact
-default['postfix']['main']['smtpd_use_tls'] = 'yes'
-default['postfix']['main']['smtp_use_tls'] = 'yes'
+default['postfix']['main']['smtpd_tls_security_level'] = 'may'
+default['postfix']['main']['smtp_tls_security_level'] = 'may'
 default['postfix']['main']['smtp_sasl_auth_enable'] = 'no'
 default['postfix']['main']['mailbox_size_limit'] = 0
 default['postfix']['main']['mynetworks'] = nil
 default['postfix']['main']['inet_interfaces'] = 'loopback-only'
+# With Postfix 2.3 and later use smtpd_tls_security_level instead.
+# default['postfix']['main']['smtpd_use_tls'] = 'no'
+# With Postfix 2.3 and later use smtp_tls_security_level instead.
+# default['postfix']['main']['smtp_use_tls'] = 'no'
+
 
 # Conditional attributes, also reference _attributes recipe
 case node['platform_family']
 when 'debian'
   default['postfix']['cafile'] = '/etc/ssl/certs/ca-certificates.crt'
 when 'smartos'
-  default['postfix']['main']['smtpd_use_tls'] = 'no'
-  default['postfix']['main']['smtp_use_tls'] = 'no'
+  default['postfix']['main']['smtpd_tls_security_level'] = 'may'
+  default['postfix']['main']['smtp_tls_security_level'] = 'may'
+  # With Postfix 2.3 and later use smtpd_tls_security_level instead.
+  # default['postfix']['main']['smtpd_use_tls'] = 'no'
+  # default['postfix']['main']['smtp_use_tls'] = 'no'
   default['postfix']['cafile'] = '/opt/local/etc/postfix/cacert.pem'
 when 'rhel'
   default['postfix']['cafile'] = '/etc/pki/tls/cert.pem'

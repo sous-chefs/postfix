@@ -18,14 +18,15 @@ if node['postfix']['use_procmail']
   node.default['postfix']['main']['mailbox_command'] = '/usr/bin/procmail -a "$EXTENSION"'
 end
 
-if node['postfix']['main']['smtpd_use_tls'] == 'yes'
+if node['postfix']['main']['smtpd_use_tls'] == 'yes' or ['may', 'encrypt'].include? node['postfix']['main']['smtpd_tls_security_level']
   node.default['postfix']['main']['smtpd_tls_cert_file'] = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
   node.default['postfix']['main']['smtpd_tls_key_file'] = '/etc/ssl/private/ssl-cert-snakeoil.key'
   node.default['postfix']['main']['smtpd_tls_CAfile'] = node['postfix']['cafile']
   node.default['postfix']['main']['smtpd_tls_session_cache_database'] = 'btree:${data_directory}/smtpd_scache'
 end
 
-if node['postfix']['main']['smtp_use_tls'] == 'yes'
+smtp_tls_security_level_options = ['may', 'encrypt', 'dane', 'dane-only', 'fingerprint', 'verify', 'secure']
+if node['postfix']['main']['smtp_use_tls'] == 'yes' or smtp_tls_security_level_options.include? node['postfix']['main']['smtp_tls_security_level']
   node.default['postfix']['main']['smtp_tls_CAfile'] = node['postfix']['cafile']
   node.default['postfix']['main']['smtp_tls_session_cache_database'] = 'btree:${data_directory}/smtp_scache'
 end
