@@ -4,10 +4,17 @@
 ###
 
 <% @settings.sort.map do |key, value| -%>
-<%  next if value.nil? -%>
+<%  next if (value.nil? || key == 'restrictions') -%>
 <%  if value.kind_of? Array -%>
 <%=   "#{key} = #{value.join(', ')}"%>
 <%  else -%>
 <%=   "#{key} = #{value}"%>
 <%  end -%>
 <% end -%>
+
+<% @settings['restrictions'].each do |name, type| %>
+smtpd_<%= name %>_restrictions =
+<% type.each do |value| %>
+  <%= value %>
+<% end %>
+<% end unless @settings['restrictions'].nil? %>
