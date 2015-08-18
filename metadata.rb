@@ -7,7 +7,9 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '5.3.1'
 
 recipe 'postfix', 'Installs and configures postfix'
-recipe 'postfix::sasl_auth', 'Set up postfix to auth to a server with sasl'
+recipe 'postfix::sasl_common', 'Installs the SASL packages and configures smtpd.conf'
+recipe 'postfix::sasldb', 'Creates SASL users from attributes'
+recipe 'postfix::sasl_auth', 'Sets up Postfix to auth to a server with SASL'
 recipe 'postfix::aliases', 'Manages /etc/aliases'
 recipe 'postfix::transports', 'Manages /etc/postfix/transport'
 recipe 'postfix::access', 'Manages /etc/postfix/access'

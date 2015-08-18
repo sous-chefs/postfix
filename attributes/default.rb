@@ -1,5 +1,5 @@
 # Author:: Joshua Timberman <joshua@chef.io>
-# Copyright:: 2009-2017, Chef Software, Inc.
+# Copyright:: 2009-2018, Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -378,6 +378,15 @@ default['postfix']['master']['bsmtp']['unpriv'] = false
 default['postfix']['master']['bsmtp']['chroot'] = false
 default['postfix']['master']['bsmtp']['command'] = 'pipe'
 default['postfix']['master']['bsmtp']['args'] = ['flags=Fq. user=foo argv=/usr/local/sbin/bsmtp -f $sender $nexthop $recipient']
+
+# SASL smtpd.conf attributes
+default['postfix']['sasl_conf']['pwcheck_method'] = 'saslauthd'
+default['postfix']['sasl_conf']['mech_list'] = %w(plain login)
+
+# sasldb attributes
+default['postfix']['sasldb']['users'] = {}
+default['postfix']['sasldb']['group'] = 'postfix'
+default['postfix']['sasldb']['path'] = '/etc/sasldb2'
 
 # OS Aliases
 default['postfix']['aliases'] = case node['platform']

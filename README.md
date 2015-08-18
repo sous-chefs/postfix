@@ -186,6 +186,14 @@ Includes the default recipe to install, configure and start postfix.
 
 Does not work with `chef-solo`.
 
+### sasl_common
+
+Installs the Cyrus SASL packages and configures `smtpd.conf` for authenticating mail clients. Included by the `sasldb` and `sasl_auth` recipes. You should manually include this before using the `postfix_sasldb_user` LWRP.
+
+### sasldb
+
+Creates SASL users with the `postfix_sasldb_user` LWRP from attributes containing email/password pairs.
+
 ### sasl_auth
 
 Sets up the system to authenticate with a remote mail relay using SASL authentication.
@@ -275,6 +283,23 @@ Manage `/etc/postfix/virtual` with this recipe.
 ### relay_restrictions
 
 Manage `/etc/postfix/relay_restriction` with this recipe The postfix option smtpd_relay_restrictions in main.cf will point to this hash map db.
+
+## LWRPs
+
+### postfix_sasldb_user
+
+Creates or disables a SASL user with the given email address and password in a flat BerkDB database using saslpasswd2. Make sure you include the `sasl_common` recipe first to install the required packages and configure `smtpd.conf`. Note that the default configuration will not use this database. Set the following attributes to use it.
+
+```ruby
+override_attributes(
+  "postfix" => {
+    "sasl_conf" => {
+      "pwcheck_method" => "auxprop",
+      "auxprop_plugin" => "sasldb"
+    }
+  }
+)
+```
 
 ## Usage
 
