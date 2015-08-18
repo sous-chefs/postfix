@@ -276,8 +276,6 @@ Manage `/etc/postfix/virtual` with this recipe.
 
 Manage `/etc/postfix/relay_restriction` with this recipe The postfix option smtpd_relay_restrictions in main.cf will point to this hash map db.
 
-<http://wiki.chef.io/display/chef/Templates#Templates-TemplateLocationSpecificity>
-
 ## Usage
 
 On systems that should simply send mail directly to a relay, or out to the internet, use `recipe[postfix]` and modify the `node['postfix']['main']['relayhost']` attribute via a role.
