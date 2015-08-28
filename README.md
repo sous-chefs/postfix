@@ -1,5 +1,9 @@
 postfix Cookbook
 ================
+
+[![Build Status](https://travis-ci.org/opscode-cookbooks/postfix.svg?branch=master)](https://travis-ci.org/opscode-cookbooks/postfix)
+[![Cookbook Version](https://img.shields.io/cookbook/v/postfix.svg)](https://supermarket.chef.io/cookbooks/postfix)
+
 Installs and configures postfix for client or outbound relayhost, or to do SASL authentication.
 
 On RHEL-family systems, sendmail will be replaced with postfix.
@@ -293,7 +297,7 @@ License & Authors
 - Author:: Joshua Timberman <joshua@chef.io>
 
 ```text
-Copyright:: 2009-2014, Chef Software, Inc
+Copyright:: 2009-2015, Chef Software, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
