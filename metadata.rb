@@ -1,12 +1,13 @@
-# encoding: utf-8
 name 'postfix'
-description 'Installs and configures postfix for client or outbound relayhost, or to do SASL auth'
 maintainer 'Chef Software, Inc.'
 maintainer_email 'cookbooks@chef.io'
 license 'Apache 2.0'
+description 'Installs and configures postfix for client or outbound relayhost, or to do SASL auth'
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '3.7.0'
-issues_url 'https://github.com/opscode-cookbooks/postfix/issues'
-source_url 'https://github.com/opscode-cookbooks/postfix'
+issues_url 'https://github.com/chef-cookbooks/postfix/issues' if respond_to?(:source_url)
+source_url 'https://github.com/chef-cookbooks/postfix' if respond_to?(:issues_url)
+
 recipe 'postfix', 'Installs and configures postfix'
 recipe 'postfix::sasl_auth', 'Set up postfix to auth to a server with sasl'
 recipe 'postfix::aliases', 'Manages /etc/aliases'
@@ -16,7 +17,7 @@ recipe 'postfix::virtual_aliases', 'Manages /etc/postfix/virtual'
 recipe 'postfix::client', 'Searches for the relayhost based on an attribute'
 recipe 'postfix::server', 'Sets the mail_type attribute to master'
 
-%w(ubuntu debian redhat centos amazon scientific smartos).each do |os|
+%w(ubuntu debian redhat centos amazon oracle scientific smartos).each do |os|
   supports os
 end
 
