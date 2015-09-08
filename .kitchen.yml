@@ -1,28 +1,24 @@
----
-driver_plugin: vagrant
-driver_config:
-  require_chef_omnibus: true
+driver:
+  name: vagrant
 
 provisioner:
-  data_path: test/shared
+  name: chef_zero
 
 platforms:
-- name: ubuntu-12.04
-  run_list:
-  - recipe[apt]
-
-- name: ubuntu-14.04
-  run_list:
-  - recipe[apt]
-
-- name: centos-6.5
-- name: centos-5.10
-- name: omnios-r151014
-  driver:
-    box: omnios-r151014
-    box_url: http://omnios.omniti.com/media/omnios-r151014.box
-  run_list:
-  - recipe[fake::omnios]
+  - name: centos-6.7
+  - name: centos-7.1
+  - name: ubuntu-12.04
+    run_list:
+      - recipe[apt::default]
+  - name: ubuntu-14.04
+    run_list:
+      - recipe[apt::default]
+  - name: omnios-r151014
+    driver:
+      box: omnios-r151014
+      box_url: http://omnios.omniti.com/media/omnios-r151014.box
+    run_list:
+    - recipe[fake::omnios]
 
 suites:
 - name: default
