@@ -1,7 +1,7 @@
 postfix Cookbook
 ================
 
-[![Build Status](https://travis-ci.org/opscode-cookbooks/postfix.svg?branch=master)](https://travis-ci.org/opscode-cookbooks/postfix)
+[![Build Status](https://travis-ci.org/chef-cookbooks/postfix.svg?branch=master)](https://travis-ci.org/chef-cookbooks/postfix)
 [![Cookbook Version](https://img.shields.io/cookbook/v/postfix.svg)](https://supermarket.chef.io/cookbooks/postfix)
 
 Installs and configures postfix for client or outbound relayhost, or to do SASL authentication.
