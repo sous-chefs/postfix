@@ -1,4 +1,12 @@
+AllCops:
+  Exclude:
+    - vendor/**/*
+
+AlignParameters:
+  Enabled: false
 Encoding:
-  Enabled: False
+  Enabled: false
 LineLength:
-  Max: 200
+  Enabled: false
+MethodLength:
+  Enabled: false
