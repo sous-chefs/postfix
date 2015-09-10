@@ -84,8 +84,54 @@ Example of json role config, for setup *_map_entries:
 `}`
 
 ### master.cf template attributes
-* `node['postfix']['master']['submission'] - Whether to use submission (TCP 587) daemon. (true/false); default false
+The master.cf template has been changed to allow full customization of the file content. For purpose of backwards compatibility default attributes generate the same master.cf. But via `node['postfix']['master']` data structure in your role for instance it can be completelly rewritten.
 
+
+Examples of json role config, for customize master.cf:
+
+`postfix : {`
+
+`...`
+
+turn some services off or on:
+```json
+  "master" : { 
+    "smtps": {
+      "active": true
+    },
+    "old-cyrus": {
+      "active": false
+    },
+    "cyrus": {
+      "active": false
+    },
+    "uucp": {
+      "active": false
+    },
+    "ifmail": {
+      "active": false
+    },
+```
+
+`...`
+define you own service:
+```json
+    "spamfilter": {
+      "comment": "My own spamfilter",
+      "active": true,
+      "order": 590,
+      "type": "unix",
+      "unpriv": false,
+      "chroot": false,
+      "command": "pipe",
+      "args": ["flags=Rq user=spamd argv=/usr/bin/spamfilter.sh -oi -f ${sender} ${recipient}"]
+    }
+```
+
+`...`
+
+` }`
+`}`
 
 Recipes
 -------
