@@ -16,7 +16,7 @@
 # limitations under the License.
 
 # Generic cookbook attributes
-default['postfix']['mail_type']  = 'client'
+default['postfix']['mail_type'] = 'client'
 default['postfix']['relayhost_role'] = 'relayhost'
 default['postfix']['multi_environment_relay'] = false
 default['postfix']['use_procmail'] = false
