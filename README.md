@@ -84,8 +84,54 @@ Example of json role config, for setup *_map_entries:
 `}`
 
 ### master.cf template attributes
-* `node['postfix']['master']['submission'] - Whether to use submission (TCP 587) daemon. (true/false); default false
+The master.cf template has been changed to allow full customization of the file content. For purpose of backwards compatibility default attributes generate the same master.cf. But via `node['postfix']['master']` data structure in your role for instance it can be completelly rewritten.
 
+
+Examples of json role config, for customize master.cf:
+
+`postfix : {`
+
+`...`
+
+turn some services off or on:
+```json
+  "master" : { 
+    "smtps": {
+      "active": true
+    },
+    "old-cyrus": {
+      "active": false
+    },
+    "cyrus": {
+      "active": false
+    },
+    "uucp": {
+      "active": false
+    },
+    "ifmail": {
+      "active": false
+    },
+```
+
+`...`
+define you own service:
+```json
+    "spamfilter": {
+      "comment": "My own spamfilter",
+      "active": true,
+      "order": 590,
+      "type": "unix",
+      "unpriv": false,
+      "chroot": false,
+      "command": "pipe",
+      "args": ["flags=Rq user=spamd argv=/usr/bin/spamfilter.sh -oi -f ${sender} ${recipient}"]
+    }
+```
+
+`...`
+
+` }`
+`}`
 
 Recipes
 -------
@@ -108,6 +154,49 @@ Sets up the system to authenticate with a remote mail relay using SASL authentic
 To use Chef Server search to automatically detect a node that is the relayhost, use this recipe in a role that will be relayhost. By default, the role should be "relayhost" but you can change the attribute `node['postfix']['relayhost_role']` to modify this.
 
 **Note** This recipe will set the `node['postfix']['mail_type']` to "master" with an override attribute.
+
+### hash_maps
+General recipe to manage any number of hash: tables. You can replace with it recipes like `transport` or `virtual_aliases`, but what is more important - you can create any kinds of hash maps, which has no own recipe.
+Examlle:
+
+```json
+  "override_attributes": {
+    "postfix": {
+      "hash_maps": {
+        "/etc/postfix/vmailbox": {
+          "john@example.com": "ok",
+          "john@example.net": "ok",
+        },
+        "/etc/postfix/virtual": {
+          "postmaster@example.com": "john@example.com",
+          "postmaster@example.net": "john@example.net",
+          "root@mail.example.net": "john@example.net"
+        },
+        "/etc/postfix/envelope_senders": {
+          "@example.com": "john@example.com",
+          "@example.net": "john@example.net"
+        },
+        "/etc/postfix/relay_recipients": {
+          "john@example.net": "ok",
+          "john@example.com": "ok",
+          "admin@example.com": "ok",
+        }
+     }
+  }
+```
+
+To use these files in your configuration reference them in `node['postfix']['main']`, for instance:
+```json
+    "postfix": {
+      "main": {
+        "smtpd_sender_login_maps": "hash:/etc/postfix/envelope_senders",
+        "relay_recipient_maps": "hash:/etc/postfix/relay_recipients",
+        "virtual_mailbox_maps": "hash:/etc/postfix/vmailbox",
+        "virtual_alias_maps": "hash:/etc/postfix/virtual",
+      }
+    }
+```
+
 
 ### aliases
 Manage `/etc/aliases` with this recipe. Currently only Ubuntu 10.04 platform has a template for the aliases file. Add your aliases template to the `templates/default` or to the appropriate platform+version directory per the File Specificity rules for templates. Then specify a hash of aliases for the `node['postfix']['aliases']` attribute.

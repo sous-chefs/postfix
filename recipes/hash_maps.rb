@@ -14,15 +14,17 @@
 # limitations under the License.
 #
 
-include_recipe 'postfix::_common'
+node['postfix']['hash_maps'].each do |file, content|
+  execute "update-postmap-#{file}" do
+    command "postmap #{file}"
+    environment PATH: "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
+    action :nothing
+  end
 
-execute 'update-postfix-relay-restrictions' do
-  command "postmap #{node['postfix']['relay_restrictions_db']}"
-  environment PATH: "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
-  action :nothing
-end
-
-template node['postfix']['relay_restrictions_db'] do
-  source 'relay_restrictions.erb'
-  notifies :run, 'execute[update-postfix-relay-restrictions]'
+  template file do
+    source 'hash_maps.erb'
+    variables(map: content)
+    notifies :run, "execute[update-postmap-#{file}]"
+    notifies :restart, 'service[postfix]'
+  end
 end

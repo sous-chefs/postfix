@@ -1,2 +1,2 @@
 
-include 'postfix'
+include_recipe 'postfix'

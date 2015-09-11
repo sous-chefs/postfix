@@ -57,7 +57,7 @@ when 'omnios'
   # we don't guard this because if the user creation was successful (or happened out of band), then this won't get executed when the action is :nothing.
   execute '/opt/omni/sbin/postfix set-permissions'
 
-  template manifest_path  do
+  template manifest_path do
     source 'manifest-postfix.xml.erb'
     owner 'root'
     group node['root_group']
@@ -100,7 +100,7 @@ unless node['postfix']['smtp_generic_map_entries'].empty?
   template "#{node['postfix']['conf_dir']}/smtp_generic" do
     owner 'root'
     group node['root_group']
-    mode  '0644'
+    mode '0644'
     notifies :run, 'execute[update-postfix-smtp_generic]'
     notifies :reload, 'service[postfix]'
   end
