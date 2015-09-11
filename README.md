@@ -109,6 +109,49 @@ To use Chef Server search to automatically detect a node that is the relayhost, 
 
 **Note** This recipe will set the `node['postfix']['mail_type']` to "master" with an override attribute.
 
+### hash_maps
+General recipe to manage any number of hash: tables. You can replace with it recipes like `transport` or `virtual_aliases`, but what is more important - you can create any kinds of hash maps, which has no own recipe.
+Examlle:
+
+```json
+  "override_attributes": {
+    "postfix": {
+      "hash_maps": {
+        "/etc/postfix/vmailbox": {
+          "john@example.com": "ok",
+          "john@example.net": "ok",
+        },
+        "/etc/postfix/virtual": {
+          "postmaster@example.com": "john@example.com",
+          "postmaster@example.net": "john@example.net",
+          "root@mail.example.net": "john@example.net"
+        },
+        "/etc/postfix/envelope_senders": {
+          "@example.com": "john@example.com",
+          "@example.net": "john@example.net"
+        },
+        "/etc/postfix/relay_recipients": {
+          "john@example.net": "ok",
+          "john@example.com": "ok",
+          "admin@example.com": "ok",
+        }
+     }
+  }
+```
+
+To use these files in your configuration reference them in `node['postfix']['main']`, for instance:
+```json
+    "postfix": {
+      "main": {
+        "smtpd_sender_login_maps": "hash:/etc/postfix/envelope_senders",
+        "relay_recipient_maps": "hash:/etc/postfix/relay_recipients",
+        "virtual_mailbox_maps": "hash:/etc/postfix/vmailbox",
+        "virtual_alias_maps": "hash:/etc/postfix/virtual",
+      }
+    }
+```
+
+
 ### aliases
 Manage `/etc/aliases` with this recipe. Currently only Ubuntu 10.04 platform has a template for the aliases file. Add your aliases template to the `templates/default` or to the appropriate platform+version directory per the File Specificity rules for templates. Then specify a hash of aliases for the `node['postfix']['aliases']` attribute.
 
