@@ -124,5 +124,8 @@ end
 
 service 'postfix' do
   supports status: true, restart: true, reload: true
+  if node['platform'] == 'ubuntu' && node['platform_version'].to_i >= 15
+    provider Chef::Provider::Service::Debian
+  end
   action :enable
 end

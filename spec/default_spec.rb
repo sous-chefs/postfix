@@ -46,4 +46,34 @@ describe 'postfix::default' do
       expect(chef_run).to_not render_file('/etc/postfix/main.cf').with_content('recipient_delimiter')
     end
   end
+
+  context 'on Ubuntu 14.04' do
+    let(:chef_runner) do
+      ChefSpec::ServerRunner.new(platform: 'ubuntu', version: 14.04)
+        .converge(described_recipe)
+    end
+    let(:chef_run) { chef_runner.converge(described_recipe) }
+
+    it 'uses Debian service provider' do
+      expect(chef_run).to enable_service('postfix')
+        .with_provider(nil)
+    end
+  end
+
+  context 'on Ubuntu 15.04' do
+    let(:chef_runner) { ChefSpec::ServerRunner.new }
+    let(:chef_run) { chef_runner.converge(described_recipe) }
+    let(:node) { chef_runner.node }
+    # Ubuntu 15.04 still not supported by fauxhai
+    before do
+      node.automatic['platform_family'] = 'debian'
+      node.automatic['platform'] = 'ubuntu'
+      node.automatic['platform_version'] = '15.04'
+    end
+
+    it 'uses Debian service provider' do
+      expect(chef_run).to enable_service('postfix')
+        .with_provider(Chef::Provider::Service::Debian)
+    end
+  end
 end
