@@ -39,6 +39,13 @@ if node['postfix']['main']['smtp_sasl_auth_enable'] == 'yes'
   node.default_unless['postfix']['main']['relayhost'] = ''
 end
 
+if node['postfix']['main']['smtp_sender_dependent_authentication'] == 'yes'
+  node.default_unless['postfix']['sender_relayhost_file'] = "#{node['postfix']['conf_dir']}/sender_relay"
+  node.default_unless['postfix']['main']['sender_dependent_relayhost_maps'] = "hash:#{node['postfix']['sender_relayhost_file']}"
+  node.default_unless['postfix']['sasl']['smtp_sasl_passwd_map'] = {}
+  node.default_unless['postfix']['sender_relayhost_map'] = {}
+end
+
 if node['postfix']['use_alias_maps']
   node.default_unless['postfix']['main']['alias_maps'] = ["hash:#{node['postfix']['aliases_db']}"]
 end

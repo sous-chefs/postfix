@@ -40,6 +40,7 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['virtual_aliases']` - hash of virtual_aliases to create with `recipe[postfix::virtual_aliases]`, see below under __Recipes__ for more information.
 * `node['postfix']['main_template_source']` - Cookbook source for main.cf template. Default 'postfix'
 * `node['postfix']['master_template_source']` - Cookbook source for master.cf template. Default 'postfix'
+* `node['postfix']['sender_relayhost_map']` - hash of sender domains/addresses and the relayhost to use, see __Examples__ at the end of this doc.
 
 ### main.cf and sasl\_passwd template attributes
 The main.cf template has been simplified to include any attributes in the `node['postfix']['main']` data structure.  The following attributes are still included with this cookbook to maintain some semblance of backwards compatibility.
@@ -70,6 +71,9 @@ This change in namespace to `node['postfix']['main']` should allow for greater f
   - `node['postfix']['main']['relayhost']` - Set to empty string
   - `node['postfix']['sasl']['smtp_sasl_user_name']` - SASL user to authenticate as.  Default empty
   - `node['postfix']['sasl']['smtp_sasl_passwd']` - SASL password to use.  Default empty.
+* `node['postfix']['main']['smtp_sender_dependent_authentication']` - (yes/no); default no.  If enabled, see following conditional attributes.
+  - `node['postfix']['main']['sender_dependent_relayhost_maps']` - Set to `hash:/etc/postfix/sender_relay` template file
+  - `node['postfix']['sasl']['smtp_sasl_passwd_map']` - Map of senders with sasl credentials. See __Examples__ at the end of this doc.
 * `node['postfix']['sender_canonical_map_entries']` - (hash with key value pairs); default not configured.  Setup generic canonical maps. See `man 5 canonical`. If has at least one value, then will be enabled in config.
 * `node['postfix']['smtp_generic_map_entries']` - (hash with key value pairs); default not configured.  Setup generic postfix maps. See `man 5 generic`. If has at least one value, then will be enabled in config.
 
@@ -201,6 +205,38 @@ override_attributes(
     "sasl" => {
       "smtp_sasl_passwd" => "your_password",
       "smtp_sasl_user_name" => "your_username"
+    }
+  }
+)
+```
+
+The `sasl_mapped_relayhost` role is applied to the nodes that require sending mail to a different SMTP relay host based on the sender domain. For example this may be used to communicate with the same SMTP relay host using different SASL credentials depending on the sender.
+
+```ruby
+name "sasl_mapped_relayhost"
+run_list("recipe[postfix], recipe[postfix::sasl_auth]")
+override_attributes(
+  "postfix" => {
+    "mail_type" => "client",
+    "sender_relayhost_map" => {
+      "@domainA.com" => "smtp.mailgun.org",
+      "@domainB.com" => "smtp.mailgun.org"
+    },
+    "main" => {
+      "smtp_sasl_auth_enable" => "yes",
+      "smtp_sender_dependent_authentication" => "yes"
+    },
+    "sasl" => {
+      "smtp_sasl_passwd_map": {
+        "@domainA.com": {
+          "smtp_sasl_user_name": "domainA_username",
+          "smtp_sasl_passwd": "domainA_password"
+        },
+        "@domainB.com": {
+          "smtp_sasl_user_name": "domainB_username",
+          "smtp_sasl_passwd": "domainB_password"
+        }
+      }
     }
   }
 )

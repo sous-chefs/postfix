@@ -48,6 +48,12 @@ execute 'postmap-sasl_passwd' do
   action :nothing
 end
 
+execute 'postmap-sender_relay' do
+  command "postmap #{node['postfix']['sender_relayhost_file']}"
+  environment 'PATH' => "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
+  action :nothing
+end
+
 template node['postfix']['sasl_password_file'] do
   sensitive true
   source 'sasl_passwd.erb'
@@ -58,3 +64,14 @@ template node['postfix']['sasl_password_file'] do
   notifies :restart, 'service[postfix]'
   variables(settings: node['postfix']['sasl'])
 end
+
+template node['postfix']['sender_relayhost_file'] do
+  sensitive true
+  source 'sender_relay.erb'
+  owner 'root'
+  group node['root_group']
+  mode 0400
+  notifies :run, 'execute[postmap-sender_relay]', :immediately
+  notifies :restart, 'service[postfix]'
+  variables(settings: node['postfix']['sasl'])
+end if node['postfix']['main']['smtp_sender_dependent_authentication'] == 'yes'
