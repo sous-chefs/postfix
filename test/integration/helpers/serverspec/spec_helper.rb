@@ -6,13 +6,13 @@ set :path, '/sbin:/usr/local/sbin:$PATH'
 def get_family
   fam = 'solaris2'
   return fam unless File.exist? '/etc/release'
-  File.open("/etc/release") do |file|
-      while line = file.gets
-        case line
-        when /^\s*(OmniOS)/
-          fam = 'omnios'
-        end
+  File.open('/etc/release') do |file|
+    while line = file.gets
+      case line
+      when /^\s*(OmniOS)/
+        fam = 'omnios'
       end
+    end
   end
   fam
 end
@@ -24,4 +24,3 @@ def postfix_conf_path
     '/etc/postfix'
   end
 end
-
