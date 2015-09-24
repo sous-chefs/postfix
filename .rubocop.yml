@@ -2,6 +2,7 @@ AllCops:
   Exclude:
     - vendor/**/*
     - Guardfile
+    - test/**/*
 
 AlignParameters:
   Enabled: false
