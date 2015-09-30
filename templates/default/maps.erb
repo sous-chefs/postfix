@@ -5,5 +5,5 @@
 #
 
 <% @map.each do |key, value| -%>
-<%= key %> <%= value %>
+<%= key %><%= @separator %><%= value %>
 <% end unless @map.nil? -%>

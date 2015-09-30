@@ -174,31 +174,43 @@ To use Chef Server search to automatically detect a node that is the relayhost, 
 
 **Note** This recipe will set the `node['postfix']['mail_type']` to "master" with an override attribute.
 
-### hash_maps
-General recipe to manage any number of hash: tables. You can replace with it recipes like `transport` or `virtual_aliases`, but what is more important - you can create any kinds of hash maps, which has no own recipe.
+### maps
+General recipe to manage any number of any type postfix lookup tables. You can replace with it recipes like `transport` or `virtual_aliases`, but what is more important - you can create any kinds of maps, which has no own recipe, including database lookup maps configuration.
+`maps` is a hash keys of which is a lookup table type and value is another hash with filenames as the keys and hash with file content as the value. File content is an any number of key/value pairs which meaning depends on lookup table type.
 Examlle:
 
 ```json
   "override_attributes": {
     "postfix": {
-      "hash_maps": {
-        "/etc/postfix/vmailbox": {
-          "john@example.com": "ok",
-          "john@example.net": "ok",
-        },
-        "/etc/postfix/virtual": {
-          "postmaster@example.com": "john@example.com",
-          "postmaster@example.net": "john@example.net",
-          "root@mail.example.net": "john@example.net"
-        },
-        "/etc/postfix/envelope_senders": {
-          "@example.com": "john@example.com",
-          "@example.net": "john@example.net"
-        },
-        "/etc/postfix/relay_recipients": {
-          "john@example.net": "ok",
-          "john@example.com": "ok",
-          "admin@example.com": "ok",
+      "maps": {
+        "hash": {
+          "/etc/postfix/vmailbox": {
+            "john@example.com": "ok",
+            "john@example.net": "ok",
+          },
+          "/etc/postfix/virtual": {
+            "postmaster@example.com": "john@example.com",
+            "postmaster@example.net": "john@example.net",
+            "root@mail.example.net": "john@example.net"
+          },
+          "/etc/postfix/envelope_senders": {
+            "@example.com": "john@example.com",
+            "@example.net": "john@example.net"
+          },
+          "/etc/postfix/relay_recipients": {
+            "john@example.net": "ok",
+            "john@example.com": "ok",
+            "admin@example.com": "ok",
+          }
+       },
+       "pgsql": {
+          "/etc/postfix/pgtest": {
+            "hosts": "db.local:2345",
+            "user": "postfix",
+            "password": "test",
+            "dbname": "postdb",
+            "query": "SELECT replacement FROM aliases WHERE mailbox = '%s'"
+          }
         }
      }
   }

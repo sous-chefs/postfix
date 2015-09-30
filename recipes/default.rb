@@ -34,4 +34,4 @@ include_recipe 'postfix::virtual_aliases_domains' if node['postfix']['use_virtua
 
 include_recipe 'postfix::relay_restrictions' if node['postfix']['use_relay_restrictions_maps']
 
-include_recipe 'postfix::hash_maps' if node['postfix']['hash_maps']
+include_recipe 'postfix::maps' if node['postfix']['maps']
