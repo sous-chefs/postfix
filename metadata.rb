@@ -4,7 +4,7 @@ maintainer_email 'cookbooks@chef.io'
 license 'Apache 2.0'
 description 'Installs and configures postfix for client or outbound relayhost, or to do SASL auth'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '3.7.0'
+version '3.8.0'
 issues_url 'https://github.com/chef-cookbooks/postfix/issues' if respond_to?(:source_url)
 source_url 'https://github.com/chef-cookbooks/postfix' if respond_to?(:issues_url)
 
@@ -16,6 +16,7 @@ recipe 'postfix::access', 'Manages /etc/postfix/access'
 recipe 'postfix::virtual_aliases', 'Manages /etc/postfix/virtual'
 recipe 'postfix::client', 'Searches for the relayhost based on an attribute'
 recipe 'postfix::server', 'Sets the mail_type attribute to master'
+recipe 'postfix::maps', 'Manages any number of any type postfix lookup tables'
 
 %w(ubuntu debian redhat centos amazon oracle scientific smartos).each do |os|
   supports os
@@ -24,6 +25,11 @@ end
 attribute 'postfix/main',
           display_name: 'postfix/main',
           description: 'Hash of Postfix main.cf attributes',
+          type: 'hash'
+
+attribute 'postfix/master',
+          display_name: 'Postfix master.cf configuration',
+          description: 'Hash to configure the content of the second most important config file - master.cf. Defaults to the standard master.cf content.',
           type: 'hash'
 
 attribute 'postfix/aliases',
@@ -64,4 +70,10 @@ attribute 'postfix/relayhost_role',
 attribute 'postfix/use_procmail',
           display_name: 'Postfix Use procmail?',
           description: 'Whether procmail should be used as the local delivery agent for a server',
+          default: 'no'
+
+attribute 'postfix/maps',
+          display_name: 'Postfix lookup tables',
+          description: 'Hash to manage any kind of any  postfix lookup tables',
+          type: 'hash'
           default: 'no'
