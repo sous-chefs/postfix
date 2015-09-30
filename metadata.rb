@@ -17,7 +17,7 @@ recipe 'postfix::virtual_aliases', 'Manages /etc/postfix/virtual'
 recipe 'postfix::client', 'Searches for the relayhost based on an attribute'
 recipe 'postfix::server', 'Sets the mail_type attribute to master'
 
-%w(ubuntu debian redhat centos amazon oracle scientific smartos).each do |os|
+%w(ubuntu debian redhat centos amazon oracle scientific smartos fedora).each do |os|
   supports os
 end
 
