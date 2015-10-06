@@ -16,32 +16,29 @@
 
 node['postfix']['maps'].each do |type, maps|
   if node['platform_family'] == 'debian'
-    if ['pgsql', 'mysql', 'ldap', 'cdb'].include?(type)
-      package "postfix-#{type}"
-    end
+    package "postfix-#{type}" if %w(pgsql mysql ldap cdb).include?(type)
   end
 
+  if %w(pgsql mysql ldap memcache sqlite).include?(type)
+    separator = ' = '
+  else
+    separator = ' '
+  end
   maps.each do |file, content|
-    if ['btree', 'cdb', 'dbm', 'hash', 'sdbm'].include?(type)
-      execute "update-postmap-#{file}" do
-        command "postmap #{file}"
-        environment PATH: "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
-        action :nothing
-      end
-    end 
-    if ['pgsql', 'mysql', 'ldap', 'memcache', 'sqlite'].include?(type)
-      separator = " = "
-    else
-      separator = " "
-    end
-    template file do
+    execute "update-postmap-#{file}" do
+      command "postmap #{file}"
+      environment PATH: "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
+      action :nothing
+    end if %w(btree cdb dbm hash sdbm).include?(type)
+    template "#{file}-#{type}" do
+      path file
       source 'maps.erb'
       only_if "postconf -m | grep -q #{type}"
       variables(
         map: content,
         separator: separator
       )
-      if ['btree', 'cdb', 'dbm', 'hash', 'sdbm'].include?(type)
+      if %w(btree cdb dbm hash sdbm).include?(type)
         notifies :run, "execute[update-postmap-#{file}]"
       end
       notifies :restart, 'service[postfix]'
