@@ -76,4 +76,3 @@ attribute 'postfix/maps',
           display_name: 'Postfix lookup tables',
           description: 'Hash to manage any kind of any  postfix lookup tables',
           type: 'hash'
-          default: 'no'
