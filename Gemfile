@@ -37,7 +37,5 @@ group :development do
   gem 'guard-foodcritic'
   gem 'guard-rspec'
   gem 'guard-rubocop'
-  gem 'rake'
-  gem 'fauxhai'
   gem 'pry-nav'
 end
