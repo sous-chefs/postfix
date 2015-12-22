@@ -395,3 +395,7 @@ when 'freebsd'
 else
   default['postfix']['aliases'] = {}
 end
+
+if node['postfix']['use_relay_restirictions_maps']
+  default['postfix']['main']['smtpd_relay_restrictions'] = "hash:#{node['postfix']['relay_restrictions_db']}, reject"
+end
