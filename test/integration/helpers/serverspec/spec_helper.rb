@@ -7,7 +7,7 @@ def which_family
   fam = 'solaris2'
   return fam unless File.exist? '/etc/release'
   File.open('/etc/release') do |file|
-    while (line = file.gets)
+    while line = file.gets
       case line
       when /^\s*(OmniOS)/
         fam = 'omnios'

@@ -11,13 +11,19 @@ On RHEL-family systems, sendmail will be replaced with postfix.
 
 Requirements
 ------------
-### Platforms
+#### Platforms
 - Ubuntu 10.04+
 - Debian 6.0+
 - RHEL/CentOS/Scientific 5.7+, 6.2+
 - Amazon Linux (as of AMIs created after 4/9/2012)
 
 May work on other platforms with or without modification.
+
+#### Chef
+- Chef 11+
+
+#### Cookbooks
+- none
 
 
 Attributes
@@ -414,11 +420,11 @@ override_attributes(
 
 License & Authors
 -----------------
-- Author:: Joshua Timberman <joshua@chef.io>
 
-```text
-Copyright:: 2009-2015, Chef Software, Inc
+**Author:** Cookbook Engineering Team (<cookbooks@chef.io>)
 
+**Copyright:** 2009-2015, Chef Software, Inc.
+```
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
