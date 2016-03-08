@@ -110,6 +110,21 @@ unless node['postfix']['smtp_generic_map_entries'].empty?
   end
 end
 
+unless node['postfix']['dhparam_bits'].nil?
+  dhparam_path = "#{node['postfix']['conf_dir']}/dhparam.pem"
+  node.default['postfix']['main']['smtpd_tls_dh1024_param_file'] = dhparam_path
+
+  # We would use a file resource but lazy isn't lazy enough.
+  template dhparam_path do
+    source 'dhparam.pem.erb'
+    owner 'root'
+    group node['root_group']
+    mode '0600'
+    sensitive true
+    action :create_if_missing
+  end
+end
+
 %w( main master ).each do |cfg|
   template "#{node['postfix']['conf_dir']}/#{cfg}.cf" do
     source "#{cfg}.cf.erb"
