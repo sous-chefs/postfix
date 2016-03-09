@@ -39,6 +39,9 @@ suites:
 - name: server
   run_list:
   - recipe[postfix::server]
+  attributes:
+    postfix:
+      dhparam_bits: 1024
 
 - name: sasl_auth
   run_list:

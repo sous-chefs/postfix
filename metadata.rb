@@ -41,6 +41,11 @@ attribute 'postfix/access',
           description: "Hash of Postfix accesses mapping a pattern to a action.  Example 'domain.tld' => 'OK'.  See access man page for details.",
           type: 'hash'
 
+attribute 'postfix/dhparam_bits',
+          display_name: 'Postfix DH Parameter Bits',
+          description: 'Number of bits to generate or nil to use the built-in parameters',
+          default: nil
+
 attribute 'postfix/mail_type',
           display_name: 'Postfix Mail Type',
           description: 'Is this node a client or server?',

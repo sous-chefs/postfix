@@ -46,6 +46,7 @@ See `attributes/default.rb` for default values.
 * `node['postfix']['virtual_aliases']` - hash of virtual_aliases to create with `recipe[postfix::virtual_aliases]`, see below under __Recipes__ for more information.
 * `node['postfix']['main_template_source']` - Cookbook source for main.cf template. Default 'postfix'
 * `node['postfix']['master_template_source']` - Cookbook source for master.cf template. Default 'postfix'
+* `node['postfix']['dhparam_bits']` - Number of bits to generate for dhparam.pem or nil (default) to use the built-in parameters
 
 ### main.cf and sasl\_passwd template attributes
 The main.cf template has been simplified to include any attributes in the `node['postfix']['main']` data structure.  The following attributes are still included with this cookbook to maintain some semblance of backwards compatibility.

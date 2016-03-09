@@ -39,6 +39,7 @@ default['postfix']['aliases_db_type'] = 'hash'
 default['postfix']['transport_db_type'] = 'hash'
 default['postfix']['virtual_alias_db_type'] = 'hash'
 default['postfix']['virtual_alias_domains_db_type'] = 'hash'
+default['postfix']['dhparam_bits'] = nil
 
 case node['platform']
 when 'smartos'
