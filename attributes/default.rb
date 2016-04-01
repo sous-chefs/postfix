@@ -121,26 +121,26 @@ end
 default['postfix']['master']['submission'] = false
 
 # OS Aliases
-case node['platform']
-when 'freebsd'
-  default['postfix']['aliases'] = {
-    'MAILER-DAEMON' =>  'postmaster',
-    'bin' =>            'root',
-    'daemon' =>         'root',
-    'named' =>          'root',
-    'nobody' =>         'root',
-    'uucp' =>           'root',
-    'www' =>            'root',
-    'ftp-bugs' =>       'root',
-    'postfix' =>        'root',
-    'manager' =>        'root',
-    'dumper' =>         'root',
-    'operator' =>       'root',
-    'abuse' =>          'postmaster'
-  }
-else
-  default['postfix']['aliases'] = {}
-end
+default['postfix']['aliases'] = case node['platform']
+                                when 'freebsd'
+                                  {
+                                    'MAILER-DAEMON' =>  'postmaster',
+                                    'bin' =>            'root',
+                                    'daemon' =>         'root',
+                                    'named' =>          'root',
+                                    'nobody' =>         'root',
+                                    'uucp' =>           'root',
+                                    'www' =>            'root',
+                                    'ftp-bugs' =>       'root',
+                                    'postfix' =>        'root',
+                                    'manager' =>        'root',
+                                    'dumper' =>         'root',
+                                    'operator' =>       'root',
+                                    'abuse' =>          'postmaster'
+                                  }
+                                else
+                                  {}
+                                end
 
 if node['postfix']['use_relay_restirictions_maps']
   default['postfix']['main']['smtpd_relay_restrictions'] = "hash:#{node['postfix']['relay_restrictions_db']}, reject"
