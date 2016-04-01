@@ -2,6 +2,24 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
+## v3.8.0 (2016-04-01)
+
+- Updated attributes to use  node.default_unless instead of node.default to be more wrapper friendly
+- Added integration and unit testing in Travis CI
+- Added rubocop config and resolved rubocop warnings
+- Added Gemfile with all necessary test deps
+- Added standard gitignore and chefignore files
+- Added updated contributing and testing docs
+- Removed the Kitchen Digital Ocean files and dependencies
+- Added additional platforms to the Test Kitchen config
+- Added a Rakefile for simplified testing
+- Fixed a typo in the use_relay_restrictions_maps attribute that prevented the default from being set
+- Added fedora and oracle as supported platforms in the metadata
+- Removed the attributes from the metadata.
+- Added long_description to the metadata
+- Added Chef 11 compatibility checks to issues_url and source_url in metadata.rb
+- Added maintainers.md and maintainers.toml files
+
 ## v3.7.0 (2015-04-30)
 
 - Adding support for relay restrictions
