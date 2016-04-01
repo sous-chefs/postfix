@@ -12,8 +12,8 @@ On RHEL-family systems, sendmail will be replaced with postfix.
 Requirements
 ------------
 #### Platforms
-- Ubuntu 10.04+
-- Debian 6.0+
+- Ubuntu 12.04+
+- Debian 7.0+
 - RHEL/CentOS/Scientific 5.7+, 6.2+
 - Amazon Linux (as of AMIs created after 4/9/2012)
 
