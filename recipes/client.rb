@@ -24,11 +24,10 @@ if Chef::Config[:solo]
 end
 
 query = "role:#{node['postfix']['relayhost_role']}"
-relayhost = ''
-# results = []
 
 if node.run_list.roles.include?(node['postfix']['relayhost_role'])
-  relayhost << node['ipaddress']
+  Chef::Log.info("#{cookbook_name}::#{recipe_name} We shouldn't set relayhost for relay server")
+  return
 elsif node['postfix']['multi_environment_relay']
   results = search(:node, query)
   relayhost = results.map { |n| n['ipaddress'] }.first
@@ -37,6 +36,6 @@ else
   relayhost = results.map { |n| n['ipaddress'] }.first
 end
 
-node.set['postfix']['main']['relayhost'] = "[#{relayhost}]"
+node.default['postfix']['main']['relayhost'] = relayhost
 
 include_recipe 'postfix'
