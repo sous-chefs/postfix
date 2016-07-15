@@ -7,7 +7,7 @@
 #               (yes)   (yes)   (yes)   (never) (100)
 # ==========================================================================
 smtp      inet  n       -       n       -       -       smtpd
-<% if @settings['submission'] -%>
+<% if node['postfix']['master']['submission'] -%>
 submission inet n       -       n       -       -       smtpd
   -o smtpd_enforce_tls=yes
   -o smtpd_sasl_auth_enable=yes
