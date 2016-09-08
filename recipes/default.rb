@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Author:: Joshua Timberman(<joshua@chef.io>)
 # Cookbook Name:: postfix
 # Recipe:: default

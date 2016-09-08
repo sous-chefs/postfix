@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright:: Copyright (c) 2012, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
