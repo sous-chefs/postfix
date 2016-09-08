@@ -2,6 +2,14 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
+## 4.0.0 (2016-09-07)
+
+- Update supported platforms in metadata
+- Remove node name from config file
+- Testing updates
+- Use node.normal vs. node.set to avoid deprecation warnings
+- Require Chef 12+
+
 ## v3.8.0 (2016-04-01)
 
 - Updated attributes to use  node.default_unless instead of node.default to be more wrapper friendly
