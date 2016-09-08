@@ -87,7 +87,7 @@ unless node['postfix']['sender_canonical_map_entries'].empty?
   end
 
   unless node['postfix']['main'].key?('sender_canonical_maps')
-    node.set['postfix']['main']['sender_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/sender_canonical"
+    node.normal['postfix']['main']['sender_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/sender_canonical"
   end
 end
 
@@ -106,7 +106,7 @@ unless node['postfix']['smtp_generic_map_entries'].empty?
   end
 
   unless node['postfix']['main'].key?('smtp_generic_maps')
-    node.set['postfix']['main']['smtp_generic_maps'] = "hash:#{node['postfix']['conf_dir']}/smtp_generic"
+    node.normal['postfix']['main']['smtp_generic_maps'] = "hash:#{node['postfix']['conf_dir']}/smtp_generic"
   end
 end
 
