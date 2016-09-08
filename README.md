@@ -20,7 +20,7 @@ Requirements
 May work on other platforms with or without modification.
 
 #### Chef
-- Chef 12+
+- Chef 12.1+
 
 #### Cookbooks
 - none
