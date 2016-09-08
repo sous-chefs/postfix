@@ -19,5 +19,7 @@ recipe 'postfix::server', 'Sets the mail_type attribute to master'
   supports os
 end
 
-source_url 'https://github.com/chef-cookbooks/postfix' if respond_to?(:issues_url)
-issues_url 'https://github.com/chef-cookbooks/postfix/issues' if respond_to?(:source_url)
+source_url 'https://github.com/chef-cookbooks/postfix'
+issues_url 'https://github.com/chef-cookbooks/postfix/issues'
+
+chef_version '>= 12.1'
