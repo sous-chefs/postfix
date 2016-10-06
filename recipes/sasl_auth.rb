@@ -63,7 +63,7 @@ template node['postfix']['sasl_password_file'] do
   notifies :run, 'execute[postmap-sasl_passwd]', :immediately
   notifies :restart, 'service[postfix]'
   variables(settings: node['postfix']['sasl'])
-end
+end if node['postfix']['main']['smtp_sasl_auth_enable'] == 'yes'
 
 template node['postfix']['sender_relayhost_file'] do
   sensitive true
