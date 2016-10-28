@@ -70,6 +70,7 @@ This change in namespace to `node['postfix']['main']` should allow for greater f
 * `node['postfix']['main']['smtp_use_tls']` - (yes/no); default yes.  See following conditional attributes.
   - `node['postfix']['main']['smtp_tls_CAfile']` - set to platform specific CA bundle
   - `node['postfix']['main']['smtp_tls_session_cache_database']` - set to `btree:${data_directory}/smtpd_scache`
+* `node['postfix']['main']['restrictions']` - default is nil, could be a hash with restrictions.
 * `node['postfix']['main']['smtp_sasl_auth_enable']` - (yes/no); default no.  If enabled, see following conditional attributes.
   - `node['postfix']['main']['smtp_sasl_password_maps']` - Set to `hash:/etc/postfix/sasl_passwd` template file
   - `node['postfix']['main']['smtp_sasl_security_options']` - Set to noanonymous
@@ -293,6 +294,26 @@ override_attributes(
       "chef.io" => "OK",
       ".chef.io" => "OK",
       "example.com" => "OK"
+    }
+  }
+)
+```
+
+The example roles below sets up some restrictions on helo:
+
+```ruby
+name "base"
+run_list("recipe[postfix]")
+override_attributes(
+  "postfix" => {
+    "main" => {
+      "restrictions" => {
+        "helo" => [
+          "permit_mynetworks",
+          "reject_non_fqdn_helo_hostname",
+          "reject_invalid_helo_hostname"
+        ]
+      }
     }
   }
 )
