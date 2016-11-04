@@ -6,5 +6,5 @@
 postmaster:    root
 
 <% node['postfix']['aliases'].each do |name, value| %>
-<%= name %>: <%= [value].flatten.map{|x| %Q("#{x}")}.join(', ') %>
+<%= name %>: <%= [value].flatten.map{|x| if (x.include?("@")) then x else %Q("#{x}") end}.join(', ') %>
 <% end unless node['postfix']['aliases'].nil? %>
