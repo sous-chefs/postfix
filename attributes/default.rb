@@ -118,6 +118,7 @@ end
 
 # Master.cf attributes
 default['postfix']['master']['submission'] = false
+default['postfix']['master']['amavis'] = false
 
 # OS Aliases
 default['postfix']['aliases'] = case node['platform']
