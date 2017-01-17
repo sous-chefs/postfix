@@ -135,7 +135,7 @@ default['postfix']['aliases'] = case node['platform']
                                     'manager' =>        'root',
                                     'dumper' =>         'root',
                                     'operator' =>       'root',
-                                    'abuse' =>          'postmaster'
+                                    'abuse' =>          'postmaster',
                                   }
                                 else
                                   {}
