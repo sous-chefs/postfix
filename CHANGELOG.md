@@ -2,6 +2,16 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
+## 5.0.0 (2017-01-17)
+
+- Manage any hash: tables for postfix with hash_maps recipe
+- Fully customizable master.cf file
+- Support for any kind of postfix lookup tables
+- Remove old minitest files
+- Update chef requirement in the readme
+- Update tests for new config comment blocks
+- fixing /etc/aliases syntax for full-mailaddresses
+
 ## 4.0.0 (2016-09-07)
 
 - Update supported platforms in metadata

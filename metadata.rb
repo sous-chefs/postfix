@@ -4,7 +4,7 @@ maintainer_email 'cookbooks@chef.io'
 license 'Apache 2.0'
 description 'Installs and configures postfix for client or outbound relayhost, or to do SASL auth'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '4.0.0'
+version '5.0.0'
 
 recipe 'postfix', 'Installs and configures postfix'
 recipe 'postfix::sasl_auth', 'Set up postfix to auth to a server with sasl'
