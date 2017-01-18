@@ -1,5 +1,4 @@
-postfix Cookbook
-================
+# postfix Cookbook
 
 [![Build Status](https://travis-ci.org/chef-cookbooks/postfix.svg?branch=master)](https://travis-ci.org/chef-cookbooks/postfix)
 [![Cookbook Version](https://img.shields.io/cookbook/v/postfix.svg)](https://supermarket.chef.io/cookbooks/postfix)
@@ -8,10 +7,10 @@ Installs and configures postfix for client or outbound relayhost, or to do SASL 
 
 On RHEL-family systems, sendmail will be replaced with postfix.
 
+## Requirements
 
-Requirements
-------------
-#### Platforms
+### Platforms
+
 - Ubuntu 12.04+
 - Debian 7.0+
 - RHEL/CentOS/Scientific 5.7+, 6.2+
@@ -19,15 +18,17 @@ Requirements
 
 May work on other platforms with or without modification.
 
-#### Chef
+### Chef
+
 - Chef 12.1+
 
-#### Cookbooks
+### Cookbooks
+
 - none
 
 
-Attributes
-----------
+## Attributes
+
 See `attributes/default.rb` for default values.
 
 ### Generic cookbook attributes
@@ -93,14 +94,16 @@ Example of json role config, for setup *_map_entries:
 * `node['postfix']['master']['submission'] - Whether to use submission (TCP 587) daemon. (true/false); default false
 
 
-Recipes
--------
+## Recipes
+
 ### default
+
 Installs the postfix package and manages the service and the main configuration files (`/etc/postfix/main.cf` and `/etc/postfix/master.cf`). See __Usage__ and __Examples__ to see how to affect behavior of this recipe through configuration. Depending on the `node['postfix']['use_alias_maps']`, `node['postfix']['use_transport_maps']`, `node['postfix']['use_access_maps']` and `node['postfix']['use_virtual_aliases']` attributes the default recipe can call additional recipes to manage additional postfix configuration files
 
 For a more dynamic approach to discovery for the relayhost, see the `client` and `server` recipes below.
 
 ### client
+
 Use this recipe to have nodes automatically search for the mail relay based which node has the `node['postfix']['relayhost_role']` role. Sets the `node['postfix']['main']['relayhost']` attribute to the first result from the search.
 
 Includes the default recipe to install, configure and start postfix.
@@ -108,31 +111,35 @@ Includes the default recipe to install, configure and start postfix.
 Does not work with `chef-solo`.
 
 ### sasl\_auth
+
 Sets up the system to authenticate with a remote mail relay using SASL authentication.
 
 ### server
+
 To use Chef Server search to automatically detect a node that is the relayhost, use this recipe in a role that will be relayhost. By default, the role should be "relayhost" but you can change the attribute `node['postfix']['relayhost_role']` to modify this.
 
 **Note** This recipe will set the `node['postfix']['mail_type']` to "master" with an override attribute.
 
 ### aliases
+
 Manage `/etc/aliases` with this recipe. Currently only Ubuntu 10.04 platform has a template for the aliases file. Add your aliases template to the `templates/default` or to the appropriate platform+version directory per the File Specificity rules for templates. Then specify a hash of aliases for the `node['postfix']['aliases']` attribute.
 
 Arrays are supported as alias values, since postfix supports comma separated values per alias, simply specify your alias as an array to use this handy feature.
 
-### aliases
-Manage `/etc/aliases` with this recipe.
-
 ### transports
+
 Manage `/etc/postfix/transport` with this recipe.
 
 ### access
+
 Manage `/etc/postfix/access` with this recipe.
 
 ### virtual_aliases
+
 Manage `/etc/postfix/virtual` with this recipe.
 
 ### relay_restrictions
+
 Manage `/etc/postfix/relay_restriction` with this recipe
 The postfix option smtpd_relay_restrictions in main.cf will point to this hash map db.  
 
@@ -140,8 +147,8 @@ The postfix option smtpd_relay_restrictions in main.cf will point to this hash m
 http://wiki.chef.io/display/chef/Templates#Templates-TemplateLocationSpecificity
 
 
-Usage
------
+## Usage
+
 On systems that should simply send mail directly to a relay, or out to the internet, use `recipe[postfix]` and modify the `node['postfix']['main']['relayhost']` attribute via a role.
 
 On systems that should be the MX for a domain, set the attributes accordingly and make sure the `node['postfix']['mail_type']` attribute is `master`. See __Examples__ for information on how to use `recipe[postfix::server]` to do this automatically.
@@ -152,6 +159,7 @@ For each of these implementations, see __Examples__ for role usage.
 
 
 ### Examples
+
 The example roles below only have the relevant postfix usage. You may have other contents depending on what you're configuring on your systems.
 
 The `base` role is applied to all nodes in the environment.
@@ -298,8 +306,7 @@ override_attributes(
 )
 ```
 
-License & Authors
------------------
+## License & Authors
 
 **Author:** Cookbook Engineering Team (<cookbooks@chef.io>)
 
