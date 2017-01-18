@@ -119,6 +119,38 @@ end
 # Master.cf attributes
 default['postfix']['master']['submission'] = false
 
+default['postfix']['master']['pipe'] = {
+    'maildrop' => {
+        :flags => 'DRhu',
+        :user  => 'vmail',
+        :argv  => '/usr/local/bin/maildrop -d ${recipient}',
+    },
+    'old-cyrus' => {
+        :flags => 'R',
+        :user  => 'cyrus',
+        :argv  => '/usr/lib/cyrus-imapd/deliver -e -m ${extension} ${user}',
+    },
+    'cyrus' => {
+        :user  => 'cyrus',
+        :argv  => '/usr/lib/cyrus-imapd/deliver -e -r ${sender} -m ${extension} ${user}',
+    },
+    'uucp' => {
+        :flags => 'Fqhu',
+        :user  => 'uucp',
+        :argv  => 'uux -r -n -z -a$sender - $nexthop!rmail ($recipient)',
+    },
+    'ifmail' => {
+        :flags => 'F',
+        :user  => 'ftn',
+        :argv  => '/usr/lib/ifmail/ifmail -r $nexthop ($recipient)',
+    },
+    'bsmtp' => {
+        :flags => 'Fq.',
+        :user  => 'foo',
+        :argv  => '/usr/local/sbin/bsmtp -f $sender $nexthop $recipient',
+    },
+}
+
 # OS Aliases
 default['postfix']['aliases'] = case node['platform']
                                 when 'freebsd'
