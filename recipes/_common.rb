@@ -109,6 +109,25 @@ unless node['postfix']['smtp_generic_map_entries'].empty?
   end
 end
 
+execute 'update-postfix-recipient_canonical' do
+  command "postmap #{node['postfix']['conf_dir']}/recipient_canonical"
+  action :nothing
+end
+
+unless node['postfix']['recipient_canonical_map_entries'].empty?
+  template "#{node['postfix']['conf_dir']}/recipient_canonical" do
+    owner 'root'
+    group node['root_group']
+    mode  '0644'
+    notifies :run, 'execute[update-postfix-recipient_canonical]'
+    notifies :reload, 'service[postfix]'
+  end
+
+  unless node['postfix']['main'].key?('recipient_canonical_maps')
+    node.set['postfix']['main']['recipient_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/recipient_canonical"
+  end
+end
+
 %w( main master ).each do |cfg|
   template "#{node['postfix']['conf_dir']}/#{cfg}.cf" do
     source "#{cfg}.cf.erb"
