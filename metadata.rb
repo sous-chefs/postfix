@@ -14,6 +14,7 @@ recipe 'postfix::access', 'Manages /etc/postfix/access'
 recipe 'postfix::virtual_aliases', 'Manages /etc/postfix/virtual'
 recipe 'postfix::client', 'Searches for the relayhost based on an attribute'
 recipe 'postfix::server', 'Sets the mail_type attribute to master'
+recipe 'postfix::maps', 'Manages any number of any type postfix lookup tables'
 
 %w(ubuntu debian redhat centos amazon oracle scientific smartos fedora).each do |os|
   supports os
