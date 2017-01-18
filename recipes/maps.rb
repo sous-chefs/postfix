@@ -19,11 +19,11 @@ node['postfix']['maps'].each do |type, maps|
     package "postfix-#{type}" if %w(pgsql mysql ldap cdb).include?(type)
   end
 
-  if %w(pgsql mysql ldap memcache sqlite).include?(type)
-    separator = ' = '
-  else
-    separator = ' '
-  end
+  separator = if %w(pgsql mysql ldap memcache sqlite).include?(type)
+                ' = '
+              else
+                ' '
+              end
   maps.each do |file, content|
     execute "update-postmap-#{file}" do
       command "postmap #{file}"
