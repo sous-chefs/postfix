@@ -5,9 +5,9 @@ require 'spec_helper'
 # attributes using default level without _attributes
 # recipe clearing them.
 
-describe 'wrapper::default' do
+describe 'test::default' do
   cached(:chef_run) do
-    ChefSpec::SoloRunner.new.converge(described_recipe)
+    ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 16.04).converge(described_recipe)
   end
 
   describe '_attributes recipes' do

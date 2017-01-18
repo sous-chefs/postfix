@@ -5,9 +5,9 @@ describe 'postfix::default' do
     stub_command('/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix').and_return(true)
   end
 
-  context 'on Centos 6.5' do
+  context 'on Centos 6' do
     let(:chef_run) do
-      ChefSpec::ServerRunner.new(platform: 'centos', version: 6.5).converge(described_recipe)
+      ChefSpec::ServerRunner.new(platform: 'centos', version: 6.7).converge(described_recipe)
     end
 
     it '[COOK-4423] renders file main.cf with /etc/pki/tls/cert.pem' do
@@ -33,9 +33,9 @@ describe 'postfix::default' do
     end
   end
 
-  context 'on Ubuntu 13.04' do
+  context 'on Ubuntu 16.04' do
     let(:chef_run) do
-      ChefSpec::ServerRunner.new(platform: 'ubuntu', version: 13.04).converge(described_recipe)
+      ChefSpec::ServerRunner.new(platform: 'ubuntu', version: 16.04).converge(described_recipe)
     end
 
     it '[COOK-4423] renders file main.cf with /etc/postfix/cacert.pem' do
