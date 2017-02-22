@@ -308,7 +308,7 @@ override_attributes(
     "mail_type" => "master",
     "main" => {
       "mynetworks" => [ "10.3.3.0/24", "127.0.0.0/8" ],
-      "inet-interfaces" => "all",
+      "inet_interfaces" => "all",
       "mydomain" => "example.com",
       "myorigin" => "example.com"
   }
