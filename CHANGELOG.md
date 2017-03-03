@@ -2,6 +2,12 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
+## 5.0.1 (2017-03-03)
+
+- Fix documentation error on inet-interfaces
+- Test with Local Delivery instead of Rake
+- Fix master.cf attributes types on README
+
 ## 5.0.0 (2017-01-17)
 
 - Manage any hash: tables for postfix with hash_maps recipe
