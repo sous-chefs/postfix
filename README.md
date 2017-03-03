@@ -145,16 +145,16 @@ The possible service hash fields and their meanings: hash key - have to be uniqu
 Field   | Mandatory | Description
 ------- | --------- | --------------------------------------------------------------------
 active  | Yes       | Boolean. Defines whether or not the service needs to be in master.cf
-comment | No        | If you would like to add a comment line before service line
-order   | Yes       | Number to define the order of lines in the file
-type    | Yes       | Type of the service (inet, unix, fifo)
+comment | No        | String. If you would like to add a comment line before service line
+order   | Yes       | Integer. Number to define the order of lines in the file
+type    | Yes       | String. Type of the service (inet, unix, fifo)
 private | No        | Boolean. If present replaced by `y` or `n`, otherwise by `-`
 unpriv  | No        | Boolean. If present replaced by `y` or `n`, otherwise by `-`
 chroot  | No        | Boolean. If present replaced by `y` or `n`, otherwise by `-`
 wakeup  | No        | String. If present value placed in file, otherwise replaced by `-`
 maxproc | No        | String. If present value placed in file, otherwise replaced by `-`
 command | Yes       | String. The command to be executed.
-args    | Yes       | String. Arguments passed to command.
+args    | Yes       | Array of Strings. Arguments passed to command.
 
 For more information about meaning of the fields consult `master (5)` manual: <http://www.postfix.org/master.5.html>
 
