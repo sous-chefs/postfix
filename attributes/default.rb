@@ -395,6 +395,6 @@ default['postfix']['aliases'] = case node['platform']
                                   {}
                                 end
 
-if node['postfix']['use_relay_restirictions_maps']
+if node['postfix']['use_relay_restrictions_maps']
   default['postfix']['main']['smtpd_relay_restrictions'] = "hash:#{node['postfix']['relay_restrictions_db']}, reject"
 end
