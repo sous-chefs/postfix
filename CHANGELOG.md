@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
+## 5.0.2 (2017-05-17)
+
+- Fix use_relay_restrictions_maps attribute misspelling in attributes file
+
 ## 5.0.1 (2017-03-03)
 
 - Fix documentation error on inet-interfaces
