@@ -90,6 +90,9 @@ suites:
 - name: server
   run_list:
   - recipe[postfix::server]
+  attributes:
+    postfix:
+      use_relay_restrictions_maps: "yes"
 
 - name: sasl_auth
   run_list:
