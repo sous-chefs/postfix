@@ -99,6 +99,8 @@ when 'smartos'
   default['postfix']['cafile'] = '/opt/local/etc/postfix/cacert.pem'
 when 'rhel'
   default['postfix']['cafile'] = '/etc/pki/tls/cert.pem'
+when 'amazon'
+  default['postfix']['cafile'] = '/etc/pki/tls/cert.pem'
 else
   default['postfix']['cafile'] = "#{node['postfix']['conf_dir']}/cacert.pem"
 end
