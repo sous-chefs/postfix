@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
+## 5.1.1 (2017-07-28)
+
+- Fix support for Amazon Linux on Chef 13
+- Expand testing to cover Debian 9 in Travis
+
 ## 5.1.0 (2017-07-28)
 
 - Add an option to allow recipient canonical maps
