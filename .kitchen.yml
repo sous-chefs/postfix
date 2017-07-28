@@ -47,3 +47,12 @@ suites:
       sasl:
         smtp_sasl_user_name: "kitchenuser"
         smtp_sasl_passwd: "not-a-real-thing"
+
+- name: canonical
+  run_list:
+  - recipe[postfix]
+  attributes:
+    postfix:
+      recipient_canonical_map_entries:
+        john: john@doe.com
+        
