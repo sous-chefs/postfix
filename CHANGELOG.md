@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
+## 5.1.0 (2017-07-28)
+
+- Add an option to allow recipient canonical maps
+
 ## 5.0.3 (2017-06-26)
 
 - Correct attribute line for use_relay_restrictions_maps to prevent converge failures
