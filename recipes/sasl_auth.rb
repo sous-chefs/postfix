@@ -33,6 +33,8 @@ when 'rhel'
               else
                 %w(cyrus-sasl cyrus-sasl-plain ca-certificates)
               end
+when 'amazon'
+  sasl_pkgs = %w(cyrus-sasl cyrus-sasl-plain ca-certificates)
 when 'fedora'
   sasl_pkgs = %w(cyrus-sasl cyrus-sasl-plain ca-certificates)
 end

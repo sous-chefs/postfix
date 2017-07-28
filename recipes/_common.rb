@@ -24,7 +24,7 @@ package 'postfix'
 package 'procmail' if node['postfix']['use_procmail']
 
 case node['platform_family']
-when 'rhel', 'fedora'
+when 'rhel', 'fedora', 'amazon'
   service 'sendmail' do
     action :nothing
   end
