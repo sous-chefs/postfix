@@ -135,7 +135,9 @@ end
     group node['root_group']
     mode '0644'
     notifies :restart, 'service[postfix]'
-    variables(settings: node['postfix'][cfg])
+    variables(
+      lazy { { settings: node['postfix'][cfg] } }
+    )
     cookbook node['postfix']["#{cfg}_template_source"]
   end
 end
