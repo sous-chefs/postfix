@@ -4,7 +4,7 @@ maintainer_email 'cookbooks@chef.io'
 license 'Apache-2.0'
 description 'Installs and configures postfix for client or outbound relayhost, or to do SASL auth'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '5.2.0'
+version '5.2.1'
 
 recipe 'postfix', 'Installs and configures postfix'
 recipe 'postfix::sasl_auth', 'Set up postfix to auth to a server with sasl'
@@ -16,7 +16,7 @@ recipe 'postfix::client', 'Searches for the relayhost based on an attribute'
 recipe 'postfix::server', 'Sets the mail_type attribute to master'
 recipe 'postfix::maps', 'Manages any number of any type postfix lookup tables'
 
-%w(ubuntu debian redhat centos amazon oracle scientific smartos fedora).each do |os|
+%w(ubuntu debian redhat centos amazon oracle scientific smartos fedora freebsd).each do |os|
   supports os
 end
 
