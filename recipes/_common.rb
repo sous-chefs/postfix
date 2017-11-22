@@ -67,7 +67,7 @@ when 'omnios'
   execute 'load postfix manifest' do
     action :nothing
     command "svccfg import #{manifest_path}"
-    notifies :restart, 'service[postfix]'
+    notifies :restart, 'service[postfix]' unless platform_family?('solaris2')
   end
 when 'freebsd'
   # Actions are based on docs provided by FreeBSD:
@@ -80,7 +80,7 @@ when 'freebsd'
     source 'mailer.erb'
     owner 'root'
     group 0
-    notifies :restart, 'service[postfix]'
+    notifies :restart, 'service[postfix]' unless platform_family?('solaris2')
   end
 
   execute 'switch_mailer_to_postfix' do
@@ -175,7 +175,10 @@ end
     owner 'root'
     group node['root_group']
     mode '0644'
-    notifies :restart, 'service[postfix]'
+    # restart service for solaris on chef-client has a bug
+    # unless condition can be removed after
+    # https://github.com/chef/chef/pull/6596 merge/release
+    notifies :restart, 'service[postfix]' unless platform_family?('solaris2')
     variables(
       lazy { { settings: node['postfix'][cfg] } }
     )
@@ -185,5 +188,5 @@ end
 
 service 'postfix' do
   supports status: true, restart: true, reload: true
-  action :enable
+  action [:enable, :start]
 end
