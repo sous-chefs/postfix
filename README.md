@@ -34,6 +34,7 @@ See `attributes/default.rb` for default values.
 
 - `node['postfix']['mail_type']` - Sets the kind of mail configuration. `master` will set up a server (relayhost).
 - `node['postfix']['relayhost_role']` - name of a role used for search in the client recipe.
+- `node['postfix']['relayhost_port']` - listening network port of the relayhost.
 - `node['postfix']['multi_environment_relay']` - set to true if nodes should not constrain search for the relayhost in their own environment.
 - `node['postfix']['use_procmail']` - set to true if nodes should use procmail as the delivery agent.
 - `node['postfix']['use_alias_maps']` - set to true if you want the cookbook to use/configure alias maps
