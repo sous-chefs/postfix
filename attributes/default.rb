@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+default['postfix']['packages'] = %w[postfix]
+
 # Generic cookbook attributes
 default['postfix']['mail_type'] = 'client'
 default['postfix']['relayhost_role'] = 'relayhost'
