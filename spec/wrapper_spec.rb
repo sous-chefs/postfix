@@ -14,8 +14,8 @@ describe 'test::default' do
     it 'keeps wrapper cookbook default set attributes' do
       expect(chef_run.node['postfix']['main']['relayhost']).to eq('please')
       expect(chef_run.node['postfix']['main']['smtp_sasl_security_options']).to eq('keep')
-      expect(chef_run.node['postfix']['sasl']['smtp_sasl_user_name']).to eq('us')
-      expect(chef_run.node['postfix']['sasl']['smtp_sasl_passwd']).to eq('happy')
+      expect(chef_run.node['postfix']['sasl']['please']['username']).to eq('us')
+      expect(chef_run.node['postfix']['sasl']['please']['password']).to eq('happy')
     end
   end
 end
