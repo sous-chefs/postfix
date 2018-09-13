@@ -49,6 +49,13 @@ execute 'postmap-sasl_passwd' do
   action :nothing
 end
 
+sasl_auth_data = node['postfix']['sasl']
+if node['postfix'].key?('sasl_use_encrypted_bag') && node['postfix']['sasl_use_encrypted_bag']
+  t = data_bag_item(node['postfix']['sasl_encrypted_data_bag_name'], node['postfix']['sasl_encrypted_data_bag_element'])
+  sasl_auth_data = t.to_hash
+  sasl_auth_data.delete('id')
+end
+
 template node['postfix']['sasl_password_file'] do
   sensitive true
   source 'sasl_passwd.erb'
@@ -57,5 +64,5 @@ template node['postfix']['sasl_password_file'] do
   mode '400'
   notifies :run, 'execute[postmap-sasl_passwd]', :immediately
   notifies :restart, 'service[postfix]'
-  variables(settings: node['postfix']['sasl'])
+  variables(settings: sasl_auth_data)
 end

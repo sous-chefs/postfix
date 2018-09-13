@@ -48,6 +48,9 @@ See `attributes/default.rb` for default values.
 - `node['postfix']['virtual_aliases']` - hash of virtual_aliases to create with `recipe[postfix::virtual_aliases]`, see below under __Recipes__ for more information.
 - `node['postfix']['main_template_source']` - Cookbook source for main.cf template. Default 'postfix'
 - `node['postfix']['master_template_source']` - Cookbook source for master.cf template. Default 'postfix'
+- `node['postfix']['sasl_use_encrypted_bag']` - use encrypted databags for sasl passwords. Default false
+- `node['postfix']['sasl_encrypted_data_bag_name']` - bag to search in for sasl passwords. Default 'passwords'
+- `node['postfix']['sasl_encrypted_data_bag_element']` - bag element to use for sasl passwords. Should container a structure identical to `node['postfix']['sasl']`. Default 'postfix'
 
 ### main.cf and sasl_passwd template attributes
 
@@ -343,9 +346,9 @@ override_attributes(
       "smtp_sasl_auth_enable" => "yes"
     },
     "sasl" => {
-      "relayhost1" => {
-        "username" => "your_password",
-        "password" => "your_username"
+      "smtp.comcast.net" => {
+        "username" => "your_username",
+        "password" => "your_password"
       },
       "relayhost2" => {
         ...
@@ -356,9 +359,34 @@ override_attributes(
 )
 ```
 
-For an example of using encrypted data bags to encrypt the SASL password, see the following blog post:
+To use sasl passwords stored in an encrypted databag, do something like:
 
-- <http://jtimberman.github.com/blog/2011/08/06/encrypted-data-bag-for-postfix-sasl-authentication/>
+In your config, set sasl\_use\_encrypted\_bag:
+
+```
+  "override_attributes": {
+    "postfix": {
+      "sasl_use_encrypted_bag": true,
+    }
+  }
+```
+
+Optionally, you can defined the bag to use with sasl\_encrypted\_data\_bag\_name and the attribute which stores the data bag item with sasl\_encrypted\_data\_bag\_element.
+
+```
+$ openssl rand -base64 512 > .chef/encrypted_data_bag_secret
+$ cat passwords.json
+{
+  "id": "postfix",
+  "smtp.comcast.net": {
+    "username": "your_username",
+    "password": "your_password"
+  }
+}
+$ knife data bag from file passwords passwords.json --secret-file .chef/encrypted_data_bag_secret
+```
+
+Make sure .chef/encrypted\_data\_bag\_secret is stored on the node in /etc/chef/encrypted\_data\_bag\_secret before running chef\_client.
 
 #### Examples using the client & server recipes
 
