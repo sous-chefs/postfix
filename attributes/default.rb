@@ -383,24 +383,22 @@ default['postfix']['master']['bsmtp']['args'] = ['flags=Fq. user=foo argv=/usr/l
 default['postfix']['aliases'] = case node['platform']
                                 when 'freebsd'
                                   {
-                                    'MAILER-DAEMON' =>  'postmaster',
-                                    'bin' =>            'root',
-                                    'daemon' =>         'root',
-                                    'named' =>          'root',
-                                    'nobody' =>         'root',
-                                    'uucp' =>           'root',
-                                    'www' =>            'root',
-                                    'ftp-bugs' =>       'root',
-                                    'postfix' =>        'root',
-                                    'manager' =>        'root',
-                                    'dumper' =>         'root',
-                                    'operator' =>       'root',
-                                    'abuse' =>          'postmaster',
+                                    'MAILER-DAEMON' => 'postmaster',
+                                    'bin' => 'root',
+                                    'daemon' => 'root',
+                                    'named' => 'root',
+                                    'nobody' => 'root',
+                                    'uucp' => 'root',
+                                    'www' => 'root',
+                                    'ftp-bugs' => 'root',
+                                    'postfix' => 'root',
+                                    'manager' => 'root',
+                                    'dumper' => 'root',
+                                    'operator' => 'root',
+                                    'abuse' => 'postmaster',
                                   }
                                 else
                                   {}
                                 end
 
-if node['postfix']['use_relay_restrictions_maps']
-  default['postfix']['main']['smtpd_relay_restrictions'] = "hash:#{node['postfix']['relay_restrictions_db']}, reject"
-end
+default['postfix']['main']['smtpd_relay_restrictions'] = "hash:#{node['postfix']['relay_restrictions_db']}, reject" if node['postfix']['use_relay_restrictions_maps']

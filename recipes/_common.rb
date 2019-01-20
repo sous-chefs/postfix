@@ -126,9 +126,7 @@ unless node['postfix']['sender_canonical_map_entries'].empty?
     notifies :reload, 'service[postfix]'
   end
 
-  unless node['postfix']['main'].key?('sender_canonical_maps')
-    node.normal['postfix']['main']['sender_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/sender_canonical"
-  end
+  node.normal['postfix']['main']['sender_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/sender_canonical" unless node['postfix']['main'].key?('sender_canonical_maps')
 end
 
 execute 'update-postfix-smtp_generic' do
@@ -145,9 +143,7 @@ unless node['postfix']['smtp_generic_map_entries'].empty?
     notifies :reload, 'service[postfix]'
   end
 
-  unless node['postfix']['main'].key?('smtp_generic_maps')
-    node.normal['postfix']['main']['smtp_generic_maps'] = "hash:#{node['postfix']['conf_dir']}/smtp_generic"
-  end
+  node.normal['postfix']['main']['smtp_generic_maps'] = "hash:#{node['postfix']['conf_dir']}/smtp_generic" unless node['postfix']['main'].key?('smtp_generic_maps')
 end
 
 execute 'update-postfix-recipient_canonical' do
@@ -164,9 +160,7 @@ unless node['postfix']['recipient_canonical_map_entries'].empty?
     notifies :reload, 'service[postfix]'
   end
 
-  unless node['postfix']['main'].key?('recipient_canonical_maps')
-    node.normal['postfix']['main']['recipient_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/recipient_canonical"
-  end
+  node.normal['postfix']['main']['recipient_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/recipient_canonical" unless node['postfix']['main'].key?('recipient_canonical_maps')
 end
 
 %w( main master ).each do |cfg|

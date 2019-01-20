@@ -13,9 +13,7 @@
 # limitations under the License.
 #
 
-if node['postfix']['use_procmail']
-  node.default_unless['postfix']['main']['mailbox_command'] = '/usr/bin/procmail -a "$EXTENSION"'
-end
+node.default_unless['postfix']['main']['mailbox_command'] = '/usr/bin/procmail -a "$EXTENSION"' if node['postfix']['use_procmail']
 
 if node['postfix']['main']['smtpd_use_tls'] == 'yes'
   node.default_unless['postfix']['main']['smtpd_tls_cert_file'] = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
@@ -38,34 +36,18 @@ if node['postfix']['main']['smtp_sasl_auth_enable'] == 'yes'
   node.default_unless['postfix']['main']['relayhost'] = ''
 end
 
-if node['postfix']['use_alias_maps']
-  node.default_unless['postfix']['main']['alias_maps'] = ["hash:#{node['postfix']['aliases_db']}"]
-end
+node.default_unless['postfix']['main']['alias_maps'] = ["hash:#{node['postfix']['aliases_db']}"] if node['postfix']['use_alias_maps']
 
-if node['postfix']['use_transport_maps']
-  node.default_unless['postfix']['main']['transport_maps'] = ["hash:#{node['postfix']['transport_db']}"]
-end
+node.default_unless['postfix']['main']['transport_maps'] = ["hash:#{node['postfix']['transport_db']}"] if node['postfix']['use_transport_maps']
 
-if node['postfix']['use_access_maps']
-  node.default_unless['postfix']['main']['access_maps'] = ["hash:#{node['postfix']['access_db']}"]
-end
+node.default_unless['postfix']['main']['access_maps'] = ["hash:#{node['postfix']['access_db']}"] if node['postfix']['use_access_maps']
 
-if node['postfix']['use_virtual_aliases']
-  node.default_unless['postfix']['main']['virtual_alias_maps'] = ["#{node['postfix']['virtual_alias_db_type']}:#{node['postfix']['virtual_alias_db']}"]
-end
+node.default_unless['postfix']['main']['virtual_alias_maps'] = ["#{node['postfix']['virtual_alias_db_type']}:#{node['postfix']['virtual_alias_db']}"] if node['postfix']['use_virtual_aliases']
 
-if node['postfix']['use_virtual_aliases_domains']
-  node.default_unless['postfix']['main']['virtual_alias_domains'] = ["#{node['postfix']['virtual_alias_domains_db_type']}:#{node['postfix']['virtual_alias_domains_db']}"]
-end
+node.default_unless['postfix']['main']['virtual_alias_domains'] = ["#{node['postfix']['virtual_alias_domains_db_type']}:#{node['postfix']['virtual_alias_domains_db']}"] if node['postfix']['use_virtual_aliases_domains']
 
-if node['postfix']['use_relay_restrictions_maps']
-  node.default_unless['postfix']['main']['smtpd_relay_restrictions'] = "hash:#{node['postfix']['relay_restrictions_db']}, reject"
-end
+node.default_unless['postfix']['main']['smtpd_relay_restrictions'] = "hash:#{node['postfix']['relay_restrictions_db']}, reject" if node['postfix']['use_relay_restrictions_maps']
 
-if node['postfix']['master']['maildrop']['active']
-  node.default_unless['postfix']['main']['maildrop_destination_recipient_limit'] = 1
-end
+node.default_unless['postfix']['main']['maildrop_destination_recipient_limit'] = 1 if node['postfix']['master']['maildrop']['active']
 
-if node['postfix']['master']['cyrus']['active']
-  node.default_unless['postfix']['main']['cyrus_destination_recipient_limit'] = 1
-end
+node.default_unless['postfix']['main']['cyrus_destination_recipient_limit'] = 1 if node['postfix']['master']['cyrus']['active']
