@@ -21,17 +21,17 @@ env:
     #  - INSTANCE=default-amazonlinux # package install times out
   - INSTANCE=default-centos-6
   - INSTANCE=default-centos-7
-  - INSTANCE=default-debian-8
   - INSTANCE=default-debian-9
-  - INSTANCE=default-ubuntu-1404
+  - INSTANCE=default-debian-10
   - INSTANCE=default-ubuntu-1604
+  - INSTANCE=default-ubuntu-1804
     #- INSTANCE=canonical-amazonlinux
   - INSTANCE=canonical-centos-6
   - INSTANCE=canonical-centos-7
-  - INSTANCE=canonical-debian-8
   - INSTANCE=canonical-debian-9
-  - INSTANCE=canonical-ubuntu-1404
+  - INSTANCE=canonical-debian-10
   - INSTANCE=canonical-ubuntu-1604
+  - INSTANCE=canonical-ubuntu-1804
 
 before_script:
   - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
@@ -44,4 +44,6 @@ matrix:
   include:
     - script:
       - delivery local all
-    
+      env:
+        - UNIT_AND_LINT=1
+        - CHEF_LICENSE=accept
