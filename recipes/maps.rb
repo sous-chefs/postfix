@@ -15,7 +15,7 @@
 #
 
 node['postfix']['maps'].each do |type, maps|
-  if node['platform_family'] == 'debian'
+  if platform_family?('debian')
     package "postfix-#{type}" if %w(pgsql mysql ldap cdb).include?(type)
   end
 

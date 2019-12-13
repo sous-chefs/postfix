@@ -22,7 +22,7 @@ default['postfix']['relayhost_role'] = 'relayhost'
 default['postfix']['relayhost_port'] = '25'
 default['postfix']['multi_environment_relay'] = false
 default['postfix']['use_procmail'] = false
-default['postfix']['use_alias_maps'] = (node['platform'] == 'freebsd')
+default['postfix']['use_alias_maps'] = platform?('freebsd')
 default['postfix']['use_transport_maps'] = false
 default['postfix']['use_access_maps'] = false
 default['postfix']['use_virtual_aliases'] = false
@@ -380,8 +380,7 @@ default['postfix']['master']['bsmtp']['command'] = 'pipe'
 default['postfix']['master']['bsmtp']['args'] = ['flags=Fq. user=foo argv=/usr/local/sbin/bsmtp -f $sender $nexthop $recipient']
 
 # OS Aliases
-default['postfix']['aliases'] = case node['platform']
-                                when 'freebsd'
+default['postfix']['aliases'] = if platform?('freebsd')
                                   {
                                     'MAILER-DAEMON' => 'postmaster',
                                     'bin' => 'root',
