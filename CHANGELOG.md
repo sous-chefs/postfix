@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
+## 5.3.2 (2020-04-27)
+
+- Disabled SSLv3 by default
+
 ## 5.3.1 (2018-07-24)
 
 - Fixed sbin issue with Chef13
