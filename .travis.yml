@@ -18,14 +18,12 @@ services: docker
 
 env:
   matrix:
-    #  - INSTANCE=default-amazonlinux # package install times out
   - INSTANCE=default-centos-6
   - INSTANCE=default-centos-7
   - INSTANCE=default-debian-9
   - INSTANCE=default-debian-10
   - INSTANCE=default-ubuntu-1604
   - INSTANCE=default-ubuntu-1804
-    #- INSTANCE=canonical-amazonlinux
   - INSTANCE=canonical-centos-6
   - INSTANCE=canonical-centos-7
   - INSTANCE=canonical-debian-9
@@ -39,11 +37,3 @@ before_script:
   - chef --version
 
 script: KITCHEN_LOCAL_YAML=kitchen.dokken.yml kitchen verify ${INSTANCE}
-
-matrix:
-  include:
-    - script:
-      - delivery local all
-      env:
-        - UNIT_AND_LINT=1
-        - CHEF_LICENSE=accept
