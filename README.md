@@ -449,7 +449,6 @@ This cookbook is maintained by Chef's Community Cookbook Engineering team. Our g
 
 ## License
 
-
 **Copyright:** 2009-2017, Chef Software, Inc.
 
 ```
