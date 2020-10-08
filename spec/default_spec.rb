@@ -7,7 +7,7 @@ describe 'postfix::default' do
 
   context 'on Centos 6' do
     cached(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.9).converge(described_recipe)
+      ChefSpec::SoloRunner.new(platform: 'centos', version: '6').converge(described_recipe)
     end
 
     it '[COOK-4423] renders file main.cf with /etc/pki/tls/cert.pem' do
