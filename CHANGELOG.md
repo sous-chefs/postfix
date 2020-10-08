@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Standardise files with files in sous-chefs/repo-management
 
+### Fixed
+
+- Cookstyle fixes
+
 ## 5.3.1 (2018-07-24)
 
 - Fixed sbin issue with Chef13
