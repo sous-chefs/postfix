@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Yamllint fixes
 - MDL fixes
 
+### Removed
+
+- Remove EL 6 testing
+
 ## 5.3.1 (2018-07-24)
 
 - Fixed sbin issue with Chef13
