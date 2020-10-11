@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Sous Chefs Adoption
 - Update to use Sous Chefs GH workflow
+- Update README to sous-chefs
 
 ### Added
 
