@@ -5,9 +5,9 @@ describe 'postfix::default' do
     stub_command('/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix').and_return(true)
   end
 
-  context 'on Centos 6' do
+  context 'on Centos 8' do
     cached(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.9).converge(described_recipe)
+      ChefSpec::SoloRunner.new(platform: 'centos', version: '8').converge(described_recipe)
     end
 
     it '[COOK-4423] renders file main.cf with /etc/pki/tls/cert.pem' do

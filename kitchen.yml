@@ -1,92 +1,88 @@
+---
 driver:
   name: vagrant
 
 provisioner:
   name: chef_zero
+  product_name: chef
+  enforce_idempotency: true
+  multiple_converge: 2
   deprecations_as_errors: true
-  chef_license: accept-no-persist
 
 verifier:
   name: inspec
 
 platforms:
-  - name: amazonlinux
-    driver_config:
-      box: mvbcoding/awslinux
   - name: amazonlinux-2
-  - name: centos-6
   - name: centos-7
   - name: centos-8
   - name: debian-9
-    run_list: apt::default
   - name: debian-10
-    run_list: apt::default
   - name: fedora-latest
   - name: opensuse-leap-15
   - name: ubuntu-16.04
-    run_list: apt::default
   - name: ubuntu-18.04
-    run_list: apt::default
+  - name: ubuntu-20.04
 
 suites:
-- name: default
-  run_list:
-  - recipe[postfix]
+  - name: default
+    run_list:
+      - recipe[postfix]
 
-- name: aliases
-  run_list:
-  - recipe[postfix::aliases]
+  - name: aliases
+    run_list:
+      - recipe[postfix::aliases]
 
-- name: client
-  run_list:
-  - recipe[postfix::client]
+  - name: client
+    run_list:
+      - recipe[postfix::client]
 
-- name: server
-  run_list:
-  - recipe[postfix::server]
+  - name: server
+    run_list:
+      - recipe[postfix::server]
 
-- name: canonical
-  run_list:
-  - recipe[postfix]
-  attributes:
-    postfix:
-      recipient_canonical_map_entries:
-        john: john@doe.com
+  - name: canonical
+    run_list:
+      - recipe[postfix]
+    attributes:
+      postfix:
+        recipient_canonical_map_entries:
+          john: john@doe.com
 
-- name: sasl_auth_none
-  run_list:
-  - recipe[postfix::sasl_auth]
-  attributes:
-    postfix:
-      main:
-        relayhost: "localhost"
-        smtp_sasl_auth_enable: "yes"
+  - name: sasl_auth_none
+    run_list:
+      - recipe[postfix::sasl_auth]
+    attributes:
+      postfix:
+        main:
+          relayhost: "localhost"
+          smtp_sasl_auth_enable: "yes"
 
-- name: sasl_auth_multiple
-  run_list:
-  - recipe[postfix::sasl_auth]
-  attributes:
-    postfix:
-      main:
-        relayhost: "localhost"
-        smtp_sasl_auth_enable: "yes"
-      sasl:
-        relayhost1:
-          username: "kitchenuser"
-          password: "not-a-real-thing"
-        relayhost2:
-          username: "anotherkitchenuser"
-          password: "yet-not-a-real-thing"
+  - name: sasl_auth_multiple
+    run_list:
+      - recipe[postfix::sasl_auth]
+    attributes:
+      postfix:
+        main:
+          relayhost: "localhost"
+          smtp_sasl_auth_enable: "yes"
+        sasl:
+          relayhost1:
+            username: "kitchenuser"
+            password: "not-a-real-thing"
+          relayhost2:
+            username: "anotherkitchenuser"
+            password: "yet-not-a-real-thing"
 
-- name: sasl_auth_one
-  run_list:
-  - recipe[postfix::sasl_auth]
-  attributes:
-    postfix:
-      main:
-        relayhost: "localhost"
-        smtp_sasl_auth_enable: "yes"
-      sasl:
-        relayhost:
-          username: "kitchenuser"
-          password: "not-a-real-thing"
+  - name: sasl_auth_one
+    run_list:
+      - recipe[postfix::sasl_auth]
+    attributes:
+      postfix:
+        main:
+          relayhost: "localhost"
+          smtp_sasl_auth_enable: "yes"
+        sasl:
+          relayhost:
+            username: "kitchenuser"
+            password: "not-a-real-thing"

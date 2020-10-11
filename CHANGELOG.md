@@ -2,6 +2,37 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## Unreleased
+
+### Changed
+
+- Sous Chefs Adoption
+- Update to use Sous Chefs GH workflow
+- Update README to sous-chefs
+- Update metadata.rb to Sous Chefs
+- Update test-kitchen to Sous Chefs
+
+### Added
+
+- Standardise files with files in sous-chefs/repo-management
+- Add Ubuntu 20.04 testing
+
+### Fixed
+
+- Cookstyle fixes
+- ChefSpec fixes
+- Yamllint fixes
+- MDL fixes
+- Fix OpenSUSE installation issues
+
+### Removed
+
+- Remove EL 6 testing
+- Remove Amazon Linux 1 testing
+
 ## 5.3.1 (2018-07-24)
 
 - Fixed sbin issue with Chef13
