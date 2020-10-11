@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Standardise files with files in sous-chefs/repo-management
+- Add Ubuntu 20.04 testing
 
 ### Fixed
 
