@@ -42,6 +42,8 @@ when 'rhel', 'fedora', 'amazon'
     notifies :start, 'service[postfix]'
     not_if '/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix'
   end
+when 'suse'
+  file '/var/adm/postfix.configured'
 when 'omnios'
   manifest_path = ::File.join(Chef::Config[:file_cache_path], 'manifest-postfix.xml')
 
