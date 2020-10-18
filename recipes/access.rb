@@ -23,5 +23,5 @@ end
 
 template node['postfix']['access_db'] do
   source 'access.erb'
-  notifies :run, 'execute[update-postfix-access]'
+  notifies :run, 'execute[update-postfix-access]', :immediately
 end

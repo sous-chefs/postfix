@@ -25,5 +25,5 @@ end
 
 template node['postfix']['aliases_db'] do
   source 'aliases.erb'
-  notifies :run, 'execute[update-postfix-aliases]'
+  notifies :run, 'execute[update-postfix-aliases]', :immediately
 end
