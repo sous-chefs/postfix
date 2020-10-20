@@ -43,6 +43,7 @@ suites:
 
   - name: canonical
     run_list:
+      - recipe[test::net_setup]
       - recipe[postfix]
     attributes:
       postfix:

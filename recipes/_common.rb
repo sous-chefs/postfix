@@ -131,7 +131,7 @@ unless node['postfix']['sender_canonical_map_entries'].empty?
     owner 'root'
     group node['root_group']
     mode '0644'
-    notifies :run, 'execute[update-postfix-sender_canonical]'
+    notifies :run, 'execute[update-postfix-sender_canonical]', :immediately
     notifies :reload, 'service[postfix]'
   end
 
@@ -148,7 +148,7 @@ unless node['postfix']['smtp_generic_map_entries'].empty?
     owner 'root'
     group node['root_group']
     mode '0644'
-    notifies :run, 'execute[update-postfix-smtp_generic]'
+    notifies :run, 'execute[update-postfix-smtp_generic]', :immediately
     notifies :reload, 'service[postfix]'
   end
 
@@ -165,7 +165,7 @@ unless node['postfix']['recipient_canonical_map_entries'].empty?
     owner 'root'
     group node['root_group']
     mode '0644'
-    notifies :run, 'execute[update-postfix-recipient_canonical]'
+    notifies :run, 'execute[update-postfix-recipient_canonical]', :immediately
     notifies :reload, 'service[postfix]'
   end
 
