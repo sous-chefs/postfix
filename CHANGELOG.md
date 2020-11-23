@@ -6,6 +6,38 @@ This file is used to list changes made in each version of the postfix cookbook.
 
 - Disabled SSLv3 by default
 
+## 5.4.1 - 2020-10-20
+
+- Ensure all postmap files are rebuilt immediately if needed
+
+## 5.4.0 - 2020-10-11
+
+### Changed
+
+- Sous Chefs Adoption
+- Update to use Sous Chefs GH workflow
+- Update README to sous-chefs
+- Update metadata.rb to Sous Chefs
+- Update test-kitchen to Sous Chefs
+
+### Added
+
+- Standardise files with files in sous-chefs/repo-management
+- Add Ubuntu 20.04 testing
+
+### Fixed
+
+- Cookstyle fixes
+- ChefSpec fixes
+- Yamllint fixes
+- MDL fixes
+- Fix OpenSUSE installation issues
+
+### Removed
+
+- Remove EL 6 testing
+- Remove Amazon Linux 1 testing
+
 ## 5.3.1 (2018-07-24)
 
 - Fixed sbin issue with Chef13

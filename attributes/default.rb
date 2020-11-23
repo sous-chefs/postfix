@@ -109,6 +109,9 @@ when 'rhel'
   default['postfix']['cafile'] = '/etc/pki/tls/cert.pem'
 when 'amazon'
   default['postfix']['cafile'] = '/etc/pki/tls/cert.pem'
+when 'suse'
+  default['postfix']['main']['setgid_group'] = 'maildrop'
+  default['postfix']['main']['daemon_directory'] = '/usr/lib/postfix/bin'
 else
   default['postfix']['cafile'] = "#{node['postfix']['conf_dir']}/cacert.pem"
 end

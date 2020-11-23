@@ -1,14 +1,20 @@
-name 'postfix'
-maintainer 'Chef Software, Inc.'
-maintainer_email 'cookbooks@chef.io'
-license 'Apache-2.0'
-description 'Installs and configures postfix for client or outbound relayhost, or to do SASL auth'
-version '5.3.1'
+name              'postfix'
+maintainer        'Sous Chefs'
+maintainer_email  'help@sous-chefs.org'
+license           'Apache-2.0'
+description       'Installs and configures postfix for client or outbound relayhost, or to do SASL auth'
+version           '5.4.1'
+source_url        'https://github.com/sous-chefs/postfix'
+issues_url        'https://github.com/sous-chefs/postfix/issues'
+chef_version      '>= 12.15'
 
-%w(ubuntu debian redhat centos amazon oracle scientific smartos fedora freebsd).each do |os|
-  supports os
-end
-
-source_url 'https://github.com/chef-cookbooks/postfix'
-issues_url 'https://github.com/chef-cookbooks/postfix/issues'
-chef_version '>= 12.15'
+supports 'amazon'
+supports 'centos'
+supports 'debian'
+supports 'fedora'
+supports 'freebsd'
+supports 'oracle'
+supports 'redhat'
+supports 'scientific'
+supports 'smartos'
+supports 'ubuntu'

@@ -2,7 +2,7 @@
 # Cookbook:: common
 # Recipe:: default
 #
-# Copyright:: 2009-2019, Chef Software, Inc.
+# Copyright:: 2009-2020, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +19,14 @@
 
 include_recipe 'postfix::_attributes'
 
-package node['postfix']['packages']
+# use multi-package when we can
+if node['os'] == 'linux'
+  package node['postfix']['packages']
+else
+  node['postfix']['packages'].each do |pkg|
+    package pkg
+  end
+end
 
 package 'procmail' if node['postfix']['use_procmail']
 
@@ -35,6 +42,8 @@ when 'rhel', 'fedora', 'amazon'
     notifies :start, 'service[postfix]'
     not_if '/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix'
   end
+when 'suse'
+  file '/var/adm/postfix.configured'
 when 'omnios'
   manifest_path = ::File.join(Chef::Config[:file_cache_path], 'manifest-postfix.xml')
 
@@ -122,11 +131,11 @@ unless node['postfix']['sender_canonical_map_entries'].empty?
     owner 'root'
     group node['root_group']
     mode '0644'
-    notifies :run, 'execute[update-postfix-sender_canonical]'
+    notifies :run, 'execute[update-postfix-sender_canonical]', :immediately
     notifies :reload, 'service[postfix]'
   end
 
-  node.normal['postfix']['main']['sender_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/sender_canonical" unless node['postfix']['main'].key?('sender_canonical_maps')
+  node.default['postfix']['main']['sender_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/sender_canonical" unless node['postfix']['main'].key?('sender_canonical_maps')
 end
 
 execute 'update-postfix-smtp_generic' do
@@ -139,11 +148,11 @@ unless node['postfix']['smtp_generic_map_entries'].empty?
     owner 'root'
     group node['root_group']
     mode '0644'
-    notifies :run, 'execute[update-postfix-smtp_generic]'
+    notifies :run, 'execute[update-postfix-smtp_generic]', :immediately
     notifies :reload, 'service[postfix]'
   end
 
-  node.normal['postfix']['main']['smtp_generic_maps'] = "hash:#{node['postfix']['conf_dir']}/smtp_generic" unless node['postfix']['main'].key?('smtp_generic_maps')
+  node.default['postfix']['main']['smtp_generic_maps'] = "hash:#{node['postfix']['conf_dir']}/smtp_generic" unless node['postfix']['main'].key?('smtp_generic_maps')
 end
 
 execute 'update-postfix-recipient_canonical' do
@@ -156,11 +165,11 @@ unless node['postfix']['recipient_canonical_map_entries'].empty?
     owner 'root'
     group node['root_group']
     mode '0644'
-    notifies :run, 'execute[update-postfix-recipient_canonical]'
+    notifies :run, 'execute[update-postfix-recipient_canonical]', :immediately
     notifies :reload, 'service[postfix]'
   end
 
-  node.normal['postfix']['main']['recipient_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/recipient_canonical" unless node['postfix']['main'].key?('recipient_canonical_maps')
+  node.default['postfix']['main']['recipient_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/recipient_canonical" unless node['postfix']['main'].key?('recipient_canonical_maps')
 end
 
 %w( main master ).each do |cfg|

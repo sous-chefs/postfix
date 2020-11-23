@@ -28,11 +28,7 @@ case node['platform_family']
 when 'debian'
   sasl_pkgs = %w(libsasl2-2 libsasl2-modules ca-certificates)
 when 'rhel'
-  sasl_pkgs = if node['platform_version'].to_i < 6
-                %w(cyrus-sasl cyrus-sasl-plain openssl)
-              else
-                %w(cyrus-sasl cyrus-sasl-plain ca-certificates)
-              end
+  sasl_pkgs = %w(cyrus-sasl cyrus-sasl-plain ca-certificates)
 when 'amazon'
   sasl_pkgs = %w(cyrus-sasl cyrus-sasl-plain ca-certificates)
 when 'fedora'
