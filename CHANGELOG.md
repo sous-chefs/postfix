@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
+## Unreleased
+
 ## 6.0.0 - *2020-11-23*
 
 - Disabled SSLv3 by default
