@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the postfix cookbook.
 
 ## Unreleased
 
+- postfix package assumes ipv6 is always available, however this is not always true. In order to tell postmap this is the case the configs need to be written first
+
 ## 6.0.1 - *2021-06-01*
 
 ## 6.0.0 - *2020-11-23*
