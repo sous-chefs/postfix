@@ -121,6 +121,26 @@ when 'freebsd'
   end
 end
 
+# We need to write the config first as the below postmap immediately commands assume config is correct
+# Which is not the case as ipv6 is assumed to be available by the postfix package
+# And if someone wants to disable this first we need to update the config first aswell
+%w( main master ).each do |cfg|
+  template "#{node['postfix']['conf_dir']}/#{cfg}.cf" do
+    source "#{cfg}.cf.erb"
+    owner 'root'
+    group node['root_group']
+    mode '0644'
+    # restart service for solaris on chef-client has a bug
+    # unless condition can be removed after
+    # https://github.com/chef/chef/pull/6596 merge/release
+    notifies :restart, 'service[postfix]' unless platform_family?('solaris2')
+    variables(
+      lazy { { settings: node['postfix'][cfg] } }
+    )
+    cookbook node['postfix']["#{cfg}_template_source"]
+  end
+end
+
 execute 'update-postfix-sender_canonical' do
   command "postmap #{node['postfix']['conf_dir']}/sender_canonical"
   action :nothing
@@ -170,23 +190,6 @@ unless node['postfix']['recipient_canonical_map_entries'].empty?
   end
 
   node.default['postfix']['main']['recipient_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/recipient_canonical" unless node['postfix']['main'].key?('recipient_canonical_maps')
-end
-
-%w( main master ).each do |cfg|
-  template "#{node['postfix']['conf_dir']}/#{cfg}.cf" do
-    source "#{cfg}.cf.erb"
-    owner 'root'
-    group node['root_group']
-    mode '0644'
-    # restart service for solaris on chef-client has a bug
-    # unless condition can be removed after
-    # https://github.com/chef/chef/pull/6596 merge/release
-    notifies :restart, 'service[postfix]' unless platform_family?('solaris2')
-    variables(
-      lazy { { settings: node['postfix'][cfg] } }
-    )
-    cookbook node['postfix']["#{cfg}_template_source"]
-  end
 end
 
 service 'postfix' do

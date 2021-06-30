@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the postfix cookbook.
 
 ## Unreleased
 
+- Make sure we write the main.conf and master.conf before we try to use any commands (like postmap)
+
 ## 6.0.1 - *2021-06-01*
 
 ## 6.0.0 - *2020-11-23*
