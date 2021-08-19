@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
-## Unreleased
+## 6.0.4 - *2021-08-19*
 
 ## 6.0.3 - *2021-08-19*
 
