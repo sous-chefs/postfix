@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the postfix cookbook.
 
 ## Unreleased
 
+- Fixed TLS configuration
+
 ## 6.0.2 - *2021-06-30*
 
 - Make sure we write the main.conf and master.conf before we try to use any commands (like postmap)
