@@ -6,7 +6,7 @@ set :path, '/sbin:/usr/local/sbin:$PATH'
 def family
   fam = 'solaris2'
   return fam unless File.exist? '/etc/release'
-  fam = 'omnios' if File.open('/etc/release').read =~ /^\s*(OmniOS)/
+  fam = 'omnios' if File.read('/etc/release') =~ /^\s*(OmniOS)/
   fam
 end
 
