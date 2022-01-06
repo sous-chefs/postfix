@@ -5,6 +5,7 @@ This file is used to list changes made in each version of the postfix cookbook.
 ## Unreleased
 
 - resolved cookstyle error: test/integration/helpers/serverspec/spec_helper.rb:9:21 convention: `Style/FileRead`
+
 ## 6.0.4 - *2021-08-19*
 
 ## 6.0.3 - *2021-08-19*
