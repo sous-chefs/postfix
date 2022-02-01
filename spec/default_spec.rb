@@ -19,23 +19,9 @@ describe 'postfix::default' do
     end
   end
 
-  context 'on SmartOS' do
+  context 'on Ubuntu 20.04' do
     cached(:chef_run) do
-      ChefSpec::ServerRunner.new(platform: 'smartos', version: '5.11').converge(described_recipe)
-    end
-
-    it '[COOK-4423] renders file main.cf without smtp_use_tls' do
-      expect(chef_run).to render_file('/opt/local/etc/postfix/main.cf').with_content(/smtp_use_tls += +no/)
-    end
-
-    it '[COOK-4619] does not set recipient_delimiter' do
-      expect(chef_run).to_not render_file('/etc/postfix/main.cf').with_content('recipient_delimiter')
-    end
-  end
-
-  context 'on Ubuntu 16.04' do
-    cached(:chef_run) do
-      ChefSpec::ServerRunner.new(platform: 'ubuntu', version: 16.04).converge(described_recipe)
+      ChefSpec::ServerRunner.new(platform: 'ubuntu', version: 20.04).converge(described_recipe)
     end
 
     it '[COOK-4423] renders file main.cf with /etc/postfix/cacert.pem' do
