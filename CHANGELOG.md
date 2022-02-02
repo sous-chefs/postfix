@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
-## Unreleased
+## 6.0.6 - *2022-02-02*
 
 - Update tested platforms
 - Remove delivery and move to calling RSpec directly via a reusable workflow
