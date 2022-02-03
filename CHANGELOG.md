@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
-## Unreleased
+## 6.0.7 - *2022-02-03*
 
 Standardise files with files in sous-chefs/repo-management
 
