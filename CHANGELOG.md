@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
-## Unreleased
+## 6.0.20 - *2023-04-17*
 
 Fix CI permissions
 
