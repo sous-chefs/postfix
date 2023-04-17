@@ -4,7 +4,11 @@ This file is used to list changes made in each version of the postfix cookbook.
 
 ## Unreleased
 
+Fix CI permissions
+
 ## 6.0.19 - *2023-04-17*
+
+Standardise files with files in sous-chefs/repo-management
 
 ## 6.0.18 - *2023-04-07*
 
@@ -12,7 +16,11 @@ Standardise files with files in sous-chefs/repo-management
 
 ## 6.0.17 - *2023-04-01*
 
+Standardise files with files in sous-chefs/repo-management
+
 ## 6.0.16 - *2023-04-01*
+
+Standardise files with files in sous-chefs/repo-management
 
 ## 6.0.15 - *2023-04-01*
 
@@ -26,8 +34,6 @@ Standardise files with files in sous-chefs/repo-management
 
 Standardise files with files in sous-chefs/repo-management
 
-Standardise files with files in sous-chefs/repo-management
-
 ## 6.0.12 - *2023-02-23*
 
 Standardise files with files in sous-chefs/repo-management
@@ -38,13 +44,13 @@ Standardise files with files in sous-chefs/repo-management
 
 ## 6.0.10 - *2023-02-14*
 
+Standardise files with files in sous-chefs/repo-management
+
 ## 6.0.9 - *2023-02-14*
 
 Standardise files with files in sous-chefs/repo-management
 
 ## 6.0.8 - *2022-12-08*
-
-Standardise files with files in sous-chefs/repo-management
 
 Standardise files with files in sous-chefs/repo-management
 
