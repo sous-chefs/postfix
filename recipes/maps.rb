@@ -17,6 +17,9 @@ node['postfix']['maps'].each do |type, maps|
   if platform_family?('debian')
     package "postfix-#{type}" if %w(pgsql mysql ldap cdb).include?(type)
   end
+  if platform?('redhat') && node['platform_version'].to_i == 8
+    package "postfix-#{type}" if %w(pgsql mysql ldap cdb).include?(type)
+  end
 
   separator = if %w(pgsql mysql ldap memcache sqlite).include?(type)
                 ' = '
