@@ -53,7 +53,7 @@ See `attributes/default.rb` for default values.
 - `node['postfix']['aliases']` - hash of aliases to create with `recipe[postfix::aliases]`, see below under **Recipes** for more information.
 - `node['postfix']['transports']` - hash of transports to create with `recipe[postfix::transports]`, see below under **Recipes** for more information.
 - `node['postfix']['access']` - hash of access to create with `recipe[postfix::access]`, see below under **Recipes** for more information.
-- `node['postfix']['virtual_aliases']` - hash of virtual_aliases to create with `recipe[postfix::virtual_aliases]`, see below under __Recipes__ for more information.
+- `node['postfix']['virtual_aliases']` - hash of virtual_aliases to create with `recipe[postfix::virtual_aliases]`, see below under **Recipes** for more information.
 - `node['postfix']['main_template_source']` - Cookbook source for main.cf template. Default 'postfix'
 - `node['postfix']['master_template_source']` - Cookbook source for master.cf template. Default 'postfix'
 
