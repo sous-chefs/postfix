@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
+## Unreleased
+
 ## 6.0.26 - *2023-10-03*
 
 - add installation of postfix addon packages for RHEL 8
