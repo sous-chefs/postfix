@@ -4,17 +4,27 @@ This file is used to list changes made in each version of the postfix cookbook.
 
 ## Unreleased
 
+- add installation of postfix addon packages for RHEL 8
+
 ## 6.0.25 - *2023-10-03*
 
 Fix markdown
 
 ## 6.0.24 - *2023-09-28*
 
+Standardise files with files in sous-chefs/repo-management
+
 ## 6.0.23 - *2023-09-04*
+
+Standardise files with files in sous-chefs/repo-management
 
 ## 6.0.22 - *2023-08-29*
 
+Standardise files with files in sous-chefs/repo-management
+
 ## 6.0.21 - *2023-05-17*
+
+Standardise files with files in sous-chefs/repo-management
 
 ## 6.0.20 - *2023-04-17*
 
