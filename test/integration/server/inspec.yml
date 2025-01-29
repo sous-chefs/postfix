@@ -1,0 +1,4 @@
+name: server
+depends:
+  - name: default
+    path: test/integration/default

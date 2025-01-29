@@ -1,0 +1,4 @@
+name: client
+depends:
+  - name: default
+    path: test/integration/default

@@ -4,25 +4,24 @@ This file is used to list changes made in each version of the postfix cookbook.
 
 ## Unreleased
 
+- Correctly fix aliases quoting logic
+- Convert all serverspec tests to inspec
+- Add Github actions
+- Update platforms to test
+
 ## 6.0.29 - *2024-11-18*
 
-Standardise files with files in sous-chefs/repo-management
-
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 6.0.28 - *2024-07-15*
 
-Standardise files with files in sous-chefs/repo-management
-
-Standardise files with files in sous-chefs/repo-management
-
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 6.0.27 - *2024-05-06*
 
 ## 6.0.26 - *2023-10-03*
 
-- add installation of postfix addon packages for RHEL 8
+- Add installation of postfix addon packages for RHEL 8
 
 ## 6.0.25 - *2023-10-03*
 
