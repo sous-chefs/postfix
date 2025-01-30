@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the postfix cookbook.
 
 ## Unreleased
 
+## Unreleased
+
 ## 6.2.2 - *2025-01-30*
 
 ## 6.2.1 - *2025-01-30*
