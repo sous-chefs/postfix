@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the postfix cookbook.
 
 ## Unreleased
 
+## 6.2.0
+
 - Correctly fix aliases quoting logic
 - Convert all serverspec tests to inspec
 - Add Github actions
