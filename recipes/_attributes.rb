@@ -29,24 +29,24 @@ end
 
 if node['postfix']['main']['smtp_sasl_auth_enable'] == 'yes'
   node.default_unless['postfix']['sasl_password_file'] = "#{node['postfix']['conf_dir']}/sasl_passwd"
-  node.default_unless['postfix']['main']['smtp_sasl_password_maps'] = "hash:#{node['postfix']['sasl_password_file']}"
+  node.default_unless['postfix']['main']['smtp_sasl_password_maps'] = "#{node['postfix']['db_type']}:#{node['postfix']['sasl_password_file']}"
   node.default_unless['postfix']['main']['smtp_sasl_security_options'] = 'noanonymous'
   node.default_unless['postfix']['sasl']['smtp_sasl_user_name'] = ''
   node.default_unless['postfix']['sasl']['smtp_sasl_passwd']    = ''
   node.default_unless['postfix']['main']['relayhost'] = ''
 end
 
-node.default_unless['postfix']['main']['alias_maps'] = ["hash:#{node['postfix']['aliases_db']}"] if node['postfix']['use_alias_maps']
+node.default_unless['postfix']['main']['alias_maps'] = ["#{node['postfix']['db_type']}:#{node['postfix']['aliases_db']}"] if node['postfix']['use_alias_maps']
 
-node.default_unless['postfix']['main']['transport_maps'] = ["hash:#{node['postfix']['transport_db']}"] if node['postfix']['use_transport_maps']
+node.default_unless['postfix']['main']['transport_maps'] = ["#{node['postfix']['db_type']}:#{node['postfix']['transport_db']}"] if node['postfix']['use_transport_maps']
 
-node.default_unless['postfix']['main']['access_maps'] = ["hash:#{node['postfix']['access_db']}"] if node['postfix']['use_access_maps']
+node.default_unless['postfix']['main']['access_maps'] = ["#{node['postfix']['db_type']}:#{node['postfix']['access_db']}"] if node['postfix']['use_access_maps']
 
 node.default_unless['postfix']['main']['virtual_alias_maps'] = ["#{node['postfix']['virtual_alias_db_type']}:#{node['postfix']['virtual_alias_db']}"] if node['postfix']['use_virtual_aliases']
 
 node.default_unless['postfix']['main']['virtual_alias_domains'] = ["#{node['postfix']['virtual_alias_domains_db_type']}:#{node['postfix']['virtual_alias_domains_db']}"] if node['postfix']['use_virtual_aliases_domains']
 
-node.default_unless['postfix']['main']['smtpd_relay_restrictions'] = "hash:#{node['postfix']['relay_restrictions_db']}, reject" if node['postfix']['use_relay_restrictions_maps']
+node.default_unless['postfix']['main']['smtpd_relay_restrictions'] = "#{node['postfix']['db_type']}:#{node['postfix']['relay_restrictions_db']}, reject" if node['postfix']['use_relay_restrictions_maps']
 
 node.default_unless['postfix']['main']['maildrop_destination_recipient_limit'] = 1 if node['postfix']['master']['maildrop']['active']
 

@@ -13,9 +13,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-default['postfix']['packages'] = %w(postfix)
-
+default['postfix']['packages'] = value_for_platform(
+  amazon: { '>= 2023' => %w(postfix postfix-lmdb) },
+  default: %w(postfix)
+)
 # Generic cookbook attributes
 default['postfix']['mail_type'] = 'client'
 default['postfix']['relayhost_role'] = 'relayhost'
@@ -37,11 +38,19 @@ default['postfix']['master_template_source'] = 'postfix'
 default['postfix']['sender_canonical_map_entries'] = {}
 default['postfix']['smtp_generic_map_entries'] = {}
 default['postfix']['recipient_canonical_map_entries'] = {}
-default['postfix']['access_db_type'] = 'hash'
-default['postfix']['aliases_db_type'] = 'hash'
-default['postfix']['transport_db_type'] = 'hash'
-default['postfix']['virtual_alias_db_type'] = 'hash'
-default['postfix']['virtual_alias_domains_db_type'] = 'hash'
+
+default['postfix']['db_type'] = value_for_platform(
+  %w(centos redhat almalinux rocky oracle) => { '>= 10' => 'lmdb' },
+  amazon: { '>= 2023' => 'lmdb' },
+  %w(opensuseleap suse) => { '>= 15' => 'lmdb' },
+  default: 'hash'
+)
+
+default['postfix']['access_db_type'] = lazy { node['postfix']['db_type'] }
+default['postfix']['aliases_db_type'] = lazy { node['postfix']['db_type'] }
+default['postfix']['transport_db_type'] = lazy { node['postfix']['db_type'] }
+default['postfix']['virtual_alias_db_type'] = lazy { node['postfix']['db_type'] }
+default['postfix']['virtual_alias_domains_db_type'] = lazy { node['postfix']['db_type'] }
 
 case node['platform']
 when 'smartos'
@@ -96,6 +105,9 @@ default['postfix']['main']['smtp_sasl_auth_enable'] = 'no'
 default['postfix']['main']['mailbox_size_limit'] = 0
 default['postfix']['main']['mynetworks'] = nil
 default['postfix']['main']['inet_interfaces'] = 'loopback-only'
+default['postfix']['main']['default_database_type'] = lazy { node['postfix']['db_type'] }
+default['postfix']['main']['alias_database'] = lazy { "#{node['postfix']['db_type']}:#{node['postfix']['aliases_db']}" }
+default['postfix']['main']['alias_maps'] = lazy { "#{node['postfix']['db_type']}:#{node['postfix']['aliases_db']}" }
 
 # Conditional attributes, also reference _attributes recipe
 case node['platform_family']
@@ -407,4 +419,4 @@ default['postfix']['aliases'] = if platform?('freebsd')
                                   {}
                                 end
 
-default['postfix']['main']['smtpd_relay_restrictions'] = "hash:#{node['postfix']['relay_restrictions_db']}, reject" if node['postfix']['use_relay_restrictions_maps']
+default['postfix']['main']['smtpd_relay_restrictions'] = lazy { "#{node['postfix']['db_type']}:#{node['postfix']['relay_restrictions_db']}, reject" if node['postfix']['use_relay_restrictions_maps'] }
