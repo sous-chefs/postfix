@@ -18,8 +18,8 @@ node['postfix']['maps'].each do |type, maps|
     package "postfix-#{type}" if %w(pgsql mysql ldap cdb).include?(type)
   end
 
-  if platform?('redhat') && node['platform_version'].to_i == 8
-    package "postfix-#{type}" if %w(pgsql mysql ldap cdb).include?(type)
+  if platform_family?('rhel') && node['platform_version'].to_i >= 8
+    package "postfix-#{type}" if %w(pgsql mysql ldap cdb lmdb).include?(type)
   end
 
   separator = if %w(pgsql mysql ldap memcache sqlite).include?(type)
@@ -32,7 +32,7 @@ node['postfix']['maps'].each do |type, maps|
       command "postmap #{file}"
       environment PATH: "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
       action :nothing
-    end if %w(btree cdb dbm hash sdbm).include?(type)
+    end if %w(btree cdb dbm hash lmdb sdbm).include?(type)
     template "#{file}-#{type}" do
       path file
       source 'maps.erb'
@@ -41,7 +41,7 @@ node['postfix']['maps'].each do |type, maps|
         map: content,
         separator: separator
       )
-      notifies :run, "execute[update-postmap-#{file}]" if %w(btree cdb dbm hash sdbm).include?(type)
+      notifies :run, "execute[update-postmap-#{file}]" if %w(btree cdb dbm hash lmdb sdbm).include?(type)
       notifies :restart, 'service[postfix]'
     end
   end

@@ -2,6 +2,12 @@ recipient_canonical =
   case os.family
   when 'suse'
     '/etc/postfix/recipient_canonical.lmdb'
+  when 'redhat'
+    if os.release.to_i >= 10
+      '/etc/postfix/recipient_canonical'
+    else
+      '/etc/postfix/recipient_canonical.db'
+    end
   else
     '/etc/postfix/recipient_canonical.db'
   end
