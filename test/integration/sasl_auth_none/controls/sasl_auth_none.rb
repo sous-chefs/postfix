@@ -11,7 +11,9 @@ control 'sasl_auth_none' do
     end
   end
 
+  db_type = ((os.family == 'redhat' && os.release.to_i >= 10) || (os.family == 'suse' && os.release.to_i >= 15)) ? 'lmdb' : 'hash'
+
   describe postfix_conf '/etc/postfix/main.cf' do
-    its('smtp_sasl_password_maps') { should eq 'hash:/etc/postfix/sasl_passwd' }
+    its('smtp_sasl_password_maps') { should eq "#{db_type}:/etc/postfix/sasl_passwd" }
   end
 end

@@ -9,7 +9,11 @@ Standardise files with files in sous-chefs/repo-management
 
 ## Unreleased
 
-## Unreleased
+## 6.3.0 - *2025-07-30*
+
+- Use LMDB instead of hash on el10
+
+## 6.3.0 - *2025-07-30*
 
 ## 6.2.2 - *2025-01-30*
 

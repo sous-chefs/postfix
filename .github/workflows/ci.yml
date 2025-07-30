@@ -24,6 +24,7 @@ jobs:
         os:
           - almalinux-8
           - almalinux-9
+          - almalinux-10
           - amazonlinux-2023
           - centos-stream-9
           - debian-11
