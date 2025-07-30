@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the postfix cookbook.
 
+## Unreleased
+
 ## 6.3.0 - *2025-07-30*
 
 - Use LMDB instead of hash on el10
