@@ -6,8 +6,6 @@ control 'sasl_auth_one' do
         # Local modifications will be overwritten.
 
         relayhost kitchenuser:not-a-real-thing
-        smtp_sasl_passwd :
-        smtp_sasl_user_name :
       EOF
     end
   end
