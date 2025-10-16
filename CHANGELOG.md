@@ -5,6 +5,13 @@ This file is used to list changes made in each version of the postfix cookbook.
 Standardise files with files in sous-chefs/repo-management
 Standardise files with files in sous-chefs/repo-management
 
+## [6.4.2](https://github.com/sous-chefs/postfix/compare/6.4.1...v6.4.2) (2025-10-16)
+
+
+### Bug Fixes
+
+* **ci:** Update workflows to use release pipeline ([#220](https://github.com/sous-chefs/postfix/issues/220)) ([39a5c2e](https://github.com/sous-chefs/postfix/commit/39a5c2e278a564b65b1fd0cf9620354cfd7175ba))
+
 ## 6.4.0 - *2025-07-30* ## 6.4.0 - *2025-07-30*
 
 Standardise files with files in sous-chefs/repo-management
