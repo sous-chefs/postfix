@@ -7,8 +7,6 @@ control 'sasl_auth_multiple' do
 
         relayhost1 kitchenuser:not-a-real-thing
         relayhost2 anotherkitchenuser:yet-not-a-real-thing
-        smtp_sasl_passwd :
-        smtp_sasl_user_name :
       EOF
     end
   end
