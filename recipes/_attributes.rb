@@ -19,12 +19,12 @@ if node['postfix']['main']['smtpd_use_tls'] == 'yes'
   node.default_unless['postfix']['main']['smtpd_tls_cert_file'] = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
   node.default_unless['postfix']['main']['smtpd_tls_key_file'] = '/etc/ssl/private/ssl-cert-snakeoil.key'
   node.default_unless['postfix']['main']['smtpd_tls_CAfile'] = node['postfix']['cafile']
-  node.default_unless['postfix']['main']['smtpd_tls_session_cache_database'] = 'btree:${data_directory}/smtpd_scache'
+  node.default_unless['postfix']['main']['smtpd_tls_session_cache_database'] = "#{node['postfix']['db_type']}:${data_directory}/smtpd_scache"
 end
 
 if node['postfix']['main']['smtp_use_tls'] == 'yes'
   node.default_unless['postfix']['main']['smtp_tls_CAfile'] = node['postfix']['cafile']
-  node.default_unless['postfix']['main']['smtp_tls_session_cache_database'] = 'btree:${data_directory}/smtp_scache'
+  node.default_unless['postfix']['main']['smtp_tls_session_cache_database'] = "#{node['postfix']['db_type']}:${data_directory}/smtp_scache"
 end
 
 if node['postfix']['main']['smtp_sasl_auth_enable'] == 'yes'
