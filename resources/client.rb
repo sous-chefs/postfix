@@ -27,7 +27,6 @@ action :create do
   port = (new_resource.relayhost_port || postfix_setting('relayhost_port', '25')).to_s
   multi_environment = new_resource.multi_environment_relay.nil? ? postfix_setting('multi_environment_relay', false) : new_resource.multi_environment_relay
   query = "role:#{role}"
-  relayhost = ''
 
   relayhost = if node.run_list.roles.include?(role)
                 node['ipaddress']
