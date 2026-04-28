@@ -4,6 +4,6 @@
 #
 # See man 5 virtual for format
 
-<% node['postfix']['virtual_aliases_domains'].each do |key, value| %>
+<% @map.each do |key, value| %>
 <%= key %> <%= value %>
-<% end unless node['postfix']['virtual_aliases_domains'].nil? %>
+<% end unless @map.nil? %>

@@ -8,6 +8,12 @@
 
 Installs and configures postfix for client or outbound relayhost, or to do SASL authentication.
 
+## Resource Migration
+
+This cookbook is resource-first. Recipes and cookbook attributes have been removed.
+
+See [migration.md](migration.md) for recipe migration guidance, [LIMITATIONS.md](LIMITATIONS.md) for supported platform constraints, and the files in [documentation/](documentation/) for resource usage.
+
 On RHEL-family systems, sendmail will be replaced with postfix.
 
 ## Maintainers
@@ -28,7 +34,7 @@ May work on other platforms with or without modification.
 
 ### Chef
 
-- Chef 12.1+
+- Chef 16.0+
 
 ### Cookbooks
 
