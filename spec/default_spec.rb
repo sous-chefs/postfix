@@ -1,34 +1,38 @@
 require 'spec_helper'
 
-describe 'postfix::default' do
+describe 'postfix resource' do
   before do
     stub_command('/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix').and_return(true)
   end
 
-  context 'on Centos 8' do
+  context 'on AlmaLinux 9' do
     cached(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: '8').converge(described_recipe)
+      runner = ChefSpec::SoloRunner.new(platform: 'almalinux', version: '9', step_into: postfix_step_into) do |node|
+        node.normal['postfix']['main']['smtp_sasl_auth_enable'] = 'no'
+      end
+
+      runner.converge('test::spec_default')
     end
 
-    it '[COOK-4423] renders file main.cf with /etc/pki/tls/cert.pem' do
+    it 'renders file main.cf with /etc/pki/tls/cert.pem' do
       expect(chef_run).to render_file('/etc/postfix/main.cf').with_content(%r{smtp_tls_CAfile += +/etc/pki/tls/cert.pem})
     end
 
-    it '[COOK-4619] does not set recipient_delimiter' do
+    it 'does not set recipient_delimiter' do
       expect(chef_run).to_not render_file('/etc/postfix/main.cf').with_content('recipient_delimiter')
     end
   end
 
-  context 'on Ubuntu 20.04' do
+  context 'on Ubuntu 24.04' do
     cached(:chef_run) do
-      ChefSpec::ServerRunner.new(platform: 'ubuntu', version: 20.04).converge(described_recipe)
+      ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '24.04', step_into: postfix_step_into).converge('test::spec_default')
     end
 
-    it '[COOK-4423] renders file main.cf with /etc/postfix/cacert.pem' do
+    it 'renders file main.cf with /etc/ssl/certs/ca-certificates.crt' do
       expect(chef_run).to render_file('/etc/postfix/main.cf').with_content(%r{smtp_tls_CAfile += +/etc/ssl/certs/ca-certificates.crt})
     end
 
-    it '[COOK-4619] does not set recipient_delimiter' do
+    it 'does not set recipient_delimiter' do
       expect(chef_run).to_not render_file('/etc/postfix/main.cf').with_content('recipient_delimiter')
     end
   end

@@ -7,15 +7,13 @@ require 'spec_helper'
 
 describe 'test::default' do
   cached(:chef_run) do
-    ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 16.04).converge(described_recipe)
+    ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '24.04', step_into: postfix_step_into).converge(described_recipe)
   end
 
-  describe '_attributes recipes' do
-    it 'keeps wrapper cookbook default set attributes' do
-      expect(chef_run.node['postfix']['main']['relayhost']).to eq('please')
-      expect(chef_run.node['postfix']['main']['smtp_sasl_security_options']).to eq('keep')
-      expect(chef_run.node['postfix']['sasl']['smtp_sasl_user_name']).to eq('us')
-      expect(chef_run.node['postfix']['sasl']['smtp_sasl_passwd']).to eq('happy')
+  describe 'legacy wrapper attributes' do
+    it 'keeps wrapper cookbook defaults when rendering main.cf' do
+      expect(chef_run).to render_file('/etc/postfix/main.cf').with_content(/^relayhost = please$/)
+      expect(chef_run).to render_file('/etc/postfix/main.cf').with_content(/^smtp_sasl_security_options = keep$/)
     end
   end
 end

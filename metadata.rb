@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 name              'postfix'
 maintainer        'Sous Chefs'
 maintainer_email  'help@sous-chefs.org'
@@ -6,15 +8,14 @@ description       'Installs and configures postfix for client or outbound relayh
 version           '6.4.2'
 source_url        'https://github.com/sous-chefs/postfix'
 issues_url        'https://github.com/sous-chefs/postfix/issues'
-chef_version      '>= 12.15'
+chef_version      '>= 16.0'
 
 supports 'amazon'
-supports 'centos'
+supports 'almalinux'
 supports 'debian'
 supports 'fedora'
-supports 'freebsd'
+supports 'opensuseleap'
 supports 'oracle'
 supports 'redhat'
-supports 'scientific'
-supports 'smartos'
+supports 'rocky'
 supports 'ubuntu'
