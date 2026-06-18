@@ -1,0 +1,4 @@
+name: access
+depends:
+  - name: default
+    path: test/integration/default

@@ -1,10 +1,12 @@
 driver:
   name: dokken
   privileged: true
-  chef_version: <%= ENV['CHEF_VERSION'] || 'current' %>
+  chef_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
 
 transport: { name: dokken }
-provisioner: { name: dokken }
+provisioner:
+  name: dokken
+  product_name: cinc
 
 platforms:
   - name: almalinux-8
@@ -37,11 +39,6 @@ platforms:
       image: dokken/centos-stream-10
       pid_one_command: /usr/lib/systemd/systemd
 
-  - name: debian-11
-    driver:
-      image: dokken/debian-11
-      pid_one_command: /bin/systemd
-
   - name: debian-12
     driver:
       image: dokken/debian-12
@@ -70,6 +67,11 @@ platforms:
   - name: oraclelinux-9
     driver:
       image: dokken/oraclelinux-9
+      pid_one_command: /usr/lib/systemd/systemd
+
+  - name: oraclelinux-10
+    driver:
+      image: dokken/oraclelinux-10
       pid_one_command: /usr/lib/systemd/systemd
 
   - name: rockylinux-8
@@ -101,3 +103,8 @@ platforms:
     driver:
       image: dokken/ubuntu-24.04
       pid_one_command: /bin/systemd
+
+  - name: ubuntu-26.04
+    driver:
+      image: dokken/ubuntu-26.04
+      pid_one_command: /usr/lib/systemd/systemd
