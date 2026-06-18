@@ -62,7 +62,6 @@ action :create do
     use_procmail: use_procmail,
     use_alias_maps: use_alias_maps,
     use_transport_maps: use_transport_maps,
-    use_access_maps: use_access_maps,
     use_virtual_aliases: use_virtual_aliases,
     use_virtual_aliases_domains: use_virtual_aliases_domains,
     use_relay_restrictions_maps: use_relay_restrictions_maps

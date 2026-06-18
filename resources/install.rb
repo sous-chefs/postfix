@@ -20,6 +20,24 @@ action :install do
   package_names = new_resource.packages || postfix_packages
   procmail = new_resource.use_procmail.nil? ? postfix_setting('use_procmail', false) : new_resource.use_procmail
 
+  # On Debian/Ubuntu the default MTA is exim4. A running exim4 holds port 25
+  # and prevents postfix/master from binding ("bind 127.0.0.1 port 25: Address
+  # already in use"), so stop and remove it before installing postfix. The
+  # service must be stopped explicitly first: purging the package does not
+  # reliably stop the running daemon, which keeps listening on port 25.
+  if platform_family?('debian')
+    service 'exim4' do
+      action [:stop, :disable]
+      only_if { ::File.exist?('/usr/sbin/exim4') }
+    end
+
+    package 'exim4' do
+      package_name %w(exim4 exim4-daemon-light exim4-config exim4-base)
+      action :purge
+      only_if { ::File.exist?('/usr/sbin/exim4') }
+    end
+  end
+
   if node['os'] == 'linux'
     package package_names
   else

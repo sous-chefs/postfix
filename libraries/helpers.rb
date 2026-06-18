@@ -127,7 +127,7 @@ module PostfixCookbook
       settings.merge(postfix_setting('main', {}).to_h)
     end
 
-    def postfix_derived_main_settings(settings, conf_dir:, db_type:, use_procmail:, use_alias_maps:, use_transport_maps:, use_access_maps:, use_virtual_aliases:, use_virtual_aliases_domains:, use_relay_restrictions_maps:)
+    def postfix_derived_main_settings(settings, conf_dir:, db_type:, use_procmail:, use_alias_maps:, use_transport_maps:, use_virtual_aliases:, use_virtual_aliases_domains:, use_relay_restrictions_maps:)
       settings = settings.dup
       cafile = postfix_cafile(conf_dir)
 
@@ -150,7 +150,6 @@ module PostfixCookbook
 
       settings['alias_maps'] ||= ["#{db_type}:#{postfix_path(:aliases_db)}"] if use_alias_maps
       settings['transport_maps'] ||= ["#{db_type}:#{postfix_path(:transport_db)}"] if use_transport_maps
-      settings['access_maps'] ||= ["#{db_type}:#{postfix_path(:access_db)}"] if use_access_maps
       settings['virtual_alias_maps'] ||= ["#{postfix_setting('virtual_alias_db_type') || db_type}:#{postfix_path(:virtual_alias_db)}"] if use_virtual_aliases
       settings['virtual_alias_domains'] ||= ["#{postfix_setting('virtual_alias_domains_db_type') || db_type}:#{postfix_path(:virtual_alias_domains_db)}"] if use_virtual_aliases_domains
       settings['smtpd_relay_restrictions'] ||= "#{db_type}:#{postfix_path(:relay_restrictions_db)}, reject" if use_relay_restrictions_maps

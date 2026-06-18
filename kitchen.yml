@@ -55,6 +55,10 @@ suites:
     run_list:
       - recipe[test::server]
 
+  - name: access
+    run_list:
+      - recipe[test::access]
+
   - name: canonical
     run_list:
       - recipe[test::canonical]
