@@ -1,4 +1,4 @@
-# Postfix Cookbook Limitations
+# Postfix Cookbook Notes
 
 This cookbook manages Postfix through operating system packages and service/configuration files. It does not build Postfix from source.
 
@@ -9,6 +9,8 @@ Supported cookbook platforms are limited to current package-based Linux distribu
 FreeBSD, SmartOS, Scientific Linux, and legacy CentOS releases were removed from cookbook support during the resource migration because the current cookbook test matrix and service implementation are Linux/package oriented.
 
 Map backends depend on distribution packages and Postfix module availability. The `postfix_map` resource only runs `postmap` for database-backed map types such as `hash`, `lmdb`, `btree`, `cdb`, `dbm`, and `sdbm`.
+
+Dependency resolution uses `Policyfile.rb`. Keep test cookbook suites represented as Policyfile named run lists so Kitchen can select them with `provisioner.named_run_list`.
 
 Sources:
 

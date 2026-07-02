@@ -1,6 +1,7 @@
 ---
 provisioner:
-  name: cinc_infra
+  name: policyfile_zero
+  product_name: <%= ENV['KITCHEN_PRODUCT_NAME'] || 'cinc' %>
   product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
   channel: stable
   install_strategy: once
@@ -9,6 +10,7 @@ provisioner:
   multiple_converge: <%= ENV['MULTIPLE_CONVERGE'] || 2 %>
   deprecations_as_errors: true
   log_level: <%= ENV['CHEF_LOG_LEVEL'] || 'auto' %>
+  policyfile: Policyfile.rb
 
 verifier:
   name: inspec

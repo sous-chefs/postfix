@@ -1,12 +1,14 @@
 driver:
   name: dokken
   privileged: true
-  chef_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
+  chef_image: "<%= ENV.fetch('KITCHEN_PRODUCT_NAME', 'cinc') == 'cinc' ? 'cincproject/cinc' : 'chef/chef' %>"
+  chef_version: "<%= ENV['CHEF_VERSION'] || (ENV.fetch('KITCHEN_PRODUCT_NAME', 'cinc') == 'cinc' ? 'latest' : 'current') %>"
 
 transport: { name: dokken }
 provisioner:
   name: dokken
-  product_name: cinc
+  chef_binary: "<%= ENV.fetch('KITCHEN_PRODUCT_NAME', 'cinc') == 'cinc' ? '/opt/cinc/bin/cinc-client' : '/opt/chef/bin/chef-client' %>"
+  product_name: "<%= ENV['KITCHEN_PRODUCT_NAME'] || 'cinc' %>"
 
 platforms:
   - name: almalinux-8
