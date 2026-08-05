@@ -5,6 +5,13 @@ This file is used to list changes made in each version of the postfix cookbook.
 Standardise files with files in sous-chefs/repo-management
 Standardise files with files in sous-chefs/repo-management
 
+## [7.0.3](https://github.com/sous-chefs/postfix/compare/v7.0.2...v7.0.3) (2026-08-05)
+
+
+### Bug Fixes
+
+* rebuild the alias database when /etc/aliases changes ([#242](https://github.com/sous-chefs/postfix/issues/242)) ([6398b15](https://github.com/sous-chefs/postfix/commit/6398b15256b534d47c9b37153310e694026acb2e))
+
 ## [7.0.2](https://github.com/sous-chefs/postfix/compare/v7.0.1...v7.0.2) (2026-07-09)
 
 
