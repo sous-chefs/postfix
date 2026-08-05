@@ -1,3 +1,13 @@
+control 'aliases-db' do
+  # hash databases compile to .db, lmdb to .lmdb — pick whichever exists
+  aliases_db = %w(/etc/aliases.db /etc/aliases.lmdb).find { |f| file(f).exist? } || '/etc/aliases.db'
+
+  describe file aliases_db do
+    it { should exist }
+    its('mtime') { should be >= file('/etc/aliases').mtime }
+  end
+end
+
 control 'aliases' do
   describe file '/etc/aliases' do
     its('content') do
