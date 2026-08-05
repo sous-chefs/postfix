@@ -37,6 +37,11 @@ describe 'postfix resources' do
     it 'renders aliases through postfix_map' do
       expect(chef_run).to render_file('/etc/aliases').with_content(/^root: admin$/)
     end
+
+    it 'rebuilds the alias database when /etc/aliases changes' do
+      expect(chef_run.template('/etc/aliases')).to notify('execute[update-postfix-map-/etc/aliases]').to(:run).immediately
+      expect(chef_run.execute('update-postfix-map-/etc/aliases').command).to eq('newaliases')
+    end
   end
 
   context 'postfix_map' do
