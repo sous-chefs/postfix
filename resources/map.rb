@@ -10,7 +10,7 @@ unified_mode true
 use '_partial/_common'
 
 property :path, String, name_property: true
-property :type, String, default: 'hash', desired_state: false
+property :type, String, desired_state: false
 property :content, Hash, default: {}, desired_state: false
 property :template_source, String, default: 'maps.erb', desired_state: false
 property :separator, String, desired_state: false
@@ -26,8 +26,16 @@ action_class do
 end
 
 action :create do
-  map_separator = new_resource.separator || postfix_map_separator(new_resource.type)
-  command = new_resource.update_command || "#{postfix_postmap_command} #{new_resource.path}"
+  # The platform default, not hash: EL10 and SUSE 15 build Postfix without Berkeley DB
+  map_type = new_resource.type || new_resource.db_type || postfix_db_type
+  map_separator = new_resource.separator || postfix_map_separator(map_type)
+  # An explicit type builds the same format whatever default_database_type main.cf holds
+  table = if PostfixCookbook::Helpers::POSTMAP_DATABASE_TYPES.include?(map_type)
+            "#{map_type}:#{new_resource.path}"
+          else
+            new_resource.path
+          end
+  command = new_resource.update_command || "#{postfix_postmap_command} #{table}"
 
   service new_resource.service_name do
     action :nothing

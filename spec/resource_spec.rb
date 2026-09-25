@@ -52,6 +52,20 @@ describe 'postfix resources' do
     it 'renders a map file' do
       expect(chef_run).to render_file('/etc/postfix/access').with_content(/^example.com OK$/)
     end
+
+    it 'passes the map type to postmap' do
+      expect(chef_run.execute('update-postfix-map-/etc/postfix/access').command).to eq('postmap hash:/etc/postfix/access')
+    end
+  end
+
+  context 'postfix_map without a type on AlmaLinux 10' do
+    cached(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'almalinux', version: '10', step_into: postfix_step_into).converge('test::spec_map')
+    end
+
+    it 'builds the platform database type, since EL10 has no hash support' do
+      expect(chef_run.execute('update-postfix-map-/etc/postfix/access').command).to eq('/usr/sbin/postmap lmdb:/etc/postfix/access')
+    end
   end
 
   context 'postfix_config with access maps' do
@@ -65,6 +79,43 @@ describe 'postfix resources' do
 
     it 'does not emit a bogus access_maps parameter in main.cf' do
       expect(chef_run).to_not render_file('/etc/postfix/main.cf').with_content(/access_maps/)
+    end
+
+    it 'builds the access map before main.cf references it' do
+      names = chef_run.resource_collection.all_resources.map(&:to_s)
+      expect(names.index('template[/etc/postfix/access]')).to be < names.index('template[/etc/postfix/main.cf]')
+    end
+  end
+
+  context 'postfix_config with access maps on AlmaLinux 10' do
+    cached(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'almalinux', version: '10', step_into: postfix_step_into).converge('test::spec_config_access')
+    end
+
+    it 'passes the configured type through to postmap' do
+      expect(chef_run.execute('update-postfix-map-/etc/postfix/access').command).to eq('/usr/sbin/postmap lmdb:/etc/postfix/access')
+    end
+  end
+
+  context 'postfix_config with virtual aliases' do
+    cached(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '24.04', step_into: postfix_step_into).converge('test::spec_config_virtual')
+    end
+
+    it 'builds the virtual alias map before main.cf references it' do
+      names = chef_run.resource_collection.all_resources.map(&:to_s)
+      expect(names.index('template[/etc/postfix/virtual]')).to be < names.index('template[/etc/postfix/main.cf]')
+    end
+  end
+
+  context 'postfix with SASL relay authentication' do
+    cached(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '24.04', step_into: postfix_step_into).converge('test::spec_wrapper_sasl')
+    end
+
+    it 'builds the SASL password map before main.cf references it' do
+      names = chef_run.resource_collection.all_resources.map(&:to_s)
+      expect(names.index('template[/etc/postfix/sasl_passwd]')).to be < names.index('template[/etc/postfix/main.cf]')
     end
   end
 

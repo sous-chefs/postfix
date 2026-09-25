@@ -55,6 +55,14 @@ action :create do
     use_procmail use_procmail
   end
 
+  # Before postfix_config, so main.cf never names a password table that is not built yet
+  postfix_sasl_auth new_resource.name do
+    conf_dir new_resource.conf_dir if new_resource.conf_dir
+    db_type new_resource.db_type if new_resource.db_type
+    service_name new_resource.service_name
+    sasl new_resource.sasl if new_resource.sasl
+  end if main_settings['smtp_sasl_auth_enable'] == 'yes'
+
   postfix_config new_resource.name do
     conf_dir new_resource.conf_dir if new_resource.conf_dir
     db_type new_resource.db_type if new_resource.db_type
@@ -80,13 +88,6 @@ action :create do
     smtp_generic_map_entries new_resource.smtp_generic_map_entries if new_resource.smtp_generic_map_entries
     recipient_canonical_map_entries new_resource.recipient_canonical_map_entries if new_resource.recipient_canonical_map_entries
   end
-
-  postfix_sasl_auth new_resource.name do
-    conf_dir new_resource.conf_dir if new_resource.conf_dir
-    db_type new_resource.db_type if new_resource.db_type
-    service_name new_resource.service_name
-    sasl new_resource.sasl if new_resource.sasl
-  end if main_settings['smtp_sasl_auth_enable'] == 'yes'
 
   postfix_service new_resource.service_name
 end

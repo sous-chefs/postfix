@@ -90,32 +90,7 @@ action :create do
     mode '0755'
   end
 
-  template "#{conf_dir}/main.cf" do
-    source 'main.cf.erb'
-    owner new_resource.owner
-    group new_resource.group || node['root_group']
-    mode '0644'
-    cookbook new_resource.main_template_cookbook || postfix_setting('main_template_source', 'postfix')
-    variables(settings: main_settings, mail_type: mail_type)
-    notifies :restart, "service[#{new_resource.service_name}]"
-  end
-
-  template "#{conf_dir}/master.cf" do
-    source 'master.cf.erb'
-    owner new_resource.owner
-    group new_resource.group || node['root_group']
-    mode '0644'
-    cookbook new_resource.master_template_cookbook || postfix_setting('master_template_source', 'postfix')
-    variables(settings: master_settings)
-    notifies :restart, "service[#{new_resource.service_name}]"
-  end
-
-  postfix_map postfix_path(:aliases_db) do
-    content(new_resource.aliases || postfix_aliases)
-    template_source 'aliases.erb'
-    update_command 'newaliases'
-  end if use_alias_maps
-
+  # Build the lookup tables first: a new smtpd reads main.cf as soon as it is written
   postfix_map postfix_path(:transport_db) do
     content(new_resource.transports || postfix_setting('transports', {}))
     template_source 'maps.erb'
@@ -177,4 +152,31 @@ action :create do
       end
     end
   end
+
+  template "#{conf_dir}/main.cf" do
+    source 'main.cf.erb'
+    owner new_resource.owner
+    group new_resource.group || node['root_group']
+    mode '0644'
+    cookbook new_resource.main_template_cookbook || postfix_setting('main_template_source', 'postfix')
+    variables(settings: main_settings, mail_type: mail_type)
+    notifies :restart, "service[#{new_resource.service_name}]"
+  end
+
+  template "#{conf_dir}/master.cf" do
+    source 'master.cf.erb'
+    owner new_resource.owner
+    group new_resource.group || node['root_group']
+    mode '0644'
+    cookbook new_resource.master_template_cookbook || postfix_setting('master_template_source', 'postfix')
+    variables(settings: master_settings)
+    notifies :restart, "service[#{new_resource.service_name}]"
+  end
+
+  # newaliases reads alias_database from main.cf, so the aliases follow it
+  postfix_map postfix_path(:aliases_db) do
+    content(new_resource.aliases || postfix_aliases)
+    template_source 'aliases.erb'
+    update_command 'newaliases'
+  end if use_alias_maps
 end
