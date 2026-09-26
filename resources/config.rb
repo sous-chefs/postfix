@@ -177,6 +177,7 @@ action :create do
   postfix_map postfix_path(:aliases_db) do
     content(new_resource.aliases || postfix_aliases)
     template_source 'aliases.erb'
+    type db_type
     update_command 'newaliases'
   end if use_alias_maps
 end

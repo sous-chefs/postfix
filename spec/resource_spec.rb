@@ -42,6 +42,21 @@ describe 'postfix resources' do
       expect(chef_run.template('/etc/aliases')).to notify('execute[update-postfix-map-/etc/aliases]').to(:run).immediately
       expect(chef_run.execute('update-postfix-map-/etc/aliases').command).to eq('newaliases')
     end
+
+    it 'runs newaliases when the alias database is missing' do
+      expect(chef_run).to run_execute('create-postfix-map-/etc/aliases').with(command: 'newaliases', creates: '/etc/aliases.db')
+    end
+  end
+
+  context 'postfix_config with aliases and an lmdb db_type' do
+    cached(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '24.04', step_into: postfix_step_into).converge('test::spec_config_aliases_lmdb')
+    end
+
+    it 'looks for the alias database main.cf names, so newaliases does not rerun' do
+      expect(chef_run).to render_file('/etc/postfix/main.cf').with_content(%r{^alias_database = lmdb:/etc/aliases$})
+      expect(chef_run).to run_execute('create-postfix-map-/etc/aliases').with(creates: '/etc/aliases.lmdb')
+    end
   end
 
   context 'postfix_map' do
@@ -56,6 +71,13 @@ describe 'postfix resources' do
     it 'passes the map type to postmap' do
       expect(chef_run.execute('update-postfix-map-/etc/postfix/access').command).to eq('postmap hash:/etc/postfix/access')
     end
+
+    it 'rebuilds the compiled table when it is missing' do
+      expect(chef_run).to run_execute('create-postfix-map-/etc/postfix/access').with(
+        command: 'postmap hash:/etc/postfix/access',
+        creates: '/etc/postfix/access.db'
+      )
+    end
   end
 
   context 'postfix_map without a type on AlmaLinux 10' do
@@ -65,6 +87,20 @@ describe 'postfix resources' do
 
     it 'builds the platform database type, since EL10 has no hash support' do
       expect(chef_run.execute('update-postfix-map-/etc/postfix/access').command).to eq('/usr/sbin/postmap lmdb:/etc/postfix/access')
+    end
+
+    it 'looks for the lmdb file when deciding whether to rebuild' do
+      expect(chef_run).to run_execute('create-postfix-map-/etc/postfix/access').with(creates: '/etc/postfix/access.lmdb')
+    end
+  end
+
+  context 'postfix_map with a type postmap does not compile' do
+    cached(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '24.04', step_into: postfix_step_into).converge('test::spec_map_regexp')
+    end
+
+    it 'does not try to rebuild a compiled file' do
+      expect(chef_run).to_not run_execute('create-postfix-map-/etc/postfix/header_checks')
     end
   end
 

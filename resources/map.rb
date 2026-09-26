@@ -63,4 +63,14 @@ action :create do
     notifies :reload, "service[#{new_resource.service_name}]" if new_resource.reload_service
     notifies :restart, "service[#{new_resource.service_name}]" if new_resource.restart_service
   end
+
+  # Rebuild a compiled table that is missing while its source is unchanged
+  db_file = postfix_map_db_file(new_resource.path, map_type)
+  execute "create-postfix-map-#{new_resource.path}" do
+    command command
+    environment postfix_path_environment if platform_family?('omnios')
+    creates db_file
+    notifies :reload, "service[#{new_resource.service_name}]" if new_resource.reload_service
+    notifies :restart, "service[#{new_resource.service_name}]" if new_resource.restart_service
+  end if new_resource.postmap && db_file
 end

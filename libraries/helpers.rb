@@ -247,5 +247,11 @@ module PostfixCookbook
     def postfix_map_separator(type)
       EQUAL_SEPARATOR_MAP_TYPES.include?(type) ? ' = ' : ' '
     end
+
+    # The file postmap writes for a table type, or nil when it writes none
+    def postfix_map_db_file(path, type)
+      suffix = { 'hash' => 'db', 'btree' => 'db', 'lmdb' => 'lmdb', 'cdb' => 'cdb', 'dbm' => 'pag', 'sdbm' => 'pag' }[type]
+      "#{path}.#{suffix}" if suffix
+    end
   end
 end
