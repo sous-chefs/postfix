@@ -1,10 +1,6 @@
 require 'spec_helper'
 
 describe 'postfix resources' do
-  before do
-    stub_command('/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix').and_return(true)
-  end
-
   context 'postfix_install' do
     cached(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '24.04', step_into: postfix_step_into).converge('test::spec_install')
@@ -12,6 +8,32 @@ describe 'postfix resources' do
 
     it 'installs postfix' do
       expect(chef_run).to install_package(%w(postfix))
+    end
+  end
+
+  context 'postfix_install on AlmaLinux 9' do
+    cached(:chef_run) do
+      allow(File).to receive(:identical?).and_call_original
+      allow(File).to receive(:identical?).with('/etc/alternatives/mta', '/usr/sbin/sendmail.postfix').and_return(false)
+      ChefSpec::SoloRunner.new(platform: 'almalinux', version: '9', step_into: postfix_step_into).converge('test::spec_install')
+    end
+
+    it 'makes postfix the system MTA' do
+      expect(chef_run).to set_alternatives('mta').with(path: '/usr/sbin/sendmail.postfix')
+      expect(chef_run.alternatives('mta')).to notify('service[sendmail]').to(:stop)
+      expect(chef_run.alternatives('mta')).to notify('service[postfix]').to(:start)
+    end
+  end
+
+  context 'postfix_install when the MTA link already resolves to postfix' do
+    cached(:chef_run) do
+      allow(File).to receive(:identical?).and_call_original
+      allow(File).to receive(:identical?).with('/etc/alternatives/mta', '/usr/sbin/sendmail.postfix').and_return(true)
+      ChefSpec::SoloRunner.new(platform: 'almalinux', version: '9', step_into: postfix_step_into).converge('test::spec_install')
+    end
+
+    it 'leaves the link alone, as on merged-sbin Fedora where it names /usr/bin' do
+      expect(chef_run).to_not set_alternatives('mta')
     end
   end
 
