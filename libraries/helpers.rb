@@ -248,6 +248,11 @@ module PostfixCookbook
       EQUAL_SEPARATOR_MAP_TYPES.include?(type) ? ' = ' : ' '
     end
 
+    # postconf -m lists one supported table type per line; match whole names only
+    def postfix_map_type_supported?(type)
+      shell_out('postconf', '-m').stdout.split.include?(type)
+    end
+
     # The file postmap writes for a table type, or nil when it writes none
     def postfix_map_db_file(path, type)
       suffix = { 'hash' => 'db', 'btree' => 'db', 'lmdb' => 'lmdb', 'cdb' => 'cdb', 'dbm' => 'pag', 'sdbm' => 'pag' }[type]

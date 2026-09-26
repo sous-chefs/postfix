@@ -124,6 +124,30 @@ describe 'postfix resources' do
     it 'does not try to rebuild a compiled file' do
       expect(chef_run).to_not run_execute('create-postfix-map-/etc/postfix/header_checks')
     end
+
+    it 'does not run postmap on a table Postfix reads as text' do
+      expect(chef_run.find_resource(:execute, 'update-postfix-map-/etc/postfix/header_checks')).to be_nil
+      expect(chef_run.template('/etc/postfix/header_checks')).to_not notify('execute[update-postfix-map-/etc/postfix/header_checks]')
+    end
+  end
+
+  context 'postfix_config with extra maps' do
+    cached(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '24.04', step_into: postfix_step_into) do
+        stubs_for_provider('postfix_config[default]') do |provider|
+          allow(provider).to receive(:shell_out).and_call_original
+          allow(provider).to receive(:shell_out).with('postconf', '-m').and_return(double(stdout: "pcre\ntexthash\n"))
+        end
+      end.converge('test::spec_config_maps')
+    end
+
+    it 'manages a map whose type postconf -m lists' do
+      expect(chef_run).to create_postfix_map('/etc/postfix/header_checks')
+    end
+
+    it 'skips a type postconf -m does not list, even when a listed name contains it' do
+      expect(chef_run).to_not create_postfix_map('/etc/postfix/hash_map')
+    end
   end
 
   context 'postfix_config with access maps' do

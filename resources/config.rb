@@ -148,7 +148,7 @@ action :create do
         type type
         postmap PostfixCookbook::Helpers::POSTMAP_DATABASE_TYPES.include?(type)
         restart_service true
-        only_if "postconf -m | grep -q #{type}"
+        only_if { postfix_map_type_supported?(type) }
       end
     end
   end

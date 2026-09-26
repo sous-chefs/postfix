@@ -29,13 +29,11 @@ action :create do
   # The platform default, not hash: EL10 and SUSE 15 build Postfix without Berkeley DB
   map_type = new_resource.type || new_resource.db_type || postfix_db_type
   map_separator = new_resource.separator || postfix_map_separator(map_type)
+  # regexp, pcre and the like are read as text, so postmap has nothing to build for them
+  compile = new_resource.postmap &&
+            (new_resource.update_command || PostfixCookbook::Helpers::POSTMAP_DATABASE_TYPES.include?(map_type))
   # An explicit type builds the same format whatever default_database_type main.cf holds
-  table = if PostfixCookbook::Helpers::POSTMAP_DATABASE_TYPES.include?(map_type)
-            "#{map_type}:#{new_resource.path}"
-          else
-            new_resource.path
-          end
-  command = new_resource.update_command || "#{postfix_postmap_command} #{table}"
+  command = new_resource.update_command || "#{postfix_postmap_command} #{map_type}:#{new_resource.path}"
 
   service new_resource.service_name do
     action :nothing
@@ -45,7 +43,7 @@ action :create do
     command command
     environment postfix_path_environment if platform_family?('omnios')
     action :nothing
-  end if new_resource.postmap
+  end if compile
 
   template new_resource.path do
     source new_resource.template_source
@@ -59,7 +57,7 @@ action :create do
       settings: new_resource.content,
       separator: map_separator
     )
-    notifies :run, "execute[update-postfix-map-#{new_resource.path}]", :immediately if new_resource.postmap
+    notifies :run, "execute[update-postfix-map-#{new_resource.path}]", :immediately if compile
     notifies :reload, "service[#{new_resource.service_name}]" if new_resource.reload_service
     notifies :restart, "service[#{new_resource.service_name}]" if new_resource.restart_service
   end
@@ -72,5 +70,5 @@ action :create do
     creates db_file
     notifies :reload, "service[#{new_resource.service_name}]" if new_resource.reload_service
     notifies :restart, "service[#{new_resource.service_name}]" if new_resource.restart_service
-  end if new_resource.postmap && db_file
+  end if compile && db_file
 end
