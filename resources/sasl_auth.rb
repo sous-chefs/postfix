@@ -26,12 +26,15 @@ action :create do
     package pkg
   end
 
+  # The postfix resource runs this before postfix_config, which creates conf_dir
+  directory ::File.dirname(password_file)
+
   postfix_map password_file do
     content(new_resource.sasl || postfix_setting('sasl', {}))
     template_source 'sasl_passwd.erb'
     sensitive true
     mode '0400'
-    update_command "postmap #{password_file}"
+    type(new_resource.db_type || postfix_db_type)
     restart_service true
   end
 end
