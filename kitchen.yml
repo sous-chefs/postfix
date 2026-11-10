@@ -60,6 +60,10 @@ suites:
     provisioner:
       named_run_list: access
 
+  - name: master_bsmtp_disabled
+    provisioner:
+      named_run_list: master_bsmtp_disabled
+
   - name: canonical
     provisioner:
       named_run_list: canonical

@@ -1,0 +1,4 @@
+name: master_bsmtp_disabled
+depends:
+  - name: default
+    path: test/integration/default

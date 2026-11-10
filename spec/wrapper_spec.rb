@@ -17,3 +17,16 @@ describe 'test::default' do
     end
   end
 end
+
+describe 'test::master_bsmtp_disabled' do
+  cached(:chef_run) do
+    ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '24.04', step_into: postfix_step_into).converge(described_recipe)
+  end
+
+  it 'renders master.cf without the bsmtp service' do
+    expect(chef_run).to render_file('/etc/postfix/master.cf').with_content { |content|
+      expect(content).not_to match(/^bsmtp\s/)
+      expect(content).to match(/^smtp\s+inet/)
+    }
+  end
+end
