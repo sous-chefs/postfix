@@ -1,10 +1,6 @@
 require 'spec_helper'
 
 describe 'postfix resource' do
-  before do
-    stub_command('/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix').and_return(true)
-  end
-
   context 'on AlmaLinux 9' do
     cached(:chef_run) do
       runner = ChefSpec::SoloRunner.new(platform: 'almalinux', version: '9', step_into: postfix_step_into) do |node|

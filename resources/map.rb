@@ -10,7 +10,7 @@ unified_mode true
 use '_partial/_common'
 
 property :path, String, name_property: true
-property :type, String, default: 'hash', desired_state: false
+property :type, String, desired_state: false
 property :content, Hash, default: {}, desired_state: false
 property :template_source, String, default: 'maps.erb', desired_state: false
 property :separator, String, desired_state: false
@@ -26,8 +26,14 @@ action_class do
 end
 
 action :create do
-  map_separator = new_resource.separator || postfix_map_separator(new_resource.type)
-  command = new_resource.update_command || "#{postfix_postmap_command} #{new_resource.path}"
+  # The platform default, not hash: EL10 and SUSE 15 build Postfix without Berkeley DB
+  map_type = new_resource.type || new_resource.db_type || postfix_db_type
+  map_separator = new_resource.separator || postfix_map_separator(map_type)
+  # regexp, pcre and the like are read as text, so postmap has nothing to build for them
+  compile = new_resource.postmap &&
+            (new_resource.update_command || PostfixCookbook::Helpers::POSTMAP_DATABASE_TYPES.include?(map_type))
+  # An explicit type builds the same format whatever default_database_type main.cf holds
+  command = new_resource.update_command || "#{postfix_postmap_command} #{map_type}:#{new_resource.path}"
 
   service new_resource.service_name do
     action :nothing
@@ -37,7 +43,7 @@ action :create do
     command command
     environment postfix_path_environment if platform_family?('omnios')
     action :nothing
-  end if new_resource.postmap
+  end if compile
 
   template new_resource.path do
     source new_resource.template_source
@@ -51,8 +57,18 @@ action :create do
       settings: new_resource.content,
       separator: map_separator
     )
-    notifies :run, "execute[update-postfix-map-#{new_resource.path}]", :immediately if new_resource.postmap
+    notifies :run, "execute[update-postfix-map-#{new_resource.path}]", :immediately if compile
     notifies :reload, "service[#{new_resource.service_name}]" if new_resource.reload_service
     notifies :restart, "service[#{new_resource.service_name}]" if new_resource.restart_service
   end
+
+  # Rebuild a compiled table that is missing while its source is unchanged
+  db_file = postfix_map_db_file(new_resource.path, map_type)
+  execute "create-postfix-map-#{new_resource.path}" do
+    command command
+    environment postfix_path_environment if platform_family?('omnios')
+    creates db_file
+    notifies :reload, "service[#{new_resource.service_name}]" if new_resource.reload_service
+    notifies :restart, "service[#{new_resource.service_name}]" if new_resource.restart_service
+  end if compile && db_file
 end

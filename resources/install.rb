@@ -58,11 +58,14 @@ action :install do
       action :nothing
     end
 
-    execute 'switch_mailer_to_postfix' do
-      command '/usr/sbin/alternatives --set mta /usr/sbin/sendmail.postfix'
+    # Compare inodes: merged-sbin Fedora registers /usr/bin/sendmail.postfix, which
+    # alternatives accepts for this path but always displays as /usr/bin
+    alternatives 'mta' do
+      path '/usr/sbin/sendmail.postfix'
+      action :set
+      not_if { ::File.identical?('/etc/alternatives/mta', '/usr/sbin/sendmail.postfix') }
       notifies :stop, 'service[sendmail]'
       notifies :start, "service[#{new_resource.service_name}]"
-      not_if '/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix'
     end
   when 'suse'
     file '/var/adm/postfix.configured'
